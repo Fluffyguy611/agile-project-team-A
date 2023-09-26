@@ -6,7 +6,7 @@ import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public class DropwizardWebServiceConfiguration extends Configuration {
+public class AgileSprintWebServiceConfiguration extends Configuration {
     @Valid
     @NotNull
     private final SwaggerBundleConfiguration swagger = new SwaggerBundleConfiguration();

@@ -7,17 +7,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.kainos.ea</groupId>
-    <artifactId>ProductApp</artifactId>
+    <artifactId>AgileSprintApp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>DropwizardWebService</name>
+    <name>Team-A-App</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>4.0.1</dropwizard.version>
-        <mainClass>org.kainos.ea.DropwizardWebServiceApplication</mainClass>
+        <mainClass>org.kainos.ea.AgileSprintWebServiceApplication</mainClass>
     </properties>
 
     <dependencyManagement>
