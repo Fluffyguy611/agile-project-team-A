@@ -1,0 +1,25 @@
+{
+  "name": "ui-tests-project",
+  "type": "module",
+  "engines": { "node": ">=18.0.0 <19.0.0" },
+  "devDependencies": {
+    "@wdio/cli": "^8.12.2",
+    "@wdio/local-runner": "^8.12.1",
+    "@wdio/mocha-framework": "^8.12.1",
+    "@wdio/spec-reporter": "^8.12.2",
+    "chromedriver": "116.0.0",
+    "dotenv": "16.3.1",
+    "eslint": "^8.45.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "17.1.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
+    "wdio-chromedriver-service": "^8.1.1"
+  },
+  "scripts": {
+    "wdio": "wdio run ./wdio.conf.ts",
+    "lint": "npx eslint . --fix  --ext .ts && prettier --write \"**/*.+(ts)\""
+  }
+}
