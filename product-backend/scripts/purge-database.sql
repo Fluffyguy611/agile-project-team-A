@@ -4,7 +4,7 @@ CREATE PROCEDURE drop_procedure()
 BEGIN
     START TRANSACTION;
     
-    DROP TABLE IF EXISTS `Role`;
+    DROP TABLE IF EXISTS JobRole;
     
     
         COMMIT;
@@ -12,5 +12,4 @@ BEGIN
 
 END $$
 DELIMITER ;
-use `new_schema_AdrianN`;
 CALL drop_procedure();
