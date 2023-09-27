@@ -23,7 +23,7 @@ public class JobRolesDao {
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),
-                    rs.getString("SharePoint")
+                    rs.getString("SharePointLink")
             );
             jobRoleList.add(jobRole);
         }
