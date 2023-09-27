@@ -35,7 +35,7 @@ public class DatabaseConnector {
         }catch (Exception e) {
             System.err.println(e.getMessage());
         }finally {
-            System.out.println("I will always rub");
+            System.out.println("I will always run");
         }
         return null;
     }
