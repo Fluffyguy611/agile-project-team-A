@@ -1,9 +1,9 @@
 import axios from 'axios';
 import JobRole from '../model/jobRoleSingleView.js';
 import logger from './logger.js';
-import { API } from '../common/constants.js';
 
-export default class ProductService {
+
+export default class JobRoleService {
 
   async getJobRoleSpecification(id: number): Promise<JobRole> {
     try {

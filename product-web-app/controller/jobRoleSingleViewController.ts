@@ -1,12 +1,9 @@
 import { Application, Request, Response } from "express";
-import JobRole from "../model/jobRoleSingleView.js";
 import logger from '../service/logger.js';
-import jobRoleSingleViewService from '../service/jobRoleSingleViewService.js';
+import JobRoleService from '../service/JobRoleSingleViewService.js'
 
-
-
-export default class ProductController {
-    private jobRoleSingleViewService = new jobRoleSingleViewService();
+export default class JobRoleSingleViewController {
+    private jobRoleSingleViewService = new JobRoleService();
   
     appRoutes(app: Application) {
       app.get('/jobRoles/:id', async (req: Request, res: Response) => {
