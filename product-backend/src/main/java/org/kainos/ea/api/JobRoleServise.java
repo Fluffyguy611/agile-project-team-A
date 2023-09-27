@@ -1,18 +1,23 @@
 package org.kainos.ea.api;
 
 import org.kainos.ea.cli.JobRole;
+import org.kainos.ea.client.FailedToGetAllJobRolesException;
+import org.kainos.ea.db.JobRolesDao;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 public class JobRoleServise {
-    public List<JobRole>getAllJobRoles(){
-        List<JobRole> jobRoleList = new ArrayList<>();
+    private JobRolesDao jobRolesDao = new JobRolesDao();
 
-        JobRole role1 = new JobRole(1,"name", "description", "sharepointlink");
+    public List<JobRole> getAllJobRoles() throws FailedToGetAllJobRolesException {
 
-        jobRoleList.add(role1);
-
-        return  jobRoleList;
+        try {
+            List<JobRole> jobRoleList = jobRolesDao.getAllJobRoles();
+            return jobRoleList;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new FailedToGetAllJobRolesException();
+        }
     }
 }

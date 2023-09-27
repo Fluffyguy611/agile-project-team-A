@@ -8,6 +8,7 @@ import java.util.Properties;
 
 public class DatabaseConnector {
     private static Connection conn;
+
     public static Connection getConnection() throws SQLException {
         String user, password, host, name;
 
@@ -15,7 +16,7 @@ public class DatabaseConnector {
             return conn;
         }
 
-        try{
+        try {
             FileInputStream propsStream = new FileInputStream("db.properties");
             Properties props = new Properties();
             props.load(propsStream);
@@ -32,9 +33,9 @@ public class DatabaseConnector {
             conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + name + "?useSSL=false", user, password);
             System.out.println("Connection successful");
             return conn;
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
-        }finally {
+        } finally {
             System.out.println("I will always run");
         }
         return null;

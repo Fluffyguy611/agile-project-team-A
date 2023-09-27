@@ -15,10 +15,10 @@ public class JobRolesDao {
     public List<JobRole> getAllJobRoles() throws SQLException {
         Connection c = databaseConnector.getConnection();
         Statement st = c.createStatement();
-        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink\n" + "FROM JobRole" );
+        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink\n" + "FROM JobRole");
 
         List<JobRole> jobRoleList = new ArrayList<>();
-        while (rs.next()){
+        while (rs.next()) {
             JobRole jobRole = new JobRole(
                     rs.getInt("Id"),
                     rs.getString("Name"),
