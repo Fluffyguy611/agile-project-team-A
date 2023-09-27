@@ -6,6 +6,8 @@ import path from 'path';
 import nunjucks from 'nunjucks';
 import axios from 'axios';
 import logger from './service/logger.js';
+import { User } from './model/user.js';
+import AuthController from './controller/authController.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -23,7 +25,6 @@ nunjucks.configure(appViews, nunjucksConfig);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 
 declare module 'express-session' {
@@ -34,8 +35,13 @@ declare module 'express-session' {
 app.set('view engine', 'html');
 app.use('/public', express.static(path.join(dirname, 'public')));
 
+const authController = new AuthController();
+authController.appRoutes(app);  // This sets up your routes
+
+
 app.listen(3000, () => {
   logger.info('Server listening on port 3000');
 });
+
 
 
