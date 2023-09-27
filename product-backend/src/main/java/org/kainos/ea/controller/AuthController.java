@@ -9,22 +9,23 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kainos.ea.api.AuthService;
 import org.kainos.ea.cli.User;
-import org.kainos.ea.client.FailedToRegisterException;
-import org.kainos.ea.client.InvalidEmailException;
-import org.kainos.ea.client.InvalidUserException;
+import org.kainos.ea.exception.FailedToRegisterException;
+import org.kainos.ea.exception.InvalidEmailException;
+import org.kainos.ea.exception.InvalidPasswordException;
 
 @Tag(name = "Authorisation")
 @Path("/api")
 public class AuthController {
     private AuthService authService = new AuthService();
+
     @POST
     @Path("/auth/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response register(User user){
-        try{
+    public Response register(User user) {
+        try {
             return Response.ok(authService.register(user)).build();
-        } catch (FailedToRegisterException | InvalidEmailException | InvalidUserException err){
+        } catch (FailedToRegisterException | InvalidEmailException | InvalidPasswordException err) {
             System.err.println(err.getMessage());
             return Response.serverError().build();
         }
