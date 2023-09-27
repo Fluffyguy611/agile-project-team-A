@@ -1,3 +1,5 @@
+{% extends "parent.html" %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,20 +8,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
-    <header class="bg-dark text-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Job Role</h1>
-                </div>
-                {% if errormessage %}
-                <div class="alert alert-danger" role="alert">
-                    {{ errormessage }}
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </header>
+    {% block header %}
+    This is the default content
+    {% endblock %}
     <main class="container mt-4">
         <section id="jobRole" class="mt-4">
            {% if jobRole and jobRole.name.length > 0 %}

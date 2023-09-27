@@ -1,6 +1,6 @@
 import { Application, Request, Response } from "express";
 import logger from '../service/logger.js';
-import JobRoleService from '../service/jobRoleSingleViewService.js'
+import JobRoleService from '../service/jobRoleService.js'
 
 export default class JobRoleSingleViewController {
     private jobRoleSingleViewService = new JobRoleService();

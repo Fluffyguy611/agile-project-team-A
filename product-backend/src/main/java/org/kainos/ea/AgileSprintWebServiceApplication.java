@@ -5,7 +5,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
-import org.kainos.ea.controller.JobRoleSingleViewControllerA;
+import org.kainos.ea.controller.JobRoleController;
 
 public class AgileSprintWebServiceApplication extends Application<AgileSprintWebServiceConfiguration> {
 
@@ -30,7 +30,7 @@ public class AgileSprintWebServiceApplication extends Application<AgileSprintWeb
 
     @Override
     public void run(AgileSprintWebServiceConfiguration dropwizardWebServiceConfiguration, Environment environment) throws Exception {
-        environment.jersey().register(new JobRoleSingleViewControllerA());
+        environment.jersey().register(new JobRoleController());
     }
 
 }
