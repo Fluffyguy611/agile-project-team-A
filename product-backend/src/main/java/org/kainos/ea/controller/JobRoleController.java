@@ -1,4 +1,4 @@
-package org.kainos.ea.resources;
+package org.kainos.ea.controller;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

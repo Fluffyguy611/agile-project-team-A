@@ -5,7 +5,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
-import org.kainos.ea.resources.JobRoleController;
+import org.kainos.ea.controller.JobRoleController;
 
 public class AgileSprintWebServiceApplication extends Application<AgileSprintWebServiceConfiguration> {
 
