@@ -10,7 +10,8 @@ export default class JobRoleSingleViewController {
         let data = {};
   
         try {
-          data = await this.jobRoleSingleViewService.getJobRoleSpecification(Number.parseInt(req.params.id));
+          data = await this.jobRoleSingleViewService.
+          getJobRoleSpecification(Number.parseInt(req.params.id, 10));
         } catch (e) {
           logger.error(`Couldnt get job Role! Error: ${e}`);
         }
