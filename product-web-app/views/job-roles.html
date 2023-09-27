@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Job Roles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOB ROLE LIST</title>
 </head>
+
 <body>
-    <p>No job roles yet</p>
+    <header >
+         <a href="/">MAIN VIEW</a>
+    </header>
+
+    <main>
+        <table>
+            <h2>Our Job Roles</h2>
+                    {% for role in roles %}
+                    <tr>
+                        <td>{{ role.name }}</td>
+                        <td>{{ role.description }}</td>
+                        <td>{{ role.sharePointLink }}</td>
+                    </tr>
+                    {% endfor %}
+        </table>
+    </main>
 </body>
+
 </html>
