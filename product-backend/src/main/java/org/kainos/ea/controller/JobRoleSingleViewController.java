@@ -7,7 +7,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import io.swagger.annotations.Api;
 import org.kainos.ea.client.FailedToGetJobRoleException;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleSingleViewDao;
@@ -16,7 +15,6 @@ import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.api.JobRoleSingleViewService;
 
 import java.sql.SQLException;
-@Api("Single JobRole View")
 @Path("/api")
 public class JobRoleSingleViewController {
 
