@@ -8,17 +8,15 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kainos.ea.client.FailedToGetJobRoleException;
-import org.kainos.ea.db.DatabaseConnector;
-import org.kainos.ea.db.JobRoleSingleViewDao;
-import org.kainos.ea.client.DatabaseConnectionException;
+import org.kainos.ea.db.DatabaseConnectorA;
+import org.kainos.ea.db.JobRoleSingleViewDaoA;
 import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.api.JobRoleSingleViewService;
 
-import java.sql.SQLException;
 @Path("/api")
-public class JobRoleSingleViewController {
+public class JobRoleSingleViewControllerA {
 
-    JobRoleSingleViewService jobRoleSingleViewService = new JobRoleSingleViewService(new DatabaseConnector(), new JobRoleSingleViewDao());
+    JobRoleSingleViewService jobRoleSingleViewService = new JobRoleSingleViewService(new DatabaseConnectorA(), new JobRoleSingleViewDaoA());
 
 
     @GET

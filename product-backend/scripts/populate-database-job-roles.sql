@@ -1,11 +1,5 @@
-DELIMITER $$
-DROP PROCEDURE IF EXISTS Insert_Values_to_role $$
-CREATE PROCEDURE Insert_Values_to_role()
-BEGIN
-	START TRANSACTION;
-
 INSERT INTO JobRole (Name, Description, SharePointLink) VALUES
-('Technology Leader', 'Responsible for leading technology initiatives and teams within the organization.', 'https://example.com/techleader'),
+("Techssnology Lesdfsdfader", "Responsible for leading technology initiatives and teams within the organization.", "https://example.com/techleader"),
 ('Principal', 'A high-level position with significant responsibilities in the organization.', 'https://example.com/principal'),
 ('Principal Architect', 'Responsible for designing and overseeing architectural solutions.', 'https://example.com/principalarchitect'),
 ('Principal Test Architect', 'Responsible for designing and managing test architecture.', 'https://example.com/principaltestarchitect'),
@@ -28,7 +22,3 @@ INSERT INTO JobRole (Name, Description, SharePointLink) VALUES
 ('Senior Front-End Engineer', 'Experienced front-end developer with senior responsibilities.', 'https://example.com/seniorfrontendengineer'),
 ('Senior Support Technician', 'Provides senior-level support and troubleshooting services.', 'https://example.com/seniorsupporttechnician'),
 ('Senior Test Engineer', 'Experienced test engineer with senior responsibilities.', 'https://example.com/seniortestengineer');
-
-END $$
-DELIMITER ;
-CALL Insert_Values_to_role();

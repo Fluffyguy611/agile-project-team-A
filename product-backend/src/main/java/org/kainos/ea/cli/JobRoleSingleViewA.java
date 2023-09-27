@@ -1,12 +1,12 @@
 package org.kainos.ea.cli;
-public class JobRoleSingleView {
+public class JobRoleSingleViewA {
 
         private int Id;
         private String Name;
         private String Description;
         private String SharePointLink;
 
-    public JobRoleSingleView(int id, String name, String description, String sharePointLink) {
+    public JobRoleSingleViewA(int id, String name, String description, String sharePointLink) {
         Id = id;
         Name = name;
         Description = description;

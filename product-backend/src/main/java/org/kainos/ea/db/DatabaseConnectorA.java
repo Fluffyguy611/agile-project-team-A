@@ -1,16 +1,16 @@
 package org.kainos.ea.db;
 
 
-import org.kainos.ea.client.DatabaseConnectionException;
+import org.kainos.ea.client.DatabaseConnectionExceptionA;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnector {
+public class DatabaseConnectorA {
     private static Connection conn;
 
-    public Connection getConnection() throws DatabaseConnectionException, SQLException {
+    public Connection getConnection() throws DatabaseConnectionExceptionA, SQLException {
         String user;
         String password;
         String host;
@@ -35,7 +35,7 @@ public class DatabaseConnector {
 
             return conn;
         } catch (Exception e) {
-            throw new DatabaseConnectionException(e);
+            throw new DatabaseConnectionExceptionA(e);
         }
     }
 }
