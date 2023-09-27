@@ -1,25 +1,30 @@
-package org.kainos.ea.api;
+package org.kainos.ea.service;
 
-import org.kainos.ea.cli.User;
-import org.kainos.ea.core.UserValidator;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.exception.FailedToRegisterException;
 import org.kainos.ea.exception.InvalidEmailException;
 import org.kainos.ea.exception.InvalidPasswordException;
+import org.kainos.ea.model.User;
 
 import java.sql.SQLException;
 
 public class AuthService {
-    private AuthDao authDao = new AuthDao();
+    private AuthDao authDao;
+    private AuthValidator authValidator;
+
+    public AuthService(AuthDao authDao, AuthValidator authValidator) {
+        this.authDao = authDao;
+        this.authValidator = authValidator;
+    }
 
     public String register(User user) throws FailedToRegisterException, InvalidEmailException, InvalidPasswordException {
 
         try {
-            if (!UserValidator.isValidEmail(user.getEmail())) {
+            if (!authValidator.isValidEmail(user.getEmail())) {
                 throw new InvalidEmailException();
             }
 
-            if (!UserValidator.isValidPassword(user.getPassword())) {
+            if (!authValidator.isValidPassword(user.getPassword())) {
                 throw new InvalidPasswordException();
             }
 

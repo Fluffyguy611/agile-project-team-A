@@ -1,9 +1,9 @@
-package org.kainos.ea.core;
+package org.kainos.ea.service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserValidator {
+public class AuthValidator {
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9._%+-]{1,53}@kainos\\.com$";
         Pattern pattern = Pattern.compile(emailRegex);

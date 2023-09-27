@@ -1,10 +1,11 @@
 package org.kainos.ea.db;
 
-import org.kainos.ea.cli.User;
+import org.kainos.ea.model.User;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthDao {
     private DatabaseConnector databaseConnector = new DatabaseConnector();
