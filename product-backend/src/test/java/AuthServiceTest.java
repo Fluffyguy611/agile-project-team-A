@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class AuthServiceTest {
-    DatabaseConnector databaseConnectorMock;
+    DatabaseConnector databaseConnectorMock = mock(DatabaseConnector.class);
     AuthDao authDaoMock = mock(AuthDao.class);
     AuthValidator authValidatorMock = mock(AuthValidator.class);
     AuthService authService = new AuthService(databaseConnectorMock, authDaoMock, authValidatorMock);
