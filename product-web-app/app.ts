@@ -6,6 +6,9 @@ import path from 'path';
 import nunjucks from 'nunjucks';
 import axios from 'axios';
 import logger from './service/logger.js';
+import JobRoleController from './controller/jobRoleController.js';
+import { API_URL } from './common/constants.js';
+import JobRole from './model/jobRole.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -25,17 +28,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
-
+axios.defaults.baseURL = API_URL;
 declare module 'express-session' {
   interface SessionData {
+    jobRole: Partial<JobRole>;
   }
 }
+
+
 
 app.set('view engine', 'html');
 app.use('/public', express.static(path.join(dirname, 'public')));
 
 app.listen(3000, () => {
   logger.info('Server listening on port 3000');
+
 });
 
+const jobRoleController = new JobRoleController();
 
+jobRoleController.appRoutes(app);
