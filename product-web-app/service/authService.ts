@@ -24,7 +24,7 @@ export default class AuthService {
             const response = await axios.post('http://localhost:8080/api/auth/register', user);
             console.log('User registered:', response.data);
         } catch (e) {
-            throw new Error('Unknown error. Could not register user');
+            throw new Error('Invalid email');
         }
     }
 }

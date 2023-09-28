@@ -7,8 +7,8 @@ export default class AuthController {
   private authService = new AuthService(new AuthValidator());
 
   appRoutes(app: Application) {
-    app.get('/register', async (req: Request, res: Response) => {
-        res.render('register');
+    app.get('/auth/register', async (req: Request, res: Response) => {
+      res.render('register');
     });
 
     app.post('/register', async (req: Request, res: Response) => {
