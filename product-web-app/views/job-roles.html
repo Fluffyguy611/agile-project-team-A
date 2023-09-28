@@ -1,29 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JOB ROLE LIST</title>
-</head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
 
-<body>
-    <header >
-         <a href="/">MAIN VIEW</a>
+  <body>
+    <header class="bg-dark text-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Our Job Roles</h2>
+          </div>
+        </div> 
+      </div> 
     </header>
 
-    <main>
-        <table>
-            <h2>Our Job Roles</h2>
-                    {% for role in roles %}
-                    <tr>
-                        <td>{{ role.name }}</td>
-                        <td>{{ role.description }}</td>
-                        <td>{{ role.sharePointLink }}</td>
-                    </tr>
-                    {% endfor %}
-        </table>
-    </main>
-</body>
+    <main class="container mt-4">
+      <section id="roles" class="mt-4">
 
+      {% if roles and roles.length >0%}
+            <table class="table">
+              <thead>
+                      <tr>
+                        <th scope="col">JOB ROLES</th>
+                        <th scope="col">DESCRIPTION</th>
+                        <th scope="col">SHOW DETAILS</th>
+                      </tr>
+              </thead>
+
+
+              <tbody>
+                {% for role in roles %}
+                <tr>
+                  <td><strong>{{ role.name }}</strong></td>
+                  <td>{{ role.description }}</td>
+                  <td><a href= "/{{ role.sharePointLink }}">Details</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>    
+{% else %}
+There are no job roles
+{% endif %}
+      </section>
+    </main>
+  </body>
 </html>
