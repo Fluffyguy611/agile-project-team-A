@@ -14,14 +14,8 @@ const jobRolePrincipal: JobRole = {
   description: 'his is a test case',
   sharePointLink: "https://example.com"
 };
-const jobRoleMenager: JobRole = {
-    id: 6,
-    name: 'Menager',
-    description: 'his is a test case',
-    sharePointLink: "https://example1.com"
-  };
 
-  const jobRoleService = new JobRoleService();
+const jobRoleService = new JobRoleService();
 
 describe('JobRole service', () => {
   before(() => {

@@ -43,22 +43,40 @@
         max-width: 200px;
         max-height: 200px;
     }
+
+    .img-container {
+    position: relative;
+    text-align: left;
+    color: white;
+    }
+
+    .centered {
+    position: absolute;
+    font-size: 50px;
+    text-shadow: 2px 2px #ffffff;
+    color: rgb(21, 10, 71);
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%);
+    }
   </style>
     
     <main class="container mt-4">
         <section id="jobRole" class="mt-4">
-            <h1>JOB ROLE</h1>
            {% if jobRole and jobRole.name.length > 0 %}
+           <div class="img-container">
+            <img src="https://www.shutterstock.com/shutterstock/photos/1646867911/display_1500/stock-photo-closeup-portrait-of-happy-pensioner-smiling-at-camera-1646867911.jpg" alt="Phono" width="700" height="500">
+            <div class="centered">{{ jobRole.name }}</div>
+           </div>
            <table class="table">
+           </section>
             <thead>
                 <tr>
-                    <th scope="col" class="role-name-td">Role Name</th>
                     <th scope="col" class="role-description-td">Role Description</th>
                     <th scope="col" class="role-sharepointlink-td">SharePoint Link for Role Specification</th>
                 </tr>
                 <tbody>
                     <tr>
-                        <td class="role-details-td">{{ jobRole.name }}</td>
                         <td class="role-details-td">{{ jobRole.description }} </td>
                         <td class="role-details-td"><a href="{{ jobRole.sharePointLink }}">
                             <button class="details-job-role">View Details</button>
