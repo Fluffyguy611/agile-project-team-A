@@ -6,7 +6,7 @@ export default class JobRoleSingleViewController {
     private jobRoleSingleViewService = new JobRoleService();
   
     appRoutes(app: Application) {
-      app.get('/jobRoles/:id', async (req: Request, res: Response) => {
+      app.get('/job-roles/:id', async (req: Request, res: Response) => {
         let data = {};
   
         try {

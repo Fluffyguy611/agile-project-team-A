@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -60,7 +61,7 @@ public class JobRoleServiceTest {
         );
         int jobRoleId = 1;
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(jobRoleDao.getJobRoleById(jobRoleId, conn)).thenReturn(jobRole);
+        Mockito.when(jobRoleDao.getJobRoleById(jobRoleId, conn)).thenReturn(Optional.of(jobRole));
 
         JobRole resultRole = jobRoleService.getJobRoleById(jobRoleId);
 
@@ -71,7 +72,7 @@ public class JobRoleServiceTest {
     void getJobRole_shouldThrowUserJobRoleNotExistException_whenDaoReturnsNull() throws SQLException, DatabaseConnectionException, JobRoleDoesNotExistException {
         int Id = 1;
         Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
-        Mockito.when(jobRoleDao.getJobRoleById(Id, conn)).thenReturn(null);
+        Mockito.when(jobRoleDao.getJobRoleById(Id, conn)).thenReturn(Optional.empty());
 
         assertThrows(JobRoleDoesNotExistException.class,
                 () -> jobRoleService.getJobRoleById(Id));

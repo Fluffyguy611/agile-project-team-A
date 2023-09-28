@@ -48,7 +48,7 @@ app.listen(3000, () => {
 const jobRoleSingleViewController = new JobRoleSingleViewController();
 
 app.get('/', (eq: Request, res: Response) => {
-  res.redirect('/jobRoles');
+  res.redirect('/job-roles');
 });
 
 jobRoleSingleViewController.appRoutes(app);

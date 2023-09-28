@@ -8,6 +8,7 @@ import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleDao;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class JobRoleService {
 
@@ -22,13 +23,13 @@ public class JobRoleService {
 
     public JobRole getJobRoleById(int id) throws JobRoleDoesNotExistException, FailedToGetJobRoleException {
         try {
-            JobRole jobRoleSingleView = jobRoleDao.getJobRoleById(id, databaseConnector.getConnection());
+            Optional<JobRole> jobRoleSingleView = jobRoleDao.getJobRoleById(id, databaseConnector.getConnection());
 
-            if (jobRoleSingleView == null) {
+            if (jobRoleSingleView.isEmpty()) {
                 throw new JobRoleDoesNotExistException();
             }
 
-            return jobRoleSingleView;
+            return jobRoleSingleView.get();
         } catch (SQLException | DatabaseConnectionException e) {
             System.err.println(e.getMessage());
 
