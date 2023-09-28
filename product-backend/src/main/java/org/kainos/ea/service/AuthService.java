@@ -19,11 +19,11 @@ public class AuthService {
 
     public String register(User user) throws FailedToRegisterException, InvalidEmailException, InvalidPasswordException {
         try {
-            if (!AuthValidator.isValidEmail(user.getEmail())) {
+            if (!authValidator.isValidEmail(user.getEmail())) {
                 throw new InvalidEmailException();
             }
 
-            if (!AuthValidator.isValidPassword(user.getPassword())) {
+            if (!authValidator.isValidPassword(user.getPassword())) {
                 throw new InvalidPasswordException();
             }
 
