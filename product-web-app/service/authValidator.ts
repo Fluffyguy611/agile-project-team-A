@@ -1,7 +1,7 @@
 export default class AuthValidator {
   public validateEmail(email: string): string | null {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@kainos\.com$/;
-    if(!emailRegex.test(email)) {
+    if (!emailRegex.test(email)) {
       return 'Email address must include @kainos.com domain';
     }
 
@@ -31,5 +31,4 @@ export default class AuthValidator {
 
     return null;
   }
-
 }

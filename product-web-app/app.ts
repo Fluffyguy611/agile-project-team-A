@@ -37,8 +37,7 @@ app.set('view engine', 'html');
 app.use('/public', express.static(path.join(dirname, 'public')));
 
 const authController = new AuthController();
-authController.appRoutes(app);  // This sets up your routes
-
+authController.appRoutes(app); // This sets up your routes
 
 app.listen(3000, () => {
   logger.info('Server listening on port 3000');
