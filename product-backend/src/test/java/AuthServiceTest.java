@@ -1,8 +1,10 @@
 import org.junit.jupiter.api.Test;
 import org.kainos.ea.db.AuthDao;
+import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.FailedToRegisterException;
 import org.kainos.ea.exception.InvalidEmailException;
 import org.kainos.ea.exception.InvalidPasswordException;
+import org.kainos.ea.exception.InvalidRoleIdException;
 import org.kainos.ea.model.User;
 import org.kainos.ea.service.AuthService;
 import org.kainos.ea.service.AuthValidator;
@@ -14,9 +16,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class AuthServiceTest {
+    DatabaseConnector databaseConnectorMock;
     AuthDao authDaoMock = mock(AuthDao.class);
     AuthValidator authValidatorMock = mock(AuthValidator.class);
-    AuthService authService = new AuthService(authDaoMock, authValidatorMock);
+    AuthService authService = new AuthService(databaseConnectorMock, authDaoMock, authValidatorMock);
 
     @Test
     void registerUser_When_ThereIsValidationError_Expect_InvalidEmailExceptionToBeThrown() {
@@ -24,6 +27,7 @@ class AuthServiceTest {
 
         when(authValidatorMock.isValidEmail(mockedUser.getEmail())).thenReturn(false);
         when(authValidatorMock.isValidPassword(mockedUser.getPassword())).thenReturn(true);
+        when(authValidatorMock.isRoleIdValid(mockedUser.getRoleId())).thenReturn(true);
 
         assertThatExceptionOfType(InvalidEmailException.class)
                 .isThrownBy(() -> authService.register(mockedUser))
@@ -36,10 +40,24 @@ class AuthServiceTest {
 
         when(authValidatorMock.isValidEmail(mockedUser.getEmail())).thenReturn(true);
         when(authValidatorMock.isValidPassword(mockedUser.getPassword())).thenReturn(false);
+        when(authValidatorMock.isRoleIdValid(mockedUser.getRoleId())).thenReturn(true);
 
         assertThatExceptionOfType(InvalidPasswordException.class)
                 .isThrownBy(() -> authService.register(mockedUser))
                 .withMessage("Provided password is invalid");
+    }
+
+    @Test
+    void registerUser_When_ThereIsValidationError_Expect_InvalidRoleIdExceptionToBeThrown() {
+        User mockedUser = new User("username@kainos.com", "Gig@Passw0rD", 3);
+
+        when(authValidatorMock.isValidEmail(mockedUser.getEmail())).thenReturn(true);
+        when(authValidatorMock.isValidPassword(mockedUser.getPassword())).thenReturn(true);
+        when(authValidatorMock.isRoleIdValid(mockedUser.getRoleId())).thenReturn(false);
+
+        assertThatExceptionOfType(InvalidRoleIdException.class)
+                .isThrownBy(() -> authService.register(mockedUser))
+                .withMessage("Provided role id is invalid");
     }
 
     @Test
@@ -48,7 +66,8 @@ class AuthServiceTest {
 
         when(authValidatorMock.isValidEmail(mockedUser.getEmail())).thenReturn(true);
         when(authValidatorMock.isValidPassword(mockedUser.getPassword())).thenReturn(true);
-        when(authDaoMock.registerUser(mockedUser)).thenThrow(new SQLException());
+        when(authValidatorMock.isRoleIdValid(mockedUser.getRoleId())).thenReturn(true);
+        when(authDaoMock.registerUser(mockedUser, databaseConnectorMock.getConnection())).thenThrow(new SQLException());
 
         assertThatExceptionOfType(FailedToRegisterException.class)
                 .isThrownBy(() -> authService.register(mockedUser))

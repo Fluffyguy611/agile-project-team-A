@@ -8,10 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class AuthDao {
-    private DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    public String registerUser(User user) throws SQLException {
-        Connection c = databaseConnector.getConnection();
+    public String registerUser(User user, Connection c) throws SQLException {
         String insertStatement = "INSERT INTO User (Email, Password, RoleId) VALUES (?,?,?)";
         PreparedStatement st = c.prepareStatement(insertStatement);
         st.setString(1, user.getEmail());

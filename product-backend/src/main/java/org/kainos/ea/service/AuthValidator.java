@@ -30,4 +30,8 @@ public class AuthValidator {
 
         return true;
     }
+
+    public boolean isRoleIdValid(int id) {
+        return id == 1 || id == 2;
+    }
 }
