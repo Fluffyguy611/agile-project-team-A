@@ -6,7 +6,6 @@ import path from 'path';
 import nunjucks from 'nunjucks';
 import axios from 'axios';
 import logger from './service/logger.js';
-import { User } from './model/user.js';
 import AuthController from './controller/authController.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
