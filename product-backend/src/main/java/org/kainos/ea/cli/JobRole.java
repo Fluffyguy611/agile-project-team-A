@@ -8,10 +8,10 @@ public class JobRole {
     private String sharePointLink;
 
     public JobRole(int id, String name, String description, String sharePointLink) {
-        id = id;
-        name = name;
-        description = description;
-        sharePointLink = sharePointLink;
+        setId(id);
+        setName(name);
+        setDescription(description);
+        setSharePointLink(sharePointLink);
     }
 
     public int getId() {
@@ -19,7 +19,7 @@ public class JobRole {
     }
 
     public void setId(int id) {
-        id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -27,7 +27,7 @@ public class JobRole {
     }
 
     public void setName(String name) {
-        name = name;
+        this.name = name;
     }
 
     public String getDescription() {
@@ -35,7 +35,7 @@ public class JobRole {
     }
 
     public void setDescription(String description) {
-        description = description;
+        this.description = description;
     }
 
     public String getSharePointLink() {
@@ -43,6 +43,6 @@ public class JobRole {
     }
 
     public void setSharePointLink(String sharePointLink) {
-        sharePointLink = sharePointLink;
+        this.sharePointLink = sharePointLink;
     }
 }

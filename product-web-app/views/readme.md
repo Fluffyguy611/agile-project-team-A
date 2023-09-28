@@ -1,3 +1,23 @@
+# How to use parent.html
+
+1. Add on the top of website:
+
+```
+{% extends "./parent.html" %}
+{% block content %}
+```
+
+2. Start html inside <main></main>
+
+3. End html file with:
+
+```
+{% endblock %}
+```
+
+
+CODE EXAMPLE:
+```
 {% extends "./parent.html" %}
 {% block content %}
     
@@ -27,3 +47,5 @@
     </main>
 
 {% endblock %}
+```
+
