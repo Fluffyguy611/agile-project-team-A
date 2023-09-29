@@ -9,8 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobRolesDao {
-    private DatabaseConnector databaseConnector = new DatabaseConnector();
+public class JobRoleDao {
+    private DatabaseConnector databaseConnector;
+
+    public JobRoleDao(DatabaseConnector databaseConnector) {
+        this.databaseConnector = databaseConnector;
+    }
 
     public List<JobRole> getAllJobRoles() throws SQLException {
         Connection c = databaseConnector.getConnection();
