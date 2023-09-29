@@ -19,7 +19,7 @@ export default class JobRoleService {
         }
 
         try {
-            const response = await axios.post(API.JOBROLES, jobRole);
+            const response = await axios.post(API.JOB_ROLES, jobRole);
       
             return response.data;
           } catch (e) {

@@ -3,6 +3,7 @@ package org.kainos.ea.service;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
+import org.kainos.ea.exception.JobRoleAlreadyExistsException;
 import org.kainos.ea.model.JobRole;
 import org.kainos.ea.model.JobRoleRequest;
 import org.slf4j.Logger;
@@ -25,13 +26,14 @@ public class JobRoleService {
     public JobRoleService(JobRoleDao jobRoleDao, DatabaseConnector databaseConnector) {
     }
 
-    public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException {
+    public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException, JobRoleAlreadyExistsException {
 
         Optional<JobRole> optionalJobRole = jobRoleDao.createNewJobRole(jobRole);
 
         if (optionalJobRole.isEmpty()) {
             throw new FailedToCreateNewJobRoleException();
+        } else {
+            throw new JobRoleAlreadyExistsException();
         }
-        return optionalJobRole.get();
     }
 }

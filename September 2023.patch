@@ -1,0 +1,1254 @@
+commit 0f57ca0effdf849c9bb0086d8623846192b8439a
+Author: Bartłomoiej Milewski <bartlomiej.milewski@kainos.com>
+Date:   Thu Sep 28 16:33:42 2023 +0200
+
+    Task US012 Done
+
+diff --git a/product-backend/pom.xml b/product-backend/pom.xml
+index 3c73203..22b2143 100644
+--- a/product-backend/pom.xml
++++ b/product-backend/pom.xml
+@@ -113,6 +113,11 @@
+             <artifactId>byte-buddy</artifactId>
+             <version>1.14.5</version>
+         </dependency>
++        <dependency>
++            <groupId>io.swagger</groupId>
++            <artifactId>swagger-annotations</artifactId>
++            <version>1.6.0</version>
++        </dependency>
+     </dependencies>
+ 
+     <build>
+diff --git a/product-backend/src/main/java/org/kainos/ea/AgileSprintWebServiceApplication.java b/product-backend/src/main/java/org/kainos/ea/AgileSprintWebServiceApplication.java
+index 266302e..4fe040c 100644
+--- a/product-backend/src/main/java/org/kainos/ea/AgileSprintWebServiceApplication.java
++++ b/product-backend/src/main/java/org/kainos/ea/AgileSprintWebServiceApplication.java
+@@ -5,6 +5,7 @@ import io.dropwizard.core.setup.Bootstrap;
+ import io.dropwizard.core.setup.Environment;
+ import io.federecio.dropwizard.swagger.SwaggerBundle;
+ import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
++import org.kainos.ea.controller.JobRoleController;
+ 
+ public class AgileSprintWebServiceApplication extends Application<AgileSprintWebServiceConfiguration> {
+ 
+@@ -29,6 +30,8 @@ public class AgileSprintWebServiceApplication extends Application<AgileSprintWeb
+ 
+     @Override
+     public void run(AgileSprintWebServiceConfiguration dropwizardWebServiceConfiguration, Environment environment) throws Exception {
++
++        environment.jersey().register(new JobRoleController());
+     }
+ 
+ }
+diff --git a/product-backend/src/main/java/org/kainos/ea/controller/JobRoleController.java b/product-backend/src/main/java/org/kainos/ea/controller/JobRoleController.java
+new file mode 100644
+index 0000000..28c46b1
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/controller/JobRoleController.java
+@@ -0,0 +1,48 @@
++package org.kainos.ea.controller;
++
++import io.swagger.v3.oas.annotations.tags.Tag;
++import jakarta.ws.rs.Consumes;
++import jakarta.ws.rs.POST;
++import jakarta.ws.rs.Path;
++import jakarta.ws.rs.Produces;
++import jakarta.ws.rs.core.MediaType;
++import jakarta.ws.rs.core.Response;
++import org.kainos.ea.db.JobRoleDao;
++import org.kainos.ea.exception.ErrorResponse;
++import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
++import org.kainos.ea.model.JobRoleRequest;
++import org.kainos.ea.service.JobRoleService;
++import org.kainos.ea.service.JobRoleValidator;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++
++import java.sql.SQLException;
++
++@Tag(name = "Group A")
++@Path("/api")
++
++public class JobRoleController {
++    private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
++    private final JobRoleService jobRoleService = new JobRoleService(new JobRoleDao(), new JobRoleValidator());
++
++    public JobRoleController() throws FailedToCreateNewJobRoleException {
++    }
++
++    @POST
++    @Path("/admin/job-roles")
++    @Produces(MediaType.APPLICATION_JSON)
++    @Consumes(MediaType.APPLICATION_JSON)
++    public Response createNewJobRole(JobRoleRequest jobRole) {
++        try {
++            return Response.ok(jobRoleService.createNewJobRole(jobRole)).build();
++        } catch (FailedToCreateNewJobRoleException e) {
++            logger.error("Failed to create new Job Role! Error: {}", e.getMessage());
++
++            return Response.serverError().entity(new ErrorResponse(e.getMessage())).build();
++        } catch (SQLException e) {
++            logger.error("Job Role already exists! Error : {}", e.getMessage());
++
++            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
++        }
++    }
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/db/DatabaseConnector.java b/product-backend/src/main/java/org/kainos/ea/db/DatabaseConnector.java
+new file mode 100644
+index 0000000..ca6628e
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/db/DatabaseConnector.java
+@@ -0,0 +1,41 @@
++package org.kainos.ea.db;
++
++import io.github.cdimascio.dotenv.Dotenv;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++
++import java.sql.Connection;
++import java.sql.DriverManager;
++import java.sql.SQLException;
++
++public class DatabaseConnector {
++    private final static Logger logger = LoggerFactory.getLogger(DatabaseConnector.class);
++    private static Connection conn;
++
++    public static Connection getConnection() throws SQLException {
++        String user, password, host, name;
++
++        if (conn != null && !conn.isClosed()) {
++            return conn;
++        }
++
++        try {
++            Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
++            user = dotenv.get("DB_USERNAME");
++            password = dotenv.get("DB_PASSWORD");
++            host = dotenv.get("DB_HOST");
++            name = dotenv.get("DB_NAME");
++
++            if (user == null || password == null || host == null || name == null)
++                throw new IllegalArgumentException("Properties file must exist " +
++                        "and must contain user, password, name and host properties.");
++
++            conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + name + "?allowPublicKeyRetrieval=true&useSSL=false", user, password);
++            return conn;
++
++        } catch (SQLException exception) {
++            logger.error("Couldn't connect to the database! Error: {}", exception.getMessage());
++            throw exception;
++        }
++    }
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/db/JobRoleDao.java b/product-backend/src/main/java/org/kainos/ea/db/JobRoleDao.java
+new file mode 100644
+index 0000000..0dc4f85
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/db/JobRoleDao.java
+@@ -0,0 +1,38 @@
++package org.kainos.ea.db;
++
++import org.kainos.ea.model.JobRole;
++import org.kainos.ea.model.JobRoleRequest;
++
++import java.sql.*;
++import java.util.Optional;
++
++public class JobRoleDao {
++
++    private static DatabaseConnector databaseConnector = new DatabaseConnector();
++
++    public Optional<JobRole> createNewJobRole(JobRoleRequest jobRole) throws SQLException {
++        Connection c = databaseConnector.getConnection();
++
++        String insertStatement = "INSERT INTO JobRole (Name, Description, SharePointLink) VALUES (?,?,?)";
++
++        PreparedStatement st = c.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
++
++        st.setString(1, jobRole.getName());
++        st.setString(2, jobRole.getDescription());
++        st.setString(3, jobRole.getSharePointLink());
++
++        st.executeUpdate();
++
++        ResultSet rs = st.getGeneratedKeys();
++
++        if (rs.next()) {
++            return Optional.of(
++                    new JobRole(
++                            rs.getInt(1),
++                            jobRole.getName(),
++                            jobRole.getDescription(),
++                            jobRole.getSharePointLink()));
++        }
++        return Optional.empty();
++    }
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/exception/ErrorResponse.java b/product-backend/src/main/java/org/kainos/ea/exception/ErrorResponse.java
+new file mode 100644
+index 0000000..d097cc2
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/exception/ErrorResponse.java
+@@ -0,0 +1,17 @@
++package org.kainos.ea.exception;
++
++public class ErrorResponse {
++    private String message;
++
++    public ErrorResponse(String message) {
++        this.message = message;
++    }
++
++    public String getMessage() {
++        return message;
++    }
++
++    public void setMessage(String message) {
++        this.message = message;
++    }
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/exception/FailedToCreateNewJobRoleException.java b/product-backend/src/main/java/org/kainos/ea/exception/FailedToCreateNewJobRoleException.java
+new file mode 100644
+index 0000000..799bdfa
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/exception/FailedToCreateNewJobRoleException.java
+@@ -0,0 +1,4 @@
++package org.kainos.ea.exception;
++
++public class FailedToCreateNewJobRoleException extends Exception {
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/exception/InvalidJobRoleException.java b/product-backend/src/main/java/org/kainos/ea/exception/InvalidJobRoleException.java
+new file mode 100644
+index 0000000..a8a006b
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/exception/InvalidJobRoleException.java
+@@ -0,0 +1,4 @@
++package org.kainos.ea.exception;
++
++public class InvalidJobRoleException extends Throwable {
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/model/JobRole.java b/product-backend/src/main/java/org/kainos/ea/model/JobRole.java
+new file mode 100644
+index 0000000..abcb10d
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/model/JobRole.java
+@@ -0,0 +1,48 @@
++package org.kainos.ea.model;
++
++
++public class JobRole {
++    private int jobId;
++    private String name;
++    private String description;
++    private String sharePointLink;
++
++    public JobRole(int jobId, String roleName, String description, String sharePointLink) {
++        this.jobId = jobId;
++        this.name = roleName.trim();
++        this.description = description.trim();
++        this.sharePointLink = sharePointLink.trim();
++    }
++
++    public int getJobId() {
++        return jobId;
++    }
++
++    public void setJobId(int jobId) {
++        this.jobId = jobId;
++    }
++
++    public String getName() {
++        return name.trim();
++    }
++
++    public void setName(String name) {
++        this.name = name.trim();
++    }
++
++    public String getDescription() {
++        return description.trim();
++    }
++
++    public void setDescription(String description) {
++        this.description = description.trim();
++    }
++
++    public String getSharePointLink() {
++        return sharePointLink.trim();
++    }
++
++    public void setSharePointLink(String sharePointLink) {
++        this.sharePointLink = sharePointLink.trim();
++    }
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/model/JobRoleRequest.java b/product-backend/src/main/java/org/kainos/ea/model/JobRoleRequest.java
+new file mode 100644
+index 0000000..57acda9
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/model/JobRoleRequest.java
+@@ -0,0 +1,44 @@
++package org.kainos.ea.model;
++
++import com.fasterxml.jackson.annotation.JsonCreator;
++import com.fasterxml.jackson.annotation.JsonProperty;
++
++public class JobRoleRequest {
++    private String name;
++    private String description;
++    private String sharePointLink;
++
++    @JsonCreator
++    public JobRoleRequest(
++            @JsonProperty("name") String name,
++            @JsonProperty("description") String description,
++            @JsonProperty("sharePointLink") String sharePointLink) {
++        setName(name);
++        setDescription(description);
++        setSharePointLink(sharePointLink);
++    }
++
++    public String getName() {
++        return name.trim();
++    }
++
++    public void setName(String name) {
++        this.name = name.trim();
++    }
++
++    public String getDescription() {
++        return description.trim();
++    }
++
++    public void setDescription(String description) {
++        this.description = description.trim();
++    }
++
++    public String getSharePointLink() {
++        return sharePointLink.trim();
++    }
++
++    public void setSharePointLink(String sharePointLink) {
++        this.sharePointLink = sharePointLink.trim();
++    }
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/service/JobRoleService.java b/product-backend/src/main/java/org/kainos/ea/service/JobRoleService.java
+new file mode 100644
+index 0000000..5dcb252
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/service/JobRoleService.java
+@@ -0,0 +1,37 @@
++package org.kainos.ea.service;
++
++import org.kainos.ea.db.DatabaseConnector;
++import org.kainos.ea.db.JobRoleDao;
++import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
++import org.kainos.ea.model.JobRole;
++import org.kainos.ea.model.JobRoleRequest;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++
++import java.sql.SQLException;
++import java.util.Optional;
++
++public class JobRoleService {
++
++    private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
++    private JobRoleDao jobRoleDao;
++    private JobRoleValidator jobRoleValidator;
++
++    public JobRoleService(JobRoleDao jobRoleDao, JobRoleValidator jobRoleValidator) {
++        this.jobRoleDao = jobRoleDao;
++        this.jobRoleValidator = jobRoleValidator;
++    }
++
++    public JobRoleService(JobRoleDao jobRoleDao, DatabaseConnector databaseConnector) {
++    }
++
++    public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException {
++
++        Optional<JobRole> optionalJobRole = jobRoleDao.createNewJobRole(jobRole);
++
++        if (optionalJobRole.isEmpty()) {
++            throw new FailedToCreateNewJobRoleException();
++        }
++        return optionalJobRole.get();
++    }
++}
+diff --git a/product-backend/src/main/java/org/kainos/ea/service/JobRoleValidator.java b/product-backend/src/main/java/org/kainos/ea/service/JobRoleValidator.java
+new file mode 100644
+index 0000000..dc6f7b6
+--- /dev/null
++++ b/product-backend/src/main/java/org/kainos/ea/service/JobRoleValidator.java
+@@ -0,0 +1,23 @@
++package org.kainos.ea.service;
++
++import org.kainos.ea.model.JobRoleRequest;
++
++public class JobRoleValidator {
++
++    public String isValidJobRole(JobRoleRequest jobRole) {
++
++        if (jobRole.getName().length() > 64) {
++            return "Name longer than 64 characters";
++        }
++
++        if (jobRole.getDescription().length() > 2000) {
++            return "Description longer than 2000 characters";
++        }
++
++        if (jobRole.getSharePointLink().length() > 2137) {
++            return "SharePointLink longer than 2137 characters";
++        }
++
++        return null;
++    }
++}
+diff --git a/product-backend/src/test/java/org/kainos/ea/exception/CreateNewJobRoleException.java b/product-backend/src/test/java/org/kainos/ea/exception/CreateNewJobRoleException.java
+new file mode 100644
+index 0000000..d585c03
+--- /dev/null
++++ b/product-backend/src/test/java/org/kainos/ea/exception/CreateNewJobRoleException.java
+@@ -0,0 +1,4 @@
++package org.kainos.ea.exception;
++
++public class CreateNewJobRoleException extends Exception {
++}
+diff --git a/product-backend/src/test/java/tests/JobRoleControllerTests.java b/product-backend/src/test/java/tests/JobRoleControllerTests.java
+new file mode 100644
+index 0000000..6ac2a7d
+--- /dev/null
++++ b/product-backend/src/test/java/tests/JobRoleControllerTests.java
+@@ -0,0 +1,4 @@
++package tests;
++
++public class JobRoleControllerTests {
++}
+diff --git a/product-backend/src/test/java/tests/JobRoleServiceTests.java b/product-backend/src/test/java/tests/JobRoleServiceTests.java
+new file mode 100644
+index 0000000..b46e5a8
+--- /dev/null
++++ b/product-backend/src/test/java/tests/JobRoleServiceTests.java
+@@ -0,0 +1,62 @@
++package tests;
++
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.junit.runner.RunWith;
++import org.kainos.ea.db.JobRoleDao;
++import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
++import org.kainos.ea.exception.InvalidJobRoleException;
++import org.kainos.ea.model.JobRole;
++import org.kainos.ea.model.JobRoleRequest;
++import org.kainos.ea.service.JobRoleService;
++import org.kainos.ea.service.JobRoleValidator;
++import org.mockito.junit.MockitoJUnitRunner;
++import org.mockito.junit.jupiter.MockitoExtension;
++
++import java.sql.SQLException;
++import java.util.Optional;
++
++import static org.assertj.core.api.Assertions.assertThat;
++import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.Mockito.*;
++
++@RunWith(MockitoJUnitRunner.class)
++@ExtendWith(MockitoExtension.class)
++class JobRoleServiceTests {
++
++    private final JobRoleDao jobRoleDaoMock = mock(JobRoleDao.class);
++    private final JobRoleValidator jobRoleValidatorMock = mock(JobRoleValidator.class);
++    private final JobRoleService jobRoleService = new JobRoleService(jobRoleDaoMock, jobRoleValidatorMock);
++    private final JobRole mockedJobRoleInstance = new JobRole(1500, "Engineer", "blabla", "http://wp.pl");
++
++    @Test
++    public void createNewJobRoleSuccess() throws SQLException, FailedToCreateNewJobRoleException {
++        JobRoleRequest jobRoleRequest = new JobRoleRequest("TestRole5678", "Tests stuff", "some sharepoint link");
++        when(jobRoleDaoMock.createNewJobRole(jobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
++
++        JobRole newJobRole = jobRoleService.createNewJobRole(jobRoleRequest);
++
++        verify(jobRoleDaoMock).createNewJobRole(jobRoleRequest);
++        assertEquals(newJobRole, mockedJobRoleInstance);
++    }
++
++    @Test
++    public void createNewJobRoleFailure() throws FailedToCreateNewJobRoleException, SQLException {
++        JobRoleRequest jobRoleRequest = new JobRoleRequest("TestRole5789", "Tests stuff", "link");
++        when(jobRoleDaoMock.createNewJobRole(jobRoleRequest)).thenReturn(Optional.empty());
++
++        assertThatExceptionOfType(FailedToCreateNewJobRoleException.class)
++                .isThrownBy(() -> jobRoleService.createNewJobRole(jobRoleRequest));
++    }
++
++    @Test
++    public void createNewJobRoleFailsWhenInputIsIncorrect() throws SQLException, FailedToCreateNewJobRoleException, InvalidJobRoleException {
++        JobRoleRequest mockedJobRoleRequest = new JobRoleRequest("MockedName", "MockedDescription", "MockedSPLink");
++        when(jobRoleDaoMock.createNewJobRole(mockedJobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
++
++        JobRole newJobRole = jobRoleService.createNewJobRole(mockedJobRoleRequest);
++
++        assertThat(newJobRole).isEqualTo(mockedJobRoleInstance);
++    }
++}
+diff --git a/product-backend/src/test/java/tests/JobRoleValidatorTest.java b/product-backend/src/test/java/tests/JobRoleValidatorTest.java
+new file mode 100644
+index 0000000..f149895
+--- /dev/null
++++ b/product-backend/src/test/java/tests/JobRoleValidatorTest.java
+@@ -0,0 +1,29 @@
++package tests;
++
++import org.junit.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.kainos.ea.model.JobRoleRequest;
++import org.kainos.ea.service.JobRoleValidator;
++import org.mockito.junit.jupiter.MockitoExtension;
++
++import static org.assertj.core.api.Assertions.assertThat;
++
++@ExtendWith(MockitoExtension.class)
++public class JobRoleValidatorTest {
++
++    JobRoleValidator jobRoleValidator = new JobRoleValidator();
++
++    @Test
++    public void WhenJobRoleNameOver64CharactersExpectErrorMessage() {
++        JobRoleRequest jobRoleRequest = new JobRoleRequest("123451234512345123451234512345123412345123451234512345123451234512341234512345123451234512345123451234", "Manages stuff", "Some SP Link");
++
++        assertThat(jobRoleValidator.isValidJobRole(jobRoleRequest)).isEqualTo("Name longer than 64 characters");
++    }
++
++    @Test
++    public void WhenJobRoleDescriptionOver2000CharactersExpectErrorMessage() {
++        JobRoleRequest jobRoleRequest = new JobRoleRequest("12345141234512345123451234512345123451234", "MtuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages sanages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuff", "Some SP Link");
++
++        assertThat(jobRoleValidator.isValidJobRole(jobRoleRequest)).isEqualTo("Description longer than 2000 characters");
++    }
++}
+diff --git a/product-web-app/app.ts b/product-web-app/app.ts
+index ffdb7cf..b9448f1 100644
+--- a/product-web-app/app.ts
++++ b/product-web-app/app.ts
+@@ -6,6 +6,9 @@ import path from 'path';
+ import nunjucks from 'nunjucks';
+ import axios from 'axios';
+ import logger from './service/logger.js';
++import JobRoleController from './controller/jobRoleController.js';
++import { API_URL } from './common/constants.js';
++import JobRole from './model/jobRole.js';
+ 
+ const dirname = url.fileURLToPath(new URL('.', import.meta.url));
+ 
+@@ -25,17 +28,23 @@ app.use(express.json());
+ app.use(express.urlencoded({ extended: true }));
+ 
+ app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
+-
++axios.defaults.baseURL = API_URL;
+ declare module 'express-session' {
+   interface SessionData {
++    jobRole: Partial<JobRole>;
+   }
+ }
+ 
++
++
+ app.set('view engine', 'html');
+ app.use('/public', express.static(path.join(dirname, 'public')));
+ 
+ app.listen(3000, () => {
+   logger.info('Server listening on port 3000');
++
+ });
+ 
++const jobRoleController = new JobRoleController();
+ 
++jobRoleController.appRoutes(app);
+diff --git a/product-web-app/common/constants.ts b/product-web-app/common/constants.ts
+new file mode 100644
+index 0000000..f6be94d
+--- /dev/null
++++ b/product-web-app/common/constants.ts
+@@ -0,0 +1,6 @@
++export const API_URL = `${process.env.API_URL}`;
++
++export const API = {
++  JOBROLES: '/api/admin/job-roles',
++  GET_JOBROLE: (jobId: number) => `/api/admin/job-roles/${jobId}`,
++};
+\ No newline at end of file
+diff --git a/product-web-app/controller/jobRoleController.ts b/product-web-app/controller/jobRoleController.ts
+new file mode 100644
+index 0000000..ded443d
+--- /dev/null
++++ b/product-web-app/controller/jobRoleController.ts
+@@ -0,0 +1,29 @@
++import { Application, Request, Response } from "express";
++import JobRole from '../model/jobRole.js';
++import JobRoleService from "../service/jobRoleService.js";
++import JobRoleValidator from '../service/jobRoleValidator.js';
++import logger from "../service/logger.js";
++
++export default class JobRoleController {
++    private jobRoleService = new JobRoleService(new JobRoleValidator);
++
++    appRoutes(app: Application) {
++
++        app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
++            res.render('add-new-job-role');
++        });
++
++        app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
++            const data: JobRole = req.body;
++
++            try {
++                const newJobRole = await this.jobRoleService.createNewJobRole(data);
++                res.redirect(`/admin/job-roles/${newJobRole.jobId}`);
++            } catch (e: any) {
++                logger.warn(e.message);
++                res.locals.errormessage = e.message;
++                res.render('add-new-job-role', req.body);
++            }
++        });
++    }
++}
+\ No newline at end of file
+diff --git a/product-web-app/model/jobRole.ts b/product-web-app/model/jobRole.ts
+new file mode 100644
+index 0000000..f5c8ac2
+--- /dev/null
++++ b/product-web-app/model/jobRole.ts
+@@ -0,0 +1,6 @@
++export default interface JobRole {
++    jobId: number;
++    name: string;
++    description: string;
++    sharePointLink: string;
++}
+\ No newline at end of file
+diff --git a/product-web-app/package-lock.json b/product-web-app/package-lock.json
+index 321edb6..3327e62 100644
+--- a/product-web-app/package-lock.json
++++ b/product-web-app/package-lock.json
+@@ -14,14 +14,15 @@
+         "express": "4.18.2",
+         "express-session": "1.17.3",
+         "nunjucks": "3.2.4",
++        "sanitize-html": "^2.11.0",
+         "winston": "3.10.0"
+       },
+       "devDependencies": {
+         "@types/chai": "4.3.5",
+-        "@types/express": "4.17.17",
++        "@types/express": "^4.17.17",
+         "@types/express-session": "1.17.7",
+         "@types/mocha": "^10.0.1",
+-        "@types/node": "14.14.31",
++        "@types/node": "^14.14.31",
+         "@types/nunjucks": "3.2.2",
+         "@types/sinon": "10.0.16",
+         "axios-mock-adapter": "1.21.5",
+@@ -392,8 +393,9 @@
+     },
+     "node_modules/@types/express": {
+       "version": "4.17.17",
++      "resolved": "https://registry.npmjs.org/@types/express/-/express-4.17.17.tgz",
++      "integrity": "sha512-Q4FmmuLGBG58btUnfS1c1r/NQdlp3DMfGDGig8WhfpA2YRUtEkxAjkZb0yvplJGYdF1fsQ81iMDcH24sSCNC/Q==",
+       "dev": true,
+-      "license": "MIT",
+       "dependencies": {
+         "@types/body-parser": "*",
+         "@types/express-serve-static-core": "^4.17.33",
+@@ -449,8 +451,9 @@
+     },
+     "node_modules/@types/node": {
+       "version": "14.14.31",
+-      "dev": true,
+-      "license": "MIT"
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-14.14.31.tgz",
++      "integrity": "sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==",
++      "dev": true
+     },
+     "node_modules/@types/nunjucks": {
+       "version": "3.2.2",
+@@ -1485,6 +1488,14 @@
+       "integrity": "sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==",
+       "dev": true
+     },
++    "node_modules/deepmerge": {
++      "version": "4.3.1",
++      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz",
++      "integrity": "sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/define-properties": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/define-properties/-/define-properties-1.2.0.tgz",
+@@ -1556,6 +1567,57 @@
+         "node": ">=6.0.0"
+       }
+     },
++    "node_modules/dom-serializer": {
++      "version": "2.0.0",
++      "resolved": "https://registry.npmjs.org/dom-serializer/-/dom-serializer-2.0.0.tgz",
++      "integrity": "sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==",
++      "dependencies": {
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.2",
++        "entities": "^4.2.0"
++      },
++      "funding": {
++        "url": "https://github.com/cheeriojs/dom-serializer?sponsor=1"
++      }
++    },
++    "node_modules/domelementtype": {
++      "version": "2.3.0",
++      "resolved": "https://registry.npmjs.org/domelementtype/-/domelementtype-2.3.0.tgz",
++      "integrity": "sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==",
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/fb55"
++        }
++      ]
++    },
++    "node_modules/domhandler": {
++      "version": "5.0.3",
++      "resolved": "https://registry.npmjs.org/domhandler/-/domhandler-5.0.3.tgz",
++      "integrity": "sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==",
++      "dependencies": {
++        "domelementtype": "^2.3.0"
++      },
++      "engines": {
++        "node": ">= 4"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/domhandler?sponsor=1"
++      }
++    },
++    "node_modules/domutils": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/domutils/-/domutils-3.1.0.tgz",
++      "integrity": "sha512-H78uMmQtI2AhgDJjWeQmHwJJ2bLPD3GMmO7Zja/ZZh84wkm+4ut+IUnUdRa8uCGX88DiVx1j6FRe1XfxEgjEZA==",
++      "dependencies": {
++        "dom-serializer": "^2.0.0",
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.3"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/domutils?sponsor=1"
++      }
++    },
+     "node_modules/dotenv": {
+       "version": "16.3.1",
+       "license": "BSD-2-Clause",
+@@ -1587,6 +1649,17 @@
+         "node": ">= 0.8"
+       }
+     },
++    "node_modules/entities": {
++      "version": "4.5.0",
++      "resolved": "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz",
++      "integrity": "sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==",
++      "engines": {
++        "node": ">=0.12"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/entities?sponsor=1"
++      }
++    },
+     "node_modules/es-abstract": {
+       "version": "1.22.1",
+       "resolved": "https://registry.npmjs.org/es-abstract/-/es-abstract-1.22.1.tgz",
+@@ -1692,6 +1765,17 @@
+       "version": "1.0.3",
+       "license": "MIT"
+     },
++    "node_modules/escape-string-regexp": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz",
++      "integrity": "sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==",
++      "engines": {
++        "node": ">=10"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/sindresorhus"
++      }
++    },
+     "node_modules/eslint": {
+       "version": "8.45.0",
+       "resolved": "https://registry.npmjs.org/eslint/-/eslint-8.45.0.tgz",
+@@ -1963,18 +2047,6 @@
+         }
+       }
+     },
+-    "node_modules/eslint/node_modules/escape-string-regexp": {
+-      "version": "4.0.0",
+-      "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz",
+-      "integrity": "sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==",
+-      "dev": true,
+-      "engines": {
+-        "node": ">=10"
+-      },
+-      "funding": {
+-        "url": "https://github.com/sponsors/sindresorhus"
+-      }
+-    },
+     "node_modules/eslint/node_modules/glob-parent": {
+       "version": "6.0.2",
+       "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz",
+@@ -2608,6 +2680,24 @@
+         "he": "bin/he"
+       }
+     },
++    "node_modules/htmlparser2": {
++      "version": "8.0.2",
++      "resolved": "https://registry.npmjs.org/htmlparser2/-/htmlparser2-8.0.2.tgz",
++      "integrity": "sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==",
++      "funding": [
++        "https://github.com/fb55/htmlparser2?sponsor=1",
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/fb55"
++        }
++      ],
++      "dependencies": {
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.3",
++        "domutils": "^3.0.1",
++        "entities": "^4.4.0"
++      }
++    },
+     "node_modules/http-errors": {
+       "version": "2.0.0",
+       "license": "MIT",
+@@ -2899,6 +2989,14 @@
+         "node": ">=8"
+       }
+     },
++    "node_modules/is-plain-object": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npmjs.org/is-plain-object/-/is-plain-object-5.0.0.tgz",
++      "integrity": "sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/is-regex": {
+       "version": "1.1.4",
+       "resolved": "https://registry.npmjs.org/is-regex/-/is-regex-1.1.4.tgz",
+@@ -3328,17 +3426,6 @@
+       "dev": true,
+       "license": "MIT"
+     },
+-    "node_modules/mocha/node_modules/escape-string-regexp": {
+-      "version": "4.0.0",
+-      "dev": true,
+-      "license": "MIT",
+-      "engines": {
+-        "node": ">=10"
+-      },
+-      "funding": {
+-        "url": "https://github.com/sponsors/sindresorhus"
+-      }
+-    },
+     "node_modules/mocha/node_modules/ms": {
+       "version": "2.1.3",
+       "dev": true,
+@@ -3616,6 +3703,11 @@
+         "node": ">=6"
+       }
+     },
++    "node_modules/parse-srcset": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/parse-srcset/-/parse-srcset-1.0.2.tgz",
++      "integrity": "sha512-/2qh0lav6CmI15FzA3i/2Bzk2zCgQhGMkvhOhKNcBVQ1ldgpbfiNTVslmooUmWJcADi1f1kIeynbDRVzNlfR6Q=="
++    },
+     "node_modules/parseurl": {
+       "version": "1.3.3",
+       "license": "MIT",
+@@ -3676,6 +3768,11 @@
+         "node": "*"
+       }
+     },
++    "node_modules/picocolors": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.0.0.tgz",
++      "integrity": "sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ=="
++    },
+     "node_modules/picomatch": {
+       "version": "2.3.1",
+       "devOptional": true,
+@@ -3687,6 +3784,50 @@
+         "url": "https://github.com/sponsors/jonschlinkert"
+       }
+     },
++    "node_modules/postcss": {
++      "version": "8.4.30",
++      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.4.30.tgz",
++      "integrity": "sha512-7ZEao1g4kd68l97aWG/etQKPKq07us0ieSZ2TnFDk11i0ZfDW2AwKHYU8qv4MZKqN2fdBfg+7q0ES06UA73C1g==",
++      "funding": [
++        {
++          "type": "opencollective",
++          "url": "https://opencollective.com/postcss/"
++        },
++        {
++          "type": "tidelift",
++          "url": "https://tidelift.com/funding/github/npm/postcss"
++        },
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/ai"
++        }
++      ],
++      "dependencies": {
++        "nanoid": "^3.3.6",
++        "picocolors": "^1.0.0",
++        "source-map-js": "^1.0.2"
++      },
++      "engines": {
++        "node": "^10 || ^12 || >=14"
++      }
++    },
++    "node_modules/postcss/node_modules/nanoid": {
++      "version": "3.3.6",
++      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.6.tgz",
++      "integrity": "sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==",
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/ai"
++        }
++      ],
++      "bin": {
++        "nanoid": "bin/nanoid.cjs"
++      },
++      "engines": {
++        "node": "^10 || ^12 || ^13.7 || ^14 || >=15.0.1"
++      }
++    },
+     "node_modules/prelude-ls": {
+       "version": "1.2.1",
+       "resolved": "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz",
+@@ -3988,6 +4129,19 @@
+       "version": "2.1.2",
+       "license": "MIT"
+     },
++    "node_modules/sanitize-html": {
++      "version": "2.11.0",
++      "resolved": "https://registry.npmjs.org/sanitize-html/-/sanitize-html-2.11.0.tgz",
++      "integrity": "sha512-BG68EDHRaGKqlsNjJ2xUB7gpInPA8gVx/mvjO743hZaeMCZ2DwzW7xvsqZ+KNU4QKwj86HJ3uu2liISf2qBBUA==",
++      "dependencies": {
++        "deepmerge": "^4.2.2",
++        "escape-string-regexp": "^4.0.0",
++        "htmlparser2": "^8.0.0",
++        "is-plain-object": "^5.0.0",
++        "parse-srcset": "^1.0.2",
++        "postcss": "^8.3.11"
++      }
++    },
+     "node_modules/semver": {
+       "version": "6.3.1",
+       "resolved": "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz",
+@@ -4134,6 +4288,14 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/source-map-js": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz",
++      "integrity": "sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/source-map-support": {
+       "version": "0.5.21",
+       "resolved": "https://registry.npmjs.org/source-map-support/-/source-map-support-0.5.21.tgz",
+diff --git a/product-web-app/package.json b/product-web-app/package.json
+index f4b43cf..005eaf5 100644
+--- a/product-web-app/package.json
++++ b/product-web-app/package.json
+@@ -20,14 +20,15 @@
+     "express": "4.18.2",
+     "express-session": "1.17.3",
+     "nunjucks": "3.2.4",
++    "sanitize-html": "^2.11.0",
+     "winston": "3.10.0"
+   },
+   "devDependencies": {
+     "@types/chai": "4.3.5",
+-    "@types/express": "4.17.17",
++    "@types/express": "^4.17.17",
+     "@types/express-session": "1.17.7",
+     "@types/mocha": "^10.0.1",
+-    "@types/node": "14.14.31",
++    "@types/node": "^14.14.31",
+     "@types/nunjucks": "3.2.2",
+     "@types/sinon": "10.0.16",
+     "axios-mock-adapter": "1.21.5",
+diff --git a/product-web-app/service/jobRoleService.ts b/product-web-app/service/jobRoleService.ts
+new file mode 100644
+index 0000000..9aecfb6
+--- /dev/null
++++ b/product-web-app/service/jobRoleService.ts
+@@ -0,0 +1,31 @@
++import JobRole from '../model/jobRole.js';
++import axios from 'axios';
++import JobRoleValidator from './jobRoleValidator.js'
++import logger from './logger.js';
++import { API } from '../common/constants.js';
++
++export default class JobRoleService {
++    private jobRoleValidator: JobRoleValidator;
++
++    constructor(jobRoleValidator: JobRoleValidator) {
++        this.jobRoleValidator = jobRoleValidator;
++    }
++
++    async createNewJobRole(jobRole: JobRole): Promise<JobRole> {
++        const validateError = this.jobRoleValidator.validateJobRole(jobRole);
++        if (validateError) {
++            logger.warn(`VALIDATION ERROR: $(validateError)`);
++            throw new Error(validateError);
++        }
++
++        try {
++            const response = await axios.post(API.JOBROLES, jobRole);
++      
++            return response.data;
++          } catch (e) {
++            console.log(e);
++            logger.error('Could not get Job Roles');
++            throw new Error('Could not create Job Role');
++          }
++    }
++}
+\ No newline at end of file
+diff --git a/product-web-app/service/jobRoleValidator.ts b/product-web-app/service/jobRoleValidator.ts
+new file mode 100644
+index 0000000..d8e95d1
+--- /dev/null
++++ b/product-web-app/service/jobRoleValidator.ts
+@@ -0,0 +1,20 @@
++import JobRole from "../model/jobRole.js";
++
++export default class JobRoleValidator {
++    validateJobRole(jobRole: JobRole) {
++
++        if (jobRole.name.length > 64) {
++            return 'Name longer than 64 characters';
++        }
++
++        if (jobRole.description.length > 2000) {
++            return 'Description longer than 2000 characters';
++        }
++
++        if (jobRole.sharePointLink.length > 2137) {
++            return 'SharePointLink longer than 2137 characters';
++        }
++
++        return null;
++    }
++}
+\ No newline at end of file
+diff --git a/product-web-app/tests/jobRoleService.test.ts b/product-web-app/tests/jobRoleService.test.ts
+new file mode 100644
+index 0000000..65c6e00
+--- /dev/null
++++ b/product-web-app/tests/jobRoleService.test.ts
+@@ -0,0 +1,73 @@
++import { expect } from 'chai';
++import sinon from 'sinon';
++import axios from 'axios';
++import MockAdapter from 'axios-mock-adapter';
++import JobRoleValidator from '../service/jobRoleValidator.js';
++import JobRole from '../model/jobRole.js';
++import JobRoleService from '../service/jobRoleService.js';
++import logger from '../service/logger.js';
++import { response } from 'express';
++
++const mockAxios = new MockAdapter(axios);
++const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
++
++const jobRoleTestEngi: JobRole = {
++    jobId: 69,
++    name: 'TestEngi',
++    description: 'TestEngisStuff',
++    sharePointLink: 'some sharepoint link',
++}
++
++const jobRoleService = new JobRoleService(jobRoleValidatorStub);
++
++describe('JobRole service', () => {
++    before(() => {
++      logger.silent();
++    });
++  
++    after(() => {
++      logger.unsilent();
++    });
++});
++
++describe('createNewJobRole', () => {
++    it('When API online expect JobRole to be created', async () => {
++        jobRoleValidatorStub.validateJobRole.returns(null);
++
++        mockAxios.onPost('/api/admin/job-roles').reply(200, jobRoleTestEngi);
++
++        const responseBody = await jobRoleService.createNewJobRole(jobRoleTestEngi);
++
++        expect(responseBody).to.deep.equal(jobRoleTestEngi);
++        sinon.assert.calledOnceWithExactly(jobRoleValidatorStub.validateJobRole, jobRoleTestEngi);
++    });
++
++    it('When Job Role has invalid fields expect exception', async () => {
++        const validationError = 'Name longer than 64 characters';
++        jobRoleValidatorStub.validateJobRole.returns(validationError);
++        mockAxios.onPost('mockedApiUrl}/api/admin/job-roles').reply(200, jobRoleTestEngi);
++
++        let exception: any;
++        try {
++            await jobRoleService.createNewJobRole(jobRoleTestEngi);
++        } catch (e) {
++            exception = e as Error;
++        } finally {
++            expect(exception.message).to.equal(validationError);
++        }
++    });
++
++    it('When API down expect exception', async () => {
++        jobRoleValidatorStub.validateJobRole.returns(null);
++        mockAxios.onPost('/api/admin/job-roles').reply(500);
++
++        let exception: any;
++        try {
++            await jobRoleService.createNewJobRole(jobRoleTestEngi)
++        } catch (e) {
++            exception = e as Error;
++        } finally {
++            expect(exception.message).to.equal('Could not create Job Role');
++        }
++    });
++})
+\ No newline at end of file
+diff --git a/product-web-app/tests/jobRoleValidator.test.ts b/product-web-app/tests/jobRoleValidator.test.ts
+new file mode 100644
+index 0000000..c8abbb2
+--- /dev/null
++++ b/product-web-app/tests/jobRoleValidator.test.ts
+@@ -0,0 +1,38 @@
++import { expect } from 'chai';
++
++import JobRoleValidator from '../service/jobRoleValidator.js';
++import JobRole from '../model/jobRole.js';
++import logger from '../service/logger.js';
++
++const jobRoleValidator = new JobRoleValidator();
++
++describe('JobRole validator', () => {
++    before(() => {
++      logger.silent();
++    });
++  
++    after(() => {
++      logger.unsilent();
++    });
++
++    describe('validateJobRole', () => {
++        it('expect name too long', () => {
++            const jobRole: Partial<JobRole> = {
++                name: '123451234512345123451234512345123412345123451234512345123451234512341234512345123451234512345123451234',
++            };
++
++            expect(jobRoleValidator.validateJobRole(jobRole as JobRole)).to.be.equal('Name longer than 64 characters');
++        });
++
++        it('expect no errors', () => {
++            const jobRole: JobRole = {
++                jobId: 99,
++                name: 'TestEngi',
++                description: 'TestEngiStuff',
++                sharePointLink: 'some link',
++            };
++
++            expect(jobRoleValidator.validateJobRole(jobRole)).to.be.null;
++        });
++    });
++});
+\ No newline at end of file
+diff --git a/product-web-app/tsconfig.json b/product-web-app/tsconfig.json
+index a312ad1..3d0f395 100644
+--- a/product-web-app/tsconfig.json
++++ b/product-web-app/tsconfig.json
+@@ -28,7 +28,7 @@
+ 
+     "moduleResolution": "Node16",
+     /* Modules */
+-    "module": "ES2020",                                /* Specify what module code is generated. */
++    "module": "Node16",                                /* Specify what module code is generated. */
+     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
+     // "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
+     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
+diff --git a/product-web-app/views/add-new-job-role.html b/product-web-app/views/add-new-job-role.html
+new file mode 100644
+index 0000000..aa8c3e9
+--- /dev/null
++++ b/product-web-app/views/add-new-job-role.html
+@@ -0,0 +1,50 @@
++<!DOCTYPE html>
++<html lang="en">
++
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <title>Add Product</title>
++    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
++        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
++</head>
++
++<body>
++    <header class="bg-dark text-light">
++        <div class="container">
++            <div class="row"></div>
++            <div class="col-md-12">
++                <h1>Add Job Role</h1>
++            </div>
++        </div>
++    </header>
++    <main class="container mt-4">
++        <section id="form" class="bg-light py-5">
++            <div class="container"></div>
++            <p>Enter Job Role details</p>
++            {% if errormessage %}
++            <div class="alert alert-danger" role="alert">
++                {{ errormessage }}
++            </div>
++            {% endif %}
++            <form action="/admin/add-job-roles" method="post">
++                <div class="form-group">
++                    <label for="name">Name</label>
++                    <input type="text" name="name" class="form-control" value="{{ jobRole.name }}" required>
++                </div>
++                <div class="form-group">
++                    <label for="description">Description</label>
++                    <input type="text" name="description" value="{{ jobRole.description }}" class="form-control"
++                        required>
++                </div>
++                <div class="form-group">
++                    <label for="sharePointLink">SharePoint Link</label>
++                    <input type="text" name="sharePointLink" value="{{ jobRole.sharePointLink }}" class="form-control" required>
++                </div>
++                <button class="btn btn-primary" type="submit">Submit new Job Role</button>
++            </form>
++        </section>
++    </main>
++</body>
++
++</html>
+\ No newline at end of file

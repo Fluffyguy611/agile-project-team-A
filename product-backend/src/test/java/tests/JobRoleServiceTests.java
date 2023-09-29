@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
 import org.kainos.ea.exception.InvalidJobRoleException;
+import org.kainos.ea.exception.JobRoleAlreadyExistsException;
 import org.kainos.ea.model.JobRole;
 import org.kainos.ea.model.JobRoleRequest;
 import org.kainos.ea.service.JobRoleService;
@@ -31,7 +32,7 @@ class JobRoleServiceTests {
     private final JobRole mockedJobRoleInstance = new JobRole(1500, "Engineer", "blabla", "http://wp.pl");
 
     @Test
-    public void createNewJobRoleSuccess() throws SQLException, FailedToCreateNewJobRoleException {
+    public void createNewJobRoleSuccess() throws SQLException, FailedToCreateNewJobRoleException, JobRoleAlreadyExistsException {
         JobRoleRequest jobRoleRequest = new JobRoleRequest("TestRole5678", "Tests stuff", "some sharepoint link");
         when(jobRoleDaoMock.createNewJobRole(jobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
 
@@ -51,7 +52,7 @@ class JobRoleServiceTests {
     }
 
     @Test
-    public void createNewJobRoleFailsWhenInputIsIncorrect() throws SQLException, FailedToCreateNewJobRoleException, InvalidJobRoleException {
+    public void createNewJobRoleFailsWhenInputIsIncorrect() throws SQLException, FailedToCreateNewJobRoleException, InvalidJobRoleException, JobRoleAlreadyExistsException {
         JobRoleRequest mockedJobRoleRequest = new JobRoleRequest("MockedName", "MockedDescription", "MockedSPLink");
         when(jobRoleDaoMock.createNewJobRole(mockedJobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
 

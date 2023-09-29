@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.ErrorResponse;
 import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
+import org.kainos.ea.exception.JobRoleAlreadyExistsException;
 import org.kainos.ea.model.JobRoleRequest;
 import org.kainos.ea.service.JobRoleService;
 import org.kainos.ea.service.JobRoleValidator;
@@ -25,9 +26,6 @@ public class JobRoleController {
     private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
     private final JobRoleService jobRoleService = new JobRoleService(new JobRoleDao(), new JobRoleValidator());
 
-    public JobRoleController() throws FailedToCreateNewJobRoleException {
-    }
-
     @POST
     @Path("/admin/job-roles")
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,14 +33,14 @@ public class JobRoleController {
     public Response createNewJobRole(JobRoleRequest jobRole) {
         try {
             return Response.ok(jobRoleService.createNewJobRole(jobRole)).build();
-        } catch (FailedToCreateNewJobRoleException e) {
+        } catch (FailedToCreateNewJobRoleException | SQLException e) {
             logger.error("Failed to create new Job Role! Error: {}", e.getMessage());
 
             return Response.serverError().entity(new ErrorResponse(e.getMessage())).build();
-        } catch (SQLException e) {
-            logger.error("Job Role already exists! Error : {}", e.getMessage());
-
-            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
+        } catch (JobRoleAlreadyExistsException e) {
+            String errorMessage = "Job Role already exists!" + e.getMessage();
+            ErrorResponse errorResponse = new ErrorResponse(errorMessage);
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorResponse).build();
         }
     }
 }
