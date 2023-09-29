@@ -14,6 +14,11 @@ public class JobRole {
         setSharePointLink(sharePointLink);
     }
 
+    public JobRole() {
+
+    }
+
+
     public int getId() {
         return id;
     }
