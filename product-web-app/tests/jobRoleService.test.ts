@@ -12,7 +12,7 @@ const jobRolePrincipal: JobRole = {
   id: 5,
   name: 'Principal',
   description: 'his is a test case',
-  sharePointLink: "https://example.com"
+  sharePointLink: 'https://example.com',
 };
 
 const jobRoleService = new JobRoleService();
@@ -27,7 +27,6 @@ describe('JobRole service', () => {
   });
 
   describe('getJobRoleById', () => {
-
     it('when API is down expect exception to be thrown', async () => {
       mockAxios.onGet('/api/job-roles/1').reply(500);
 
@@ -41,18 +40,18 @@ describe('JobRole service', () => {
       }
     });
 
-  it('when jobRole have invalid id expect exception to be thrown', async () => {
-    mockAxios.onGet('/api/job-roles/100000').reply(400);
+    it('when jobRole have invalid id expect exception to be thrown', async () => {
+      mockAxios.onGet('/api/job-roles/100000').reply(400);
 
-    let exception: any;
-    try {
-      await jobRoleService.getJobRoleSpecification(100000);
-    } catch (e) {
-      exception = e as Error;
-    } finally {
-      expect(exception.message).to.equal('Job Role not found');
-    }
-  });
+      let exception: any;
+      try {
+        await jobRoleService.getJobRoleSpecification(100000);
+      } catch (e) {
+        exception = e as Error;
+      } finally {
+        expect(exception.message).to.equal('Job Role not found');
+      }
+    });
 
     it('when API is online expect jobRole to be returned', async () => {
       mockAxios.onGet(`/api/job-roles/${jobRolePrincipal.id}`).reply(200, jobRolePrincipal);
@@ -61,5 +60,5 @@ describe('JobRole service', () => {
 
       expect(responseBody.id).to.be.equal(jobRolePrincipal.id);
     });
-    });
+  });
 });

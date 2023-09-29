@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public class JobRoleService {
 
-    public DatabaseConnector databaseConnector;
-    public JobRoleDao jobRoleDao;
+    private DatabaseConnector databaseConnector;
+    private JobRoleDao jobRoleDao;
 
     public JobRoleService(DatabaseConnector databaseConnector, JobRoleDao jobRoleDao) {
         this.databaseConnector = databaseConnector;

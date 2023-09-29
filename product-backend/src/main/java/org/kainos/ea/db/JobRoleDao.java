@@ -27,7 +27,7 @@ public class JobRoleDao {
 
         }
 
-        return null;
+        return Optional.empty();
     }
 
 }
