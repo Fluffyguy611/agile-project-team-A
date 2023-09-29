@@ -51,9 +51,9 @@
     }
 
     .centered {
-    position: absolute;
+    position: relative;
     text-align: center;
-    margin-left: 300px;
+    margin: 50px;
     font-size: 50px;
     font-weight: bold;
     color: rgb(255, 255, 255);
@@ -69,15 +69,14 @@
         <section id="jobRole" class="mt-4">
            {% if jobRole and jobRole.name.length > 0 %}
            <div class="img-container">
-            <img src="https://www.shutterstock.com/shutterstock/photos/1646867911/display_1500/stock-photo-closeup-portrait-of-happy-pensioner-smiling-at-camera-1646867911.jpg" alt="Phono" width="1000" height="500">
             <div class="centered">{{ jobRole.name }}</div>
            </div>
            <table class="table">
            </section>
             <thead>
                 <tr>
-                    <th scope="col" class="role-description-td">Role Description</th>
-                    <th scope="col" class="role-sharepointlink-td">Role Specification</th>
+                    <th scope="col" class="role-description-td">Description</th>
+                    <th scope="col" class="role-sharepointlink-td">Specification</th>
                 </tr>
                 <tbody>
                     <tr>

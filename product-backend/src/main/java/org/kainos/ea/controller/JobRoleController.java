@@ -1,6 +1,7 @@
 package org.kainos.ea.controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -12,9 +13,11 @@ import org.kainos.ea.client.FailedToGetJobRoleException;
 import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleDao;
+import org.kainos.ea.model.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Tag(name = "Job Roles")
 @Path("/api")
 public class JobRoleController {
     private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
@@ -35,7 +38,7 @@ public class JobRoleController {
         } catch (JobRoleDoesNotExistException e) {
             logger.error("Job Role does not exist! Error: {}", (e.getMessage()));
 
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
         }
     }
 }
