@@ -1,6 +1,6 @@
-export class JobRole {
-  roleId?: number;
-  name?: String;
-  description?: String;
-  sharePointLink?: String;
+export default interface JobRole {
+  id: number;
+  name: string;
+  description: string;
+  sharePointLink: string;
 }

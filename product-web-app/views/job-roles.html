@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+{% extends "./parent.html" %}
+{% block content %}
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,7 +21,7 @@
     <main class="container mt-4">
       <section id="roles" class="mt-4">
 
-      {% if roles and roles.length >0%}
+      {% if roles and roles.length > 0%}
             <table class="table">
               <thead>
                       <tr>
@@ -37,7 +37,7 @@
                 <tr>
                   <td><strong>{{ role.name }}</strong></td>
                   <td>{{ role.description }}</td>
-                  <td><a href= "/{{ role.sharePointLink }}">Details</a></td>
+                  <td><a href= "/job-roles/{{ role.id }}">Details</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -47,5 +47,4 @@ There are no job roles
 {% endif %}
       </section>
     </main>
-  </body>
-</html>
+{% endblock %}
