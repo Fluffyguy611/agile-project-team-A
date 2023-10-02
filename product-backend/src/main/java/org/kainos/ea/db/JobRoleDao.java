@@ -35,4 +35,24 @@ public class JobRoleDao {
         }
         return Optional.empty();
     }
+
+    public Optional<JobRole> getJobRoleById(int id, Connection c) throws SQLException {
+        String getStatement = "SELECT * FROM `JobRole` WHERE `Id`=?;";
+        PreparedStatement st = c.prepareStatement(getStatement);
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+
+        while (rs.next()) {
+            return Optional.of(new JobRole(
+                    rs.getInt("Id"),
+                    rs.getString("Name"),
+                    rs.getString("Description"),
+                    rs.getString("SharePointLink")
+            ));
+
+        }
+
+        return Optional.empty();
+    }
+
 }

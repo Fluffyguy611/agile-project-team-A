@@ -30,7 +30,6 @@ public class AgileSprintWebServiceApplication extends Application<AgileSprintWeb
 
     @Override
     public void run(AgileSprintWebServiceConfiguration dropwizardWebServiceConfiguration, Environment environment) throws Exception {
-
         environment.jersey().register(new JobRoleController());
     }
 

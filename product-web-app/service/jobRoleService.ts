@@ -28,4 +28,15 @@ export default class JobRoleService {
             throw new Error('Could not create Job Role');
           }
     }
+
+    async getJobRoleSpecification(id: number): Promise<JobRole> {
+        try {
+          const response = await axios.get(API.GET_JOB_ROLE(id));
+    
+          return response.data;
+        } catch (e) {
+          logger.error('Job Role not found');
+          throw new Error('Job Role not found');
+        }
+      }
 }

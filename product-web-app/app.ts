@@ -22,6 +22,8 @@ const nunjucksConfig = {
   express: app,
 };
 
+axios.defaults.baseURL = API_URL;
+
 nunjucks.configure(appViews, nunjucksConfig);
 
 app.use(express.json());
@@ -32,6 +34,7 @@ axios.defaults.baseURL = API_URL;
 declare module 'express-session' {
   interface SessionData {
     jobRole: Partial<JobRole>;
+    jobRoleSingleView: JobRole;
   }
 }
 
@@ -48,3 +51,8 @@ app.listen(3000, () => {
 const jobRoleController = new JobRoleController();
 
 jobRoleController.appRoutes(app);
+
+app.get('/', (eq: Request, res: Response) => {
+  res.redirect('/job-roles');
+});
+

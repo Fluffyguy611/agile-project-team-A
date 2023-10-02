@@ -1,6 +1,7 @@
 export const API_URL = `${process.env.API_URL}`;
 
 export const API = {
-  JOB_ROLES: '/api/admin/job-roles',
-  GET_JOBROLE: (jobId: number) => `/api/admin/job-roles/${jobId}`,
+  ADD_JOB_ROLES: '/api/admin/job-roles',
+  JOB_ROLES: '/api/job-roles/',
+  GET_JOB_ROLE: (id: number) => `api/job-roles/${id}`,
 };

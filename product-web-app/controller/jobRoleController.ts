@@ -29,5 +29,19 @@ export default class JobRoleController {
                 res.render('add-new-job-role', req.body);
             }
         });
+
+        app.get('/job-roles/:id', async (req: Request, res: Response) => {
+            let data = {};
+      
+            try {
+              data = await this.jobRoleService.getJobRoleSpecification(
+                Number.parseInt(req.params.id, 10),
+              );
+            } catch (e) {
+              logger.error(`Couldnt get job Role! Error: ${e}`);
+            }
+      
+            res.render('view-single-jobRole', { jobRole: data });
+          });
     }
 }
