@@ -38,14 +38,11 @@ declare module 'express-session' {
   }
 }
 
-
-
 app.set('view engine', 'html');
 app.use('/public', express.static(path.join(dirname, 'public')));
 
 app.listen(3000, () => {
   logger.info('Server listening on port 3000');
-
 });
 
 const jobRoleController = new JobRoleController();
@@ -55,4 +52,3 @@ jobRoleController.appRoutes(app);
 app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
-
