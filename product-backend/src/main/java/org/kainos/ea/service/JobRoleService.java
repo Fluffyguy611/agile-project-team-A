@@ -25,6 +25,12 @@ public class JobRoleService {
     }
 
     public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException, JobRoleAlreadyExistsException {
+        Optional<String> validationError = jobRoleValidator.isValidJobRole(jobRole);
+        
+        if (validationError.isPresent()) {
+            throw new FailedToCreateNewJobRoleException(validationError.get());
+        }
+
         Optional<JobRole> existingJobRole = jobRoleDao.getJobRoleByName(jobRole.getName());
 
         if (existingJobRole.isPresent()) {
@@ -33,7 +39,7 @@ public class JobRoleService {
 
         Optional<JobRole> optionalJobRole = jobRoleDao.createNewJobRole(jobRole);
 
-        return optionalJobRole.orElseThrow(FailedToCreateNewJobRoleException::new);
+        return optionalJobRole.orElseThrow(() -> new FailedToCreateNewJobRoleException("Couldn't create job role!"));
     }
 
     public JobRole getJobRoleById(int id) throws JobRoleDoesNotExistException, FailedToGetJobRoleException {

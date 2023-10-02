@@ -35,9 +35,9 @@ public class JobRoleController {
         } catch (FailedToCreateNewJobRoleException | SQLException e) {
             logger.error("Failed to create new Job Role! Error: {}", e.getMessage());
 
-            return Response.serverError().entity(new ErrorResponse(e.getMessage())).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
         } catch (JobRoleAlreadyExistsException e) {
-            String errorMessage = "Job Role already exists!" + e.getMessage();
+            String errorMessage = "Job Role already exists!";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);
             return Response.status(Response.Status.BAD_REQUEST).entity(errorResponse).build();
         }

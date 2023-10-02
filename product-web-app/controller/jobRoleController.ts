@@ -22,10 +22,10 @@ export default class JobRoleController {
 
             try {
                 const newJobRole = await this.jobRoleService.createNewJobRole(data);
-                res.redirect(`/admin/job-roles/${newJobRole.id}`);
+                res.redirect(`/job-roles/${newJobRole.id}`);
             } catch (e: any) {
                 logger.warn(e.message);
-                res.locals.errormessage = e.message;
+                res.locals.errorMessage = e.message;
                 res.render('add-new-job-role', req.body);
             }
         });
