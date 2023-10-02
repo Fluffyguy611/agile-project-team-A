@@ -31,7 +31,6 @@ app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 declare module 'express-session' {
   interface SessionData {
     product: JobRole;
-    
   }
 }
 
@@ -42,9 +41,6 @@ const jobRolesController = new JobRolesController();
 
 jobRolesController.initialize(app);
 
-
 app.listen(3000, () => {
   logger.info('Server listening on port 3000');
 });
-
-
