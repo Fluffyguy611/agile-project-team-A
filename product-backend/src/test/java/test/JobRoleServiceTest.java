@@ -41,7 +41,6 @@ public class JobRoleServiceTest {
  ));
 
  //preparing mock //when
-//  Mockito.when(databaseConnector.getConnection()).thenReturn(conn);
   Mockito.when(jobRoleService.getAllJobRoles()).thenReturn(mockedJobRole);
 
 
@@ -60,7 +59,7 @@ void getJobRole_shouldThrowsFailedToGetAllJobRolesException_whenFailedToGetAllJo
 //calling
  Mockito.when(jobRoleService.getAllJobRoles()).thenThrow(SQLException.class);
 
- //
+
     assertThatExceptionOfType(FailedToGetAllJobRolesException.class)
             .isThrownBy(() -> jobRoleService.getAllJobRoles())
             .withMessage("Failed to get job all job roles");
