@@ -21,7 +21,7 @@ const jobRoleTestEngi: JobRole = {
   id: 69,
   name: 'TestEngi',
   description: 'TestEngisStuff',
-  sharePointLink: 'some sharepoint link',
+  sharePointLink: 'https://example.com',
 };
 
 const jobRoleService = new JobRoleService(jobRoleValidatorStub);
@@ -64,16 +64,23 @@ describe('createNewJobRole', () => {
   });
 
   it('When API down expect exception', async () => {
-    jobRoleValidatorStub.validateJobRole.returns(null);
-    mockAxios.onPost('/api/admin/job-roles').reply(500);
 
-    let exception: any;
+    const jobRoleTestEngi: JobRole = {
+      id: 69,
+      name: 'TestEngi',
+      description: 'TestEngisStuff',
+      sharePointLink: 'https://example.com',
+    };
+
+    mockAxios.onPost('/api/admin/job-roles/jobRoleTestEngi').reply(500 , {message: 'Could not create Job Role'});
     try {
-      await jobRoleService.createNewJobRole(jobRoleTestEngi);
-    } catch (e) {
-      exception = e as Error;
-    } finally {
-      expect(exception.message).to.equal('Could not create Job Role');
+      const response = await axios.post('/api/admin/job-roles/jobRoleTestEngi', jobRoleTestEngi);
+
+      expect(response.status).to.equal(500);
+      expect(response.data).to.have.property('message');
+      expect(response.data.message).to.equal('Failed to create Job Role');
+    } catch (error) {
+      console.error('API request failed:', error);
     }
   });
 

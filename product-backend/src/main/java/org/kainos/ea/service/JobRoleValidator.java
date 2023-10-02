@@ -10,10 +10,14 @@ public class JobRoleValidator {
 
         if (jobRole.getName().length() > 64) {
             return Optional.of("Name longer than 64 characters");
+        } else if (jobRole.getName().length() < 2) {
+            return Optional.of("Name shorter than 2 characters");
         }
 
         if (jobRole.getDescription().length() > 2000) {
             return Optional.of("Description longer than 2000 characters");
+        } else if (jobRole.getDescription().length() < 50) {
+            return Optional.of("Description shorter than 5 characters");
         }
 
         if (jobRole.getSharePointLink().length() > 2137) {
