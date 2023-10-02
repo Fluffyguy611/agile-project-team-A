@@ -1,6 +1,5 @@
 package org.kainos.ea.service;
 
-import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
 import org.kainos.ea.exception.JobRoleAlreadyExistsException;
@@ -21,9 +20,6 @@ public class JobRoleService {
     public JobRoleService(JobRoleDao jobRoleDao, JobRoleValidator jobRoleValidator) {
         this.jobRoleDao = jobRoleDao;
         this.jobRoleValidator = jobRoleValidator;
-    }
-
-    public JobRoleService(JobRoleDao jobRoleDao, DatabaseConnector databaseConnector) {
     }
 
     public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException, JobRoleAlreadyExistsException {
