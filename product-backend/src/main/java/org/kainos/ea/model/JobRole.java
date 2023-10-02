@@ -2,24 +2,24 @@ package org.kainos.ea.model;
 
 
 public class JobRole {
-    private int jobId;
+    private int id;
     private String name;
     private String description;
     private String sharePointLink;
 
-    public JobRole(int jobId, String roleName, String description, String sharePointLink) {
-        this.jobId = jobId;
+    public JobRole(int id, String roleName, String description, String sharePointLink) {
+        this.id = id;
         this.name = roleName.trim();
         this.description = description.trim();
         this.sharePointLink = sharePointLink.trim();
     }
 
-    public int getJobId() {
-        return jobId;
+    public int getId() {
+        return id;
     }
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

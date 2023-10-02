@@ -1,5 +1,7 @@
 package org.kainos.ea.service;
 
+import org.kainos.ea.client.FailedToGetJobRoleException;
+import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
 import org.kainos.ea.exception.JobRoleAlreadyExistsException;
@@ -23,13 +25,30 @@ public class JobRoleService {
     }
 
     public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException, JobRoleAlreadyExistsException {
+        Optional<JobRole> existingJobRole = jobRoleDao.getJobRoleByName(jobRole.getName());
+
+        if (existingJobRole.isPresent()) {
+            throw new JobRoleAlreadyExistsException();
+        }
 
         Optional<JobRole> optionalJobRole = jobRoleDao.createNewJobRole(jobRole);
 
-        if (optionalJobRole.isEmpty()) {
-            throw new FailedToCreateNewJobRoleException();
-        } else {
-            throw new JobRoleAlreadyExistsException();
+        return optionalJobRole.orElseThrow(FailedToCreateNewJobRoleException::new);
+    }
+
+    public JobRole getJobRoleById(int id) throws JobRoleDoesNotExistException, FailedToGetJobRoleException {
+        try {
+            Optional<JobRole> jobRoleSingleView = jobRoleDao.getJobRoleById(id);
+
+            if (jobRoleSingleView.isEmpty()) {
+                throw new JobRoleDoesNotExistException();
+            }
+
+            return jobRoleSingleView.get();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+
+            throw new FailedToGetJobRoleException();
         }
     }
 }

@@ -1,6 +1,6 @@
 package tests;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kainos.ea.model.JobRoleRequest;
 import org.kainos.ea.service.JobRoleValidator;
@@ -17,13 +17,13 @@ public class JobRoleValidatorTest {
     public void WhenJobRoleNameOver64CharactersExpectErrorMessage() {
         JobRoleRequest jobRoleRequest = new JobRoleRequest("123451234512345123451234512345123412345123451234512345123451234512341234512345123451234512345123451234", "Manages stuff", "Some SP Link");
 
-        assertThat(jobRoleValidator.isValidJobRole(jobRoleRequest)).isEqualTo("Name longer than 64 characters");
+        assertThat(jobRoleValidator.isValidJobRole(jobRoleRequest).get()).isEqualTo("Name longer than 64 characters");
     }
 
     @Test
     public void WhenJobRoleDescriptionOver2000CharactersExpectErrorMessage() {
         JobRoleRequest jobRoleRequest = new JobRoleRequest("12345141234512345123451234512345123451234", "MtuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages sanages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuffManages stuff", "Some SP Link");
 
-        assertThat(jobRoleValidator.isValidJobRole(jobRoleRequest)).isEqualTo("Description longer than 2000 characters");
+        assertThat(jobRoleValidator.isValidJobRole(jobRoleRequest).get()).isEqualTo("Description longer than 2000 characters");
     }
 }

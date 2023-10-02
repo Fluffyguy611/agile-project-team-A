@@ -22,7 +22,7 @@ export default class JobRoleController {
 
             try {
                 const newJobRole = await this.jobRoleService.createNewJobRole(data);
-                res.redirect(`/admin/job-roles/${newJobRole.jobId}`);
+                res.redirect(`/admin/job-roles/${newJobRole.id}`);
             } catch (e: any) {
                 logger.warn(e.message);
                 res.locals.errormessage = e.message;

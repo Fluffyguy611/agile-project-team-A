@@ -26,7 +26,7 @@ describe('JobRole validator', () => {
 
         it('expect no errors', () => {
             const jobRole: JobRole = {
-                jobId: 99,
+                id: 99,
                 name: 'TestEngi',
                 description: 'TestEngiStuff',
                 sharePointLink: 'some link',
