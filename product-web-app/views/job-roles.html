@@ -8,14 +8,14 @@
               <thead>
                       <tr class="bg-dark text-light">
                         <th scope="col">JOB ROLES</th>
-                        <th scope="col">SHOW DETAILS</th>
+                        <th scope="col" style="text-align: center;">SHOW DETAILS</th>
                       </tr>
               </thead>
               <tbody>
                 {% for role in roles %}
                 <tr>
-                  <td><strong>{{ role.name }}</strong></td>
-                  <td><a href= "/job-roles/{{ role.id }}">Details</a></td>
+                  <td ><strong>{{ role.name }}</strong></td>
+                  <td style="text-align: center;"><a href= "/job-roles/{{ role.id }}">Details</a></td>
                 </tr>
                 {% endfor %}
               </tbody>
