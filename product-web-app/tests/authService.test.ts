@@ -1,4 +1,4 @@
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import AuthService from '../service/authService.js';
