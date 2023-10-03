@@ -1,18 +1,29 @@
-import { expect } from 'chai';
+import { expect, assert } from 'chai';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import AuthService from '../service/authService.js';
 import AuthValidator from '../service/authValidator.js';
+import logger from '../service/logger.js';
+import { API } from '../common/constants.js';
 
 const mockAxios = new MockAdapter(axios);
 
 const mockedUser = {
   email: 'username@kainos.com',
-  password: 'strongPassword123',
+  password: 'strongPassword123!',
   roleId: 1,
 };
 
 const authService = new AuthService(new AuthValidator());
+
+describe('Auth service', () => {
+  before(() => {
+    logger.silent();
+  });
+
+  after(() => {
+    logger.unsilent();
+  });
 
 describe('AuthService', () => {
   describe('register', () => {
@@ -23,12 +34,12 @@ describe('AuthService', () => {
     it('should throw an error for an invalid email', async () => {
       const userWithInvalidEmail = {
         ...mockedUser,
-        email: 'invalid-email',
+        email: 'invalidemail',
       };
 
       let error;
       try {
-        await authService.register(userWithInvalidEmail, 'strongPassword123');
+        await authService.register(userWithInvalidEmail, 'strongPassword123!');
       } catch (e: any) {
         error = e;
       }
@@ -64,11 +75,15 @@ describe('AuthService', () => {
     });
 
     it('should register a user when valid email, password, and repeatPassword are provided', async () => {
-      mockAxios.onPost('http://localhost:8080/api/auth/register', mockedUser).reply(200, { success: true });
+      mockAxios.onPost(API.REGISTER, mockedUser).reply(200);
 
-      const response = await authService.register(mockedUser, 'strongPassword123');
-
-      expect(response).to.deep.equal({ success: true });
+      try {
+        await authService.register(mockedUser, 'strongPassword123!');
+      } catch (e) {
+        assert.fail('Couldnt register!');
+      }
+  
     });
   });
+});
 });

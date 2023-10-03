@@ -22,7 +22,7 @@ public class AuthService {
         this.authValidator = authValidator;
     }
 
-    public String register(User user) throws FailedToRegisterException, InvalidEmailException, InvalidPasswordException, InvalidRoleIdException {
+    public void register(User user) throws FailedToRegisterException, InvalidEmailException, InvalidPasswordException, InvalidRoleIdException {
         try {
             if (!authValidator.isValidEmail(user.getEmail())) {
                 throw new InvalidEmailException();
@@ -38,8 +38,6 @@ public class AuthService {
 
             user.setPassword(hashPassword(user.getPassword()));
             authDao.registerUser(user, databaseConnector.getConnection());
-
-            return user.getEmail();
         } catch (SQLException | DatabaseConnectionException e) {
             logger.error("SQL exception! Error: {}", e.getMessage());
 

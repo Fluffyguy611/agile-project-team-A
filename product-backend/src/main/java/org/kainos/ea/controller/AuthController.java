@@ -28,7 +28,8 @@ public class AuthController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(User user) {
         try {
-            return Response.ok(authService.register(user)).build();
+            authService.register(user);
+            return Response.ok().build();
         } catch (FailedToRegisterException e) {
             logger.error("Failed to create user! Error: {}", e.getMessage());
 

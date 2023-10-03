@@ -9,9 +9,7 @@ import org.kainos.ea.service.AuthValidator;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class AuthServiceTest {
     DatabaseConnector databaseConnectorMock = mock(DatabaseConnector.class);
@@ -28,9 +26,9 @@ class AuthServiceTest {
         when(authValidatorMock.isRoleIdValid(mockedUser.getRoleId())).thenReturn(true);
         when(authDaoMock.registerUser(mockedUser, databaseConnectorMock.getConnection())).thenReturn(mockedUser.getEmail());
 
-        String returnedEmail = authService.register(mockedUser);
+        authService.register(mockedUser);
 
-        assertThat(returnedEmail).isEqualTo(mockedUser.getEmail());
+        verify(authDaoMock).registerUser(mockedUser, databaseConnectorMock.getConnection());
     }
 
     @Test
