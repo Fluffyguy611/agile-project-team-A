@@ -1,6 +1,6 @@
+const example = {
+  isLoggedIn: true,
+  role: 'employee',
+};
 
-
-export const example = {
-    isLoggedIn: true,
-    role: 'employee',
-  };
+export default example;
