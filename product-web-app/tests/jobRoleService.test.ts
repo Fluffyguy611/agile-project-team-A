@@ -61,39 +61,41 @@ describe('JobRole service', () => {
       expect(responseBody.id).to.be.equal(jobRolePrincipal.id);
     });
 
-    const data = [
-      {
-        id: 1,
-        name: 'name',
-        description: 'description',
-        sharePointLink: 'exaple',
-      },
-    ];
+    describe('getJobRoles', async () => {
+      const data = [
+        {
+          id: 1,
+          name: 'name',
+          description: 'description',
+          sharePointLink: 'exaple',
+        },
+      ];
 
-    it('should return jobRoles from Response', async () => {
-      const mock = new MockAdapter(axios);
-      const jobRolesService = new JobRoleService();
+      it('when there are job roles expect job roles to be returned', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRolesService = new JobRoleService();
 
-      mock.onGet(API.JOB_ROLES).reply(200, data);
+        mock.onGet(API.JOB_ROLES).reply(200, data);
 
-      const result = await jobRolesService.getJobRoles();
-      expect(result).to.deep.equal(data);
-    });
+        const result = await jobRolesService.getJobRoles();
+        expect(result).to.deep.equal(data);
+      });
 
-    it('should throw err when  ', async () => {
-      const mock = new MockAdapter(axios);
-      const jobRolesService = new JobRoleService();
+      it('when Api is down expect exception to be thrown', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRolesService = new JobRoleService();
 
-      mock.onGet('/api/job-roles').reply(500, data);
-      let error;
+        mock.onGet('/api/job-roles').reply(500, data);
+        let error;
 
-      try {
-        await jobRolesService.getJobRoles();
-      } catch (e: any) {
-        error = e.message;
-      }
+        try {
+          await jobRolesService.getJobRoles();
+        } catch (e: any) {
+          error = e.message;
+        }
 
-      expect(error).to.equal('Could not get job roles');
+        expect(error).to.equal('Could not get job roles');
+      });
     });
   });
 });

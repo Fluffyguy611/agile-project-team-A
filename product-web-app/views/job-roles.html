@@ -1,14 +1,5 @@
 {% extends "./parent.html" %}
 {% block content %}
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JOB ROLE LIST</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  </head>
-
-  <body>
-   
     <main class="container mt-4">
       <section id="roles" class="mt-4">
 
@@ -21,8 +12,6 @@
                         <th scope="col">SHOW DETAILS</th>
                       </tr>
               </thead>
-
-
               <tbody>
                 {% for role in roles %}
                 <tr>
