@@ -1,12 +1,9 @@
 import { expect } from 'chai';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 import AuthService from '../service/authService.js';
 import AuthValidator from '../service/authValidator.js';
 import logger from '../service/logger.js';
 import { API } from '../common/constants.js';
-
-const mockAxios = new MockAdapter(axios);
+import mockAxios from './axios.instance.test.js';
 
 const mockedUser = {
   email: 'username@kainos.com',
@@ -74,7 +71,7 @@ describe('AuthService', () => {
       expect(error.message).to.equal('Password and repeated password do not match');
     });
 
-    it.skip('should register a user when valid email, password, and repeatPassword are provided', async () => {      
+    it('should register a user when valid email, password, and repeatPassword are provided', async () => {      
       mockAxios.onPost(API.REGISTER, mockedUser).reply(200);
       
       await authService.register(mockedUser, 'strongPassword123!');      

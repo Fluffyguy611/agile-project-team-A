@@ -1,12 +1,8 @@
 import { expect } from 'chai';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 import JobRole from '../model/jobRole.js';
 import logger from '../service/logger.js';
 import JobRoleService from '../service/jobRoleService.js';
-
-// This sets the mock adapter on the default instance
-const mockAxios = new MockAdapter(axios);
+import mockAxios from './axios.instance.test.js';
 
 const jobRolePrincipal: JobRole = {
   id: 5,
