@@ -14,7 +14,7 @@ export default class AuthController {
     app.post('/register', async (req: Request, res: Response) => {
       const data: User = req.body;
       try {
-        await this.authService.register(data);
+        await this.authService.register(data, req.body.repeatPassword);
         res.redirect('/login');
       } catch (e: any) {
         res.locals.errormessage = e.message;
