@@ -1,11 +1,11 @@
 package org.kainos.ea.api;
 
 import org.kainos.ea.cli.JobRole;
-import org.kainos.ea.client.DatabaseConnectionException;
 import org.kainos.ea.client.FailedToGetJobRoleException;
 import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleDao;
+import org.kainos.ea.exception.DatabaseConnectionException;
 
 import java.sql.SQLException;
 import java.util.Optional;
