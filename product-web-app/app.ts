@@ -48,12 +48,7 @@ app.listen(3000, () => {
 
 const authController = new AuthController();
 
-app.post('/', (req: Request, res: Response) => {
-  res.redirect('/auth/register');
- });
-
 authController.appRoutes(app);
-
 
 const jobRoleSingleViewController = new JobRoleSingleViewController();
 
