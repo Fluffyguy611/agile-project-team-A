@@ -34,7 +34,7 @@ public class JobRoleController {
         try {
             return Response.ok(jobRoleService.getAllJobRoles()).build();
         } catch (FailedToGetAllJobRolesException | SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to get Job Roles! Error: {}. SQL exception! Error: {}", e.getMessage(), e.getMessage());
             return Response.serverError().build();
         }
     }

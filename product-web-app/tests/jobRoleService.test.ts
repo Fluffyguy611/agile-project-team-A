@@ -84,7 +84,7 @@ describe('JobRole service', () => {
       const mock = new MockAdapter(axios);
       const jobRolesService = new JobRoleService();
 
-      mock.onGet('http://localhost:8080/api/job-roles').reply(500, data);
+      mock.onGet('/api/job-roles').reply(500, data);
       let error;
 
       try {

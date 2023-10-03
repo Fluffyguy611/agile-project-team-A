@@ -3,6 +3,7 @@ package test;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kainos.ea.api.JobRoleService;
+import org.kainos.ea.client.DatabaseConnectionException;
 import org.kainos.ea.client.FailedToGetAllJobRolesException;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.cli.JobRole;
@@ -22,49 +23,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 public class JobRoleServiceTest {
 
-  JobRoleDao jobRoleDao = Mockito.mock(JobRoleDao.class);
-
-  JobRoleService jobRoleService = new JobRoleService(jobRoleDao);
-
+    JobRoleDao jobRoleDao = Mockito.mock(JobRoleDao.class);
+    JobRoleService jobRoleService = new JobRoleService(jobRoleDao);
 
 
- @Test
- void getJobRoles_shouldReturnJobRoles_whenDaoReturnsJobRoles() throws SQLException, FailedToGetAllJobRolesException {
- List<JobRole> mockedJobRole = new ArrayList<>();
-
- //given
- mockedJobRole.add(new JobRole(
-            1,
-            "name",
-            "description",
-            "sharePointLink"
- ));
-
- //preparing mock //when
-  Mockito.when(jobRoleService.getAllJobRoles()).thenReturn(mockedJobRole);
+    @Test
+    void getJobRoles_shouldReturnJobRoles_whenDaoReturnsJobRoles() throws SQLException, FailedToGetAllJobRolesException, DatabaseConnectionException {
+        List<JobRole> mockedJobRole = new ArrayList<>();
 
 
-//calling the method to test
-  List<JobRole> result = jobRoleService.getAllJobRoles();
+        mockedJobRole.add(new JobRole(
+                1,
+                "name",
+                "description",
+                "sharePointLink"
+        ));
 
 
-  //comparison list
-  assertEquals(result, mockedJobRole);
+        Mockito.when(jobRoleDao.getAllJobRoles()).thenReturn(mockedJobRole);
 
- }
+        List<JobRole> result = jobRoleService.getAllJobRoles();
 
-@Test
-void getJobRole_shouldThrowsFailedToGetAllJobRolesException_whenFailedToGetAllJobs() throws SQLException, FailedToGetAllJobRolesException {
+        assertEquals(result, mockedJobRole);
 
-//calling
- Mockito.when(jobRoleService.getAllJobRoles()).thenThrow(SQLException.class);
+    }
+
+    @Test
+    void getJobRole_shouldThrowsFailedToGetAllJobRolesException_whenFailedToGetAllJobs() throws SQLException, DatabaseConnectionException {
 
 
-    assertThatExceptionOfType(FailedToGetAllJobRolesException.class)
-            .isThrownBy(() -> jobRoleService.getAllJobRoles())
-            .withMessage("Failed to get job all job roles");
+        Mockito.when(jobRoleDao.getAllJobRoles()).thenThrow(SQLException.class);
 
- }
+
+        assertThatExceptionOfType(FailedToGetAllJobRolesException.class)
+                .isThrownBy(() -> jobRoleService.getAllJobRoles())
+                .withMessage("Failed to get job all job roles");
+
+    }
 
 
 }

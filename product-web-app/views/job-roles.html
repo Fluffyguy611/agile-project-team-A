@@ -8,23 +8,14 @@
   </head>
 
   <body>
-    <header class="bg-dark text-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <h2>Our Job Roles</h2>
-          </div>
-        </div> 
-      </div> 
-    </header>
-
+   
     <main class="container mt-4">
       <section id="roles" class="mt-4">
 
-      {% if roles and roles.length > 0%}
+      {% if roles and roles.length > 0 %}
             <table class="table">
               <thead>
-                      <tr>
+                      <tr class="bg-dark text-light">
                         <th scope="col">JOB ROLES</th>
                         <th scope="col">DESCRIPTION</th>
                         <th scope="col">SHOW DETAILS</th>

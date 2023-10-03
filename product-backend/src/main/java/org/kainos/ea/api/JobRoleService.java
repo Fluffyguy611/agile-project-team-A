@@ -7,12 +7,15 @@ import org.kainos.ea.client.FailedToGetJobRoleException;
 import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class JobRoleService {
+    private static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
     private JobRoleDao jobRoleDao;
 
     private DatabaseConnector databaseConnector;
@@ -33,7 +36,7 @@ public class JobRoleService {
             List<JobRole> jobRoleList = jobRoleDao.getAllJobRoles();
             return jobRoleList;
         } catch (SQLException | DatabaseConnectionException e) {
-            System.err.println(e.getMessage());
+            logger.error("SQL exception! Error: {}. DatabaseConnection! Error: {}", e.getMessage(), e.getMessage());
             throw new FailedToGetAllJobRolesException();
         }
     }
@@ -49,8 +52,7 @@ public class JobRoleService {
 
             return jobRoleSingleView.get();
         } catch (SQLException | DatabaseConnectionException e) {
-            System.err.println(e.getMessage());
-
+            logger.error("SQL exception! Error: {}. DatabaseConnection! Error: {}", e.getMessage(), e.getMessage());
             throw new FailedToGetJobRoleException();
         }
     }
