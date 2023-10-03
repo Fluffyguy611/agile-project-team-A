@@ -8,7 +8,6 @@
               <thead>
                       <tr class="bg-dark text-light">
                         <th scope="col">JOB ROLES</th>
-                        <th scope="col">DESCRIPTION</th>
                         <th scope="col">SHOW DETAILS</th>
                       </tr>
               </thead>
@@ -16,7 +15,6 @@
                 {% for role in roles %}
                 <tr>
                   <td><strong>{{ role.name }}</strong></td>
-                  <td>{{ role.description }}</td>
                   <td><a href= "/job-roles/{{ role.id }}">Details</a></td>
                 </tr>
                 {% endfor %}
