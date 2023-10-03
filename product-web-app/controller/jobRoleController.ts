@@ -1,6 +1,7 @@
 import { Application, Request, Response } from 'express';
 import logger from '../service/logger.js';
 import JobRoleService from '../service/jobRoleService.js';
+import { example } from '../common/example_file.js';
 
 export default class JobRoleSingleViewController {
   private JobRoleService = new JobRoleService();
@@ -17,7 +18,10 @@ export default class JobRoleSingleViewController {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
 
-      res.render('view-single-jobRole', { jobRole: data });
+      res.render('view-single-jobRole', { jobRole: data , role: example.role, isLoggedIn: example.isLoggedIn});
     });
+    app.get('/pizza', async(req: Request, res: Response) => {
+      res.render('view-pizza', {role: example.role, isLoggedIn: example.isLoggedIn})
+    })
   }
 }
