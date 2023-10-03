@@ -1,7 +1,7 @@
 import { Application, Request, Response } from 'express';
 import logger from '../service/logger.js';
 import JobRoleService from '../service/jobRoleService.js';
-import example from '../common/example_file.js';
+import mock from '../common/req.express.session.mock.js';
 
 export default class JobRoleSingleViewController {
   private JobRoleService = new JobRoleService();
@@ -20,12 +20,9 @@ export default class JobRoleSingleViewController {
 
       res.render('view-single-jobRole', {
         jobRole: data,
-        role: example.role,
-        isLoggedIn: example.isLoggedIn,
+        role: mock.role,
+        isLoggedIn: mock.isLoggedIn,
       });
-    });
-    app.get('/pizza', async (req: Request, res: Response) => {
-      res.render('view-pizza', { role: example.role, isLoggedIn: example.isLoggedIn });
     });
   }
 }
