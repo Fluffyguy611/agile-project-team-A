@@ -30,7 +30,7 @@ export default class AuthService {
     }
 
     try {
-      const response = await axios.post(API.REGISTER, user);
+      await axios.post(API.REGISTER, user);
     } catch (e) {
       logger.error('Could not register user');
       throw new Error('Could not register user');
