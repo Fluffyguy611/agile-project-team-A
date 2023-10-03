@@ -50,9 +50,7 @@ public class JobRoleDao {
                     rs.getString("Description"),
                     rs.getString("SharePointLink")
             ));
-
         }
-
         return Optional.empty();
     }
 
@@ -70,10 +68,7 @@ public class JobRoleDao {
                     rs.getString("Description"),
                     rs.getString("SharePointLink")
             ));
-
         }
-
         return Optional.empty();
     }
-
 }

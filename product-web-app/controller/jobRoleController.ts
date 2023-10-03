@@ -25,7 +25,7 @@ export default class JobRoleController {
       } catch (e: any) {
         logger.warn(e.message);
         res.locals.errorMessage = e.message;
-        res.render('add-new-job-role', req.body);
+        res.render('add-new-job-role', {jobRole: data});
       }
     });
 

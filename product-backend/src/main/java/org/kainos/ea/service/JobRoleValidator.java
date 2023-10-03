@@ -16,7 +16,7 @@ public class JobRoleValidator {
 
         if (jobRole.getDescription().length() > 2000) {
             return Optional.of("Description longer than 2000 characters");
-        } else if (jobRole.getDescription().length() < 50) {
+        } else if (jobRole.getDescription().length() < 5) {
             return Optional.of("Description shorter than 5 characters");
         }
 
