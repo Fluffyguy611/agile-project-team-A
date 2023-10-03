@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 
-@Tag(name = "Group A")
+@Tag(name = "Job Roles")
 @Path("/api")
 
 public class JobRoleController {
