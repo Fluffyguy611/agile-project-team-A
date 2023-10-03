@@ -1,7 +1,6 @@
 package org.kainos.ea.db;
 
 import org.kainos.ea.exception.DatabaseConnectionException;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

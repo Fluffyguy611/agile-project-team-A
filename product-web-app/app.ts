@@ -8,6 +8,8 @@ import axios from 'axios';
 import logger from './service/logger.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
+import JobRole from './model/jobRole.js';
+import JobRoleSingleViewController from './controller/jobRoleController.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -32,7 +34,7 @@ axios.defaults.baseURL = API_URL;
 
 declare module 'express-session' {
   interface SessionData {
-    
+    jobRoleSingleView: JobRole;
   }
 }
 
@@ -43,6 +45,7 @@ app.listen(3000, () => {
   logger.info('Server listening on port 3000');
 });
 
+
 const authController = new AuthController();
 
 app.post('/', (req: Request, res: Response) => {
@@ -50,3 +53,12 @@ app.post('/', (req: Request, res: Response) => {
  });
 
 authController.appRoutes(app);
+
+
+const jobRoleSingleViewController = new JobRoleSingleViewController();
+
+app.get('/', (eq: Request, res: Response) => {
+  res.redirect('/job-roles');
+});
+
+jobRoleSingleViewController.appRoutes(app);

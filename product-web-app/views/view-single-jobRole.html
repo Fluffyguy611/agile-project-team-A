@@ -1,0 +1,100 @@
+{% extends "./parent.html" %}
+{% block content %}
+
+<style>
+    .details-job-role {
+      background: rgb(4, 119, 63);
+      border: 0;
+      color: white;
+      padding: 10px;
+      margin-left: 50px;
+      border-radius: 15px;
+      transition: 0.4s ease;
+    }
+  
+    .my-button:hover {
+      background: black;
+      cursor: pointer;
+    }
+
+    .role-name-td {
+        font-size:x-large;
+        width: 200px;
+        padding-right: 100px;
+        padding-bottom: 100px;
+        max-height: 200px;    
+    }
+
+    .role-description-td {
+        font-size:x-large;
+        padding-right: 100px;
+        padding-bottom: 100px;
+        max-width: 200px;
+        max-height: 200px;    
+    }
+
+    .role-sharepointlink-td {
+        font-size:x-large;
+        padding-bottom: 100px;
+        width: 300px;
+    }
+    
+    .role-details-td {
+        max-width: 200px;
+        max-height: 200px;
+    }
+
+    .img-container {
+    position: relative;
+    text-align: left;
+    color: white;
+    }
+
+    .centered {
+    position: relative;
+    text-align: center;
+    margin: 50px;
+    font-size: 50px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-color: #283583;
+    width: 500px;
+    top: 25%;
+    left: 25%;
+    transform: translate(-50%);
+    }
+  </style>
+    
+    <main class="container mt-4">
+        <section id="jobRole" class="mt-4">
+           {% if jobRole and jobRole.name.length > 0 %}
+           <div class="img-container">
+            <div class="centered">{{ jobRole.name }}</div>
+           </div>
+           <table class="table">
+           </section>
+            <thead>
+                <tr>
+                    <th scope="col" class="role-description-td">Description</th>
+                    <th scope="col" class="role-sharepointlink-td">Specification</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td class="role-details-td">{{ jobRole.description }} </td>
+                        <td class="role-details-td"><a href="{{ jobRole.sharePointLink }}">
+                            <button class="details-job-role">View Details</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </thead>
+        </table>
+           {% else %}
+                Could not find job Role.
+           {% endif %}
+        </section>
+    </main>
+
+
+
+{% endblock %}
