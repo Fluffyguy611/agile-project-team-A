@@ -40,4 +40,23 @@ public class AuthController {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
         }
     }
+
+    @POST
+    @Path("/auth/login")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(User user) throws DatabaseConnectionException, UserDoesNotExistException, FailedToGenerateTokenException {
+        try {
+            String token = authService.login(user);
+            return Response.ok().build();
+        } catch (FailedToLoginException e) {
+            logger.error("Failed to login! Error: {}", e.getMessage());
+
+            return Response.serverError().entity(new ErrorResponse(e.getMessage())).build();
+        } catch (InvalidPasswordException e) {
+            logger.error("Invalid password! Error: {}", e.getMessage());
+
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
+        }
+    }
 }
