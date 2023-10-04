@@ -8,9 +8,9 @@ import axios from 'axios';
 import logger from './service/logger.js';
 import { API_URL } from './common/constants.js';
 import JobRole from './model/jobRole.js';
-import Capability from './model/Capability.js';
 import JobRoleSingleViewController from './controller/jobRoleController.js';
 import CapabilityController from './controller/capabilityController.js';
+import Capability from './model/capability.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 

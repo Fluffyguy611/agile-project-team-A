@@ -2,7 +2,7 @@ import { Application, Request, Response } from 'express';
 import logger from '../service/logger.js';
 import CapabilityService from '../service/capabilityService.js';
 
-export default class capabilityController {
+export default class CapabilityController {
   private capabilityService = new CapabilityService();
 
   appRoutes(app: Application) {
@@ -10,15 +10,14 @@ export default class capabilityController {
       let data = {};
 
       try {
-         await this.capabilityService.getEveryCapabilityLead()
+        data = await this.capabilityService.getEveryCapabilityLead();
       } catch (e) {
-        logger.error(`Couldnt get job Role! Error: ${e}`);
+        logger.error(`Couldnt get Capability Leads! Error: ${e}`);
       }
 
-      res.render('view-single-jobRole', { jobRole: data });
+      res.render('list-capability-leads', { capability: data });
     });
   }
 
-  //Emilia tu twoje
-
+  // Emilia tu twoje
 }

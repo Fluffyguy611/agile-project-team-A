@@ -14,7 +14,7 @@ public class CapabilityDao {
 
 
     public Optional<List<Capability>> getEveryCapabilityLead(Connection c) throws SQLException {
-        String getStatement = "SELECT * FROM `Capability`";
+        String getStatement = "SELECT Id, Capability, Name, Photo, Message FROM `Capability`";
         PreparedStatement st = c.prepareStatement(getStatement);
         ResultSet rs = st.executeQuery();
 
@@ -22,13 +22,12 @@ public class CapabilityDao {
 
         while (rs.next()) {
             Capability capability = new Capability(
-                    /*
                     rs.getInt("Id"),
+                    rs.getString("Capability"),
                     rs.getString("Name"),
-                    rs.getString("Description"),
-                    rs.getString("SharePointLink")
-
-                     */);
+                    rs.getString("Photo"),
+                    rs.getString("Message")
+                    );
             capabilityList.add(capability);
         }
         return Optional.of(capabilityList);

@@ -30,7 +30,7 @@ public class CapabilityService {
         try {
             Optional<List<Capability>> capabilityList = capabilityDao.getEveryCapabilityLead(databaseConnector.getConnection());
 
-            if (capabilityList.isEmpty()) {
+            if (capabilityList.get().isEmpty()) {
                 throw new CapabilityDoesNotExistException();
             }
 
