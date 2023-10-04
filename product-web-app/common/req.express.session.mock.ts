@@ -1,6 +1,6 @@
 const example = {
   isLoggedIn: true, /// to be changed for req.express.session.token
-  role: 'employee',
+  role: 'admin',
 };
 
 export default example;
