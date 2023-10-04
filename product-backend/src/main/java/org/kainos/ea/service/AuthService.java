@@ -2,7 +2,10 @@ package org.kainos.ea.service;
 
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
-import org.kainos.ea.exception.*;
+import org.kainos.ea.exception.FailedToRegisterException;
+import org.kainos.ea.exception.InvalidEmailException;
+import org.kainos.ea.exception.InvalidPasswordException;
+import org.kainos.ea.exception.InvalidRoleIdException;
 import org.kainos.ea.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -38,7 +41,7 @@ public class AuthService {
 
             user.setPassword(hashPassword(user.getPassword()));
             authDao.registerUser(user, databaseConnector.getConnection());
-        } catch (SQLException | DatabaseConnectionException e) {
+        } catch (SQLException e) {
             logger.error("SQL exception! Error: {}", e.getMessage());
 
             throw new FailedToRegisterException();
