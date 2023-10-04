@@ -1,17 +1,17 @@
-package org.kainos.ea.cli;
+package org.kainos.ea.model;
+
 
 public class JobRole {
-
     private int id;
     private String name;
     private String description;
     private String sharePointLink;
 
-    public JobRole(int id, String name, String description, String sharePointLink) {
-        setId(id);
-        setName(name);
-        setDescription(description);
-        setSharePointLink(sharePointLink);
+    public JobRole(int id, String roleName, String description, String sharePointLink) {
+        this.id = id;
+        this.name = roleName.trim();
+        this.description = description.trim();
+        this.sharePointLink = sharePointLink.trim();
     }
 
     public int getId() {
@@ -23,26 +23,26 @@ public class JobRole {
     }
 
     public String getName() {
-        return name;
+        return name.trim();
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public String getDescription() {
-        return description;
+        return description.trim();
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.trim();
     }
 
     public String getSharePointLink() {
-        return sharePointLink;
+        return sharePointLink.trim();
     }
 
     public void setSharePointLink(String sharePointLink) {
-        this.sharePointLink = sharePointLink;
+        this.sharePointLink = sharePointLink.trim();
     }
 }
