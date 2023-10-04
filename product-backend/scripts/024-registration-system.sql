@@ -22,13 +22,6 @@ CREATE TABLE User (
     FOREIGN KEY (RoleId) REFERENCES Roles(Id)
 );
 
-CREATE TABLE Token (
-	Email VARCHAR(64) NOT NULL,
-    Token TEXT NOT NULL,
-    Expiry DATETIME NOT NULL,
-    FOREIGN KEY (Email) REFERENCES Users(Email)
-);
-
 END $$
 DELIMITER ;
 CALL Create_registration_tables();
