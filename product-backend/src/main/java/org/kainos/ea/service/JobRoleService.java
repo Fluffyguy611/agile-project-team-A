@@ -26,7 +26,7 @@ public class JobRoleService {
 
     public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException, JobRoleAlreadyExistsException {
         Optional<String> validationError = jobRoleValidator.isValidJobRole(jobRole);
-        
+
         if (validationError.isPresent()) {
             throw new FailedToCreateNewJobRoleException(validationError.get());
         }

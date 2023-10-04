@@ -22,3 +22,6 @@ INSERT INTO JobRole (Name, Description, SharePointLink) VALUES
 ('Senior Front-End Engineer', 'Experienced front-end developer with senior responsibilities.', 'https://example.com/seniorfrontendengineer'),
 ('Senior Support Technician', 'Provides senior-level support and troubleshooting services.', 'https://example.com/seniorsupporttechnician'),
 ('Senior Test Engineer', 'Experienced test engineer with senior responsibilities.', 'https://example.com/seniortestengineer');
+
+INSERT INTO Role(Id, Name) VALUES (1, 'Admin');
+INSERT INTO Role(Id, Name) VALUES (2, 'Employee');

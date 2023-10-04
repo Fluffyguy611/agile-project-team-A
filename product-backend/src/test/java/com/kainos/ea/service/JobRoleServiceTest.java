@@ -3,8 +3,6 @@ package com.kainos.ea.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kainos.ea.api.JobRoleService;
-import org.kainos.ea.cli.JobRole;
 import org.kainos.ea.client.FailedToGetJobRoleException;
 import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.db.JobRoleDao;

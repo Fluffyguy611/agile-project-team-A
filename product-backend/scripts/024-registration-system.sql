@@ -10,9 +10,6 @@ CREATE TABLE Role (
     PRIMARY KEY (Id)
 );
 
-INSERT INTO Role(Id, Name) VALUES (1, 'Admin');
-INSERT INTO Role(Id, Name) VALUES (2, 'Employee');
-
 CREATE TABLE User (
 	Id INT NOT NULL auto_increment,
 	Email VARCHAR(64) NOT NULL UNIQUE,

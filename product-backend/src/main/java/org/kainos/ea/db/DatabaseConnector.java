@@ -1,6 +1,5 @@
 package org.kainos.ea.db;
 
-import org.kainos.ea.exception.DatabaseConnectionException;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,8 @@ public class DatabaseConnector {
     private final static Logger logger = LoggerFactory.getLogger(DatabaseConnector.class);
     private static Connection conn;
 
-    public Connection getConnection() throws DatabaseConnectionException, SQLException {
-        String user, password, host, database;
+    public static Connection getConnection() throws SQLException {
+        String user, password, host, name;
 
         if (conn != null && !conn.isClosed()) {
             return conn;
