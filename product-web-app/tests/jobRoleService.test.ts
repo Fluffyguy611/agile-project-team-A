@@ -1,13 +1,12 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
 import logger from '../service/logger.js';
+import mockAxios from './axios.instance.test.js';
 
-const mockAxios = new MockAdapter(axios);
 const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
 
 const jobRolePrincipal: JobRole = {
