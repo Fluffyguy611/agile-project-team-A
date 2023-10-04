@@ -9,6 +9,9 @@ import logger from './service/logger.js';
 import { API_URL } from './common/constants.js';
 import JobRole from './model/jobRole.js';
 import JobRoleController from './controller/jobRoleController.js';
+import Capability from './model/capability.js';
+import JobRoleSingleViewController from './controller/jobRoleController.js';
+import CapabilityController from './controller/capabilityController.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -34,6 +37,7 @@ app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 declare module 'express-session' {
   interface SessionData {
     jobRoleSingleView: JobRole;
+    capability: Capability;
   }
 }
 
@@ -45,9 +49,13 @@ app.listen(3000, () => {
 });
 
 const jobRoleController = new JobRoleController();
+const jobRoleSingleViewController = new JobRoleSingleViewController();
+const capabilityController = new CapabilityController();
 
 app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
 
 jobRoleController.appRoutes(app);
+jobRoleSingleViewController.appRoutes(app);
+capabilityController.appRoutes(app);
