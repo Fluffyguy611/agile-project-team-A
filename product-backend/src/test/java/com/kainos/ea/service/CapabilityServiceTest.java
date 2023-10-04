@@ -1,15 +1,12 @@
 package com.kainos.ea.service;
 
 import org.junit.jupiter.api.Test;
-import org.kainos.ea.api.CapabilityService;
-import org.kainos.ea.api.JobRoleService;
-import org.kainos.ea.cli.Capability;
-import org.kainos.ea.cli.JobRole;
-import org.kainos.ea.client.CapabilityDoesNotExistException;
-import org.kainos.ea.client.FailedToGetCapabilityException;
+import org.kainos.ea.service.CapabilityService;
+import org.kainos.ea.model.Capability;
+import org.kainos.ea.exception.CapabilityDoesNotExistException;
+import org.kainos.ea.exception.FailedToGetCapabilityException;
 import org.kainos.ea.db.CapabilityDao;
 import org.kainos.ea.db.DatabaseConnector;
-import org.kainos.ea.db.JobRoleDao;
 import org.mockito.Mockito;
 
 import java.sql.Connection;

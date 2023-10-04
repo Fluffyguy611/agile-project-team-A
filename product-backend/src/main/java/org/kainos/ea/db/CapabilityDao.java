@@ -1,9 +1,9 @@
 package org.kainos.ea.db;
 
 
-import org.kainos.ea.cli.Capability;
-import org.kainos.ea.cli.CapabilityRequest;
-import org.kainos.ea.cli.JobRole;
+import org.kainos.ea.model.Capability;
+import org.kainos.ea.model.CapabilityRequest;
+import org.kainos.ea.model.JobRole;
 
 import java.sql.*;
 import java.util.ArrayList;

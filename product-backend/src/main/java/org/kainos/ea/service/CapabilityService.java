@@ -1,13 +1,11 @@
-package org.kainos.ea.api;
+package org.kainos.ea.service;
 
-import org.kainos.ea.cli.Capability;
-import org.kainos.ea.cli.CapabilityRequest;
-import org.kainos.ea.cli.JobRole;
-import org.kainos.ea.client.*;
+import org.kainos.ea.exception.*;
+import org.kainos.ea.model.Capability;
+import org.kainos.ea.model.CapabilityRequest;
 import org.kainos.ea.core.CapabilityValidator;
 import org.kainos.ea.db.CapabilityDao;
 import org.kainos.ea.db.DatabaseConnector;
-import org.kainos.ea.db.JobRoleDao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -35,7 +33,7 @@ public class CapabilityService {
             }
 
             return capabilityList.get();
-        } catch (SQLException | DatabaseConnectionException e) {
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
 
             throw new FailedToGetCapabilityException();
@@ -58,7 +56,7 @@ public class CapabilityService {
             }
 
             return id;
-        } catch (SQLException | DatabaseConnectionException e) {
+        } catch (SQLException e) {
             throw new FailedToCreateCapabilityLeadException();
         }
     }
