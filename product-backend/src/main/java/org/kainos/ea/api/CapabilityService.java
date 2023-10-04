@@ -1,13 +1,12 @@
 package org.kainos.ea.api;
 
 import org.kainos.ea.cli.Capability;
-import org.kainos.ea.cli.CapabilityRequest;
-import org.kainos.ea.cli.JobRole;
-import org.kainos.ea.client.*;
+import org.kainos.ea.client.CapabilityDoesNotExistException;
+import org.kainos.ea.client.DatabaseConnectionException;
+import org.kainos.ea.client.FailedToGetCapabilityException;
 import org.kainos.ea.core.CapabilityValidator;
 import org.kainos.ea.db.CapabilityDao;
 import org.kainos.ea.db.DatabaseConnector;
-import org.kainos.ea.db.JobRoleDao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -40,26 +39,29 @@ public class CapabilityService {
 
             throw new FailedToGetCapabilityException();
         }
+
     }
 
 
-    public int createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException {
-        try {
-            String validation = capabilityValidator.isValidCapabilityLead(capabilityRequest);
+//        public int createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException {
+//        try {
+//            String validation = capabilityValidator.isValidCapabilityLead(capabilityRequest);
+//
+//            if (validation != null) {
+//                throw new InvalidCapabilityLeadException();
+//            }
+//
+//            int id = capabilityDao.createCapabilityLead(capabilityRequest, databaseConnector.getConnection());
+//
+//            if (id == -1) {
+//                throw new FailedToCreateCapabilityLeadException();
+//            }
+//
+//            return id;
+//        } catch (SQLException | DatabaseConnectionException e) {
+//            throw new FailedToCreateCapabilityLeadException();
+//        }
+//    }
 
-            if (validation != null) {
-                throw new InvalidCapabilityLeadException();
-            }
 
-            int id = capabilityDao.createCapabilityLead(capabilityRequest, databaseConnector.getConnection());
-
-            if (id == -1) {
-                throw new FailedToCreateCapabilityLeadException();
-            }
-
-            return id;
-        } catch (SQLException | DatabaseConnectionException e) {
-            throw new FailedToCreateCapabilityLeadException();
-        }
-    }
 }

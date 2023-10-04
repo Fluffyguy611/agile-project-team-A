@@ -3,18 +3,14 @@ package org.kainos.ea.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kainos.ea.api.CapabilityService;
 import org.kainos.ea.api.JobRoleService;
-import org.kainos.ea.cli.CapabilityRequest;
 import org.kainos.ea.client.CapabilityDoesNotExistException;
-import org.kainos.ea.client.FailedToCreateCapabilityLeadException;
 import org.kainos.ea.client.FailedToGetCapabilityException;
-import org.kainos.ea.client.InvalidCapabilityLeadException;
 import org.kainos.ea.db.CapabilityDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.model.ErrorResponse;
@@ -45,20 +41,20 @@ public class CapabilityController {
         }
     }
 
-    @POST
-    @Path("/admin/capability")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createDeliveryEmployee(CapabilityRequest capabilityRequest) {
-        try {
-            return Response.ok(capabilityService.createCapabilityLead(capabilityRequest)).build();
-        } catch (FailedToCreateCapabilityLeadException e) {
-            logger.error("Failed to create Capability! Error: {}", e.getMessage());
-            return Response.serverError().build(); //500
-        } catch (InvalidCapabilityLeadException e) {
-            logger.error("Capability does not exist! Error: {}", (e.getMessage()));
-            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();//400 np bledne zapytanie
-        }
-
-    }
+//    @POST
+//    @Path("/admin/capability")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response createDeliveryEmployee(CapabilityRequest capabilityRequest) {
+//        try {
+//            return Response.ok(capabilityService.createCapabilityLead(capabilityRequest)).build();
+//        } catch (FailedToCreateCapabilityLeadException e) {
+//            logger.error("Failed to create Capability! Error: {}", e.getMessage());
+//            return Response.serverError().build(); //500
+//        } catch (InvalidCapabilityLeadException e) {
+//            logger.error("Capability does not exist! Error: {}", (e.getMessage()));
+//            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();//400 np bledne zapytanie
+//        }
+//
+//    }
 
 }
