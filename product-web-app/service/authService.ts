@@ -36,4 +36,14 @@ export default class AuthService {
       throw new Error('Could not register user');
     }
   }
+
+  async login(user: User): Promise<void> {
+    try {
+        const response = await axios.post('http://localhost:8080/api/login', user)
+
+        return response.data
+    } catch (e) {
+        throw new Error('Could not login')
+    }
+}
 }
