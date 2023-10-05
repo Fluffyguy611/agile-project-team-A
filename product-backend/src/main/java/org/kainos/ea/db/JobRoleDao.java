@@ -19,7 +19,7 @@ public class JobRoleDao {
     public Optional<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
         Connection c = databaseConnector.getConnection();
         Statement st = c.createStatement();
-        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId\n" + "FROM JobRole");
+        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink\n" + "FROM JobRole");
 
         
         while (rs.next()) {
