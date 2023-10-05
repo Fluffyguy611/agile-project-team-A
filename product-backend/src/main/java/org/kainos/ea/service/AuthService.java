@@ -51,7 +51,7 @@ public class AuthService {
         }
     }
 
-    public String login(User user) throws FailedToLoginException, DatabaseConnectionException, UserDoesNotExistException, InvalidPasswordException, FailedToGenerateTokenException {
+    public String login(User user) throws FailedToLoginException, DatabaseConnectionException, UserDoesNotExistException, InvalidPasswordException {
         try {
             Optional<User> existingUser = authDao.getUserByEmail(user.getEmail(), databaseConnector.getConnection());
 

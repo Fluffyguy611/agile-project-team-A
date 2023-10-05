@@ -28,9 +28,7 @@ export default class AuthController {
 
     app.post('/login', async (req: Request, res: Response) => {
         let user: User = req.body;
-        user.roleId = 0;
 
-        console.log(user);
         try {
             await this.authService.login(user);
 
@@ -38,9 +36,11 @@ export default class AuthController {
             console.log("correct credentials");
 
         } catch (e: any) {
+          console.log(e);
+
             res.locals.errormessage = e.message
 
-            res.render('login', req.body);
+            res.render('login');
         }
     })
   }
