@@ -3,11 +3,29 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %}KAINOS WEB SERVICE{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
+
+<style>
+    .login-button {
+      background: rgb(4, 119, 63);
+      border: 0;
+      color: white;
+      padding: 10px;
+      margin-left: 50px;
+      border-radius: 15px;
+      transition: 0.4s ease;
+    }
+  
+    .login-button:hover {
+      background: black;
+      cursor: pointer;
+    }
+</style>
+
 
 <body>
     <header>
@@ -18,23 +36,36 @@
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                {% if isLoggedIn %} 
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item active">
                             <a class="nav-link" aria-current="page" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">test test test</a>
+                            <a class="nav-link" aria-current="page">Currently at: </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ window.location.href }}" id="page_title"></a>
+                            <script>
+                                document.getElementById("page_title").innerHTML = document.title;
+                            </script>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Categories - in progress
+                                Available actions:
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href=>All</a></li>
-                                    <a class="dropdown-item" href=></a>
-                                </li>
+                                {% if role == 'admin' %}
+                                <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
+                                <li><a class="dropdown-item" href="">Delete</a></li>
+                                <li><a class="dropdown-item" href="">Update</a></li>
+                                <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
+                                {% endif %}
+                            </li>
                             </ul>
                         </li>
                     </ul>
@@ -43,5 +74,17 @@
         </nav>
     </header>
     <div id="content">{% block content %} {% endblock %}</div>
+    {% else %} 
+    <header>YOU NEED TO BE SIGNED TO VIEW THIS PAGE</header>
+        <div class="login">
+            <a href="/login">
+                <button class="login-button">Login</button>
+                </a>
+        </div>
+        <div>
+            <img src="https://media.tenor.com/lx2WSGRk8bcAAAAC/pulp-fiction-john-travolta.gif" alt="">
+        </div>
+    </div>
+    {% endif %}
 </body>
 </html>
