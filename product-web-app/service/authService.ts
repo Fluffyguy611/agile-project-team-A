@@ -15,13 +15,13 @@ export default class AuthService {
     const validatePasswordError = this.authValidator.validatePassword(user.password);
     if (validatePasswordError) {
       logger.warn(`VALIDATION ERROR: ${validatePasswordError}`);
-      throw new Error("Provided password is invalid");
+      throw new Error('Provided password is invalid');
     }
 
     const validateEmailError = this.authValidator.validateEmail(user.email);
     if (validateEmailError) {
       logger.warn(`VALIDATION ERROR: ${validateEmailError}`);
-      throw new Error("Provided email is invalid");
+      throw new Error('Provided email is invalid');
     }
 
     if (user.password !== repeatPassword) {
@@ -39,11 +39,11 @@ export default class AuthService {
 
   async login(user: User): Promise<void> {
     try {
-        const response = await axios.post('http://localhost:8080/api/login', user)
+      const response = await axios.post('http://localhost:8080/api/login', user);
 
-        return response.data
+      return response.data;
     } catch (e) {
-        throw new Error('Could not login')
+      throw new Error('Could not login');
     }
-}
+  }
 }

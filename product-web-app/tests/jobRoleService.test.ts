@@ -109,7 +109,6 @@ describe('JobRole service', () => {
       ];
 
       it('when there are job roles expect job roles to be returned', async () => {
-
         mockAxios.onGet(API.JOB_ROLES).reply(200, data);
 
         const result = await jobRoleService.getJobRoles();
@@ -117,9 +116,7 @@ describe('JobRole service', () => {
       });
 
       it('when Api is down expect exception to be thrown', async () => {
-       
-
-        mockAxios.onGet('/api/job-roles').reply(500, data);
+        mockAxios.onGet(API.JOB_ROLES).reply(500, data);
         let error;
 
         try {
