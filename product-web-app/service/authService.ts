@@ -38,10 +38,15 @@ export default class AuthService {
   }
 
   async login(user: User): Promise<void> {
-    try {
-        const response = await axios.post('http://localhost:8080/api/login', user)
+    //VALIDATE CREDENTIALS if user exist and if pass is correct (GET userByEmail)
+    const validateEmailError = this.authValidator.validateEmail(user.email);
+    if (validateEmailError) {
+      logger.warn(`VALIDATION ERROR: ${validateEmailError}`);
+      throw new Error("Provided email is invalid");
+    }
 
-        return response.data
+    try {
+        axios.post('http://localhost:8080/api/auth/login', user)
     } catch (e) {
         throw new Error('Could not login')
     }
