@@ -9,6 +9,8 @@ import logger from './service/logger.js';
 import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
 import JobRole from './model/jobRole.js';
+import BandController from './controller/bandController.js';
+import Band from './model/band.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -35,6 +37,7 @@ declare module 'express-session' {
   interface SessionData {
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
+    band: Partial<Band>;
   }
 }
 
@@ -49,6 +52,14 @@ const jobRoleController = new JobRoleController();
 
 jobRoleController.appRoutes(app);
 
-app.get('/', (eq: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.redirect('/job-roles');
+});
+
+const bandController = new BandController();
+
+bandController.appRoutes(app);
+
+app.post('/', (req: Request, res: Response) => {
+  res.redirect('/band');
 });
