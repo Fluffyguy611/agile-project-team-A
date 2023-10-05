@@ -50,5 +50,16 @@ export default class JobRoleController {
         isLoggedIn: mock.isLoggedIn,
       });
     });
+
+    app.get('/job-roles', async (req: Request, res: Response) => {
+      let data: JobRole[] = [];
+
+      try {
+        data = await this.jobRoleService.getJobRoles();
+      } catch (e) {
+        logger.error(`Couldnt get job Role! Error: ${e}`);
+      }
+      res.render('job-roles', { roles: data });
+    });
   }
 }
