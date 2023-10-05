@@ -1,6 +1,5 @@
 package org.kainos.ea.controller;
 
-
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -55,4 +54,5 @@ public class JobRoleController {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
         }
     }
+    
 }
