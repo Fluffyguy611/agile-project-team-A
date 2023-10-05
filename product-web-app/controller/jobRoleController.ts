@@ -59,7 +59,9 @@ export default class JobRoleController {
       } catch (e) {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
-      res.render('job-roles', { roles: data });
+      res.render('job-roles', { roles: data,
+        role: mock.role,
+        isLoggedIn: mock.isLoggedIn});
     });
   }
 }
