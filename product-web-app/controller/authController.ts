@@ -2,6 +2,8 @@ import { Application, Request, Response } from 'express';
 import User from '../model/user.js';
 import AuthService from '../service/authService.js';
 import AuthValidator from '../service/authValidator.js';
+import logger from '../service/logger.js';
+
 
 export default class AuthController {
   private authService = new AuthService(new AuthValidator());
@@ -15,7 +17,7 @@ export default class AuthController {
       const data: User = req.body;
       try {
         await this.authService.register(data, req.body.repeatPassword);
-        res.redirect('/login');
+        res.redirect('/auth/login');
       } catch (e: any) {
         res.locals.errormessage = e.message;
         res.render('register', req.body);
@@ -27,21 +29,17 @@ export default class AuthController {
     })
 
     app.post('/login', async (req: Request, res: Response) => {
-        let user: User = req.body;
-
-        try {
-            await this.authService.login(user);
-
-            res.redirect('/#');
-            console.log("correct credentials");
-
-        } catch (e: any) {
-          console.log(e);
-
-            res.locals.errormessage = e.message
-
-            res.render('login');
-        }
-    })
+      let user: User = req.body;
+    
+      try {
+        await this.authService.login(user, res);
+    
+        res.redirect('/');
+      } catch (e: any) {
+        logger.error(`Login failed: ${e.message}`);
+        res.locals.errormessage = 'Login failed. Please try again.';  // Set a meaningful error message
+        res.render('login');
+      }
+    });
   }
 }

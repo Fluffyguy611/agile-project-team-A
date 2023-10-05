@@ -3,6 +3,7 @@ import User from '../model/user.js';
 import AuthValidator from './authValidator.js';
 import logger from './logger.js';
 import { API } from '../common/constants.js';
+import { Response } from 'express';
 
 export default class AuthService {
   private authValidator: AuthValidator;
@@ -37,22 +38,29 @@ export default class AuthService {
     }
   }
 
-  async login(user: User): Promise<void> {
+  async login(user: User, res: Response): Promise<void> {
     const validateEmailError = this.authValidator.validateEmail(user.email);
     if (validateEmailError) {
       logger.warn(`VALIDATION ERROR: ${validateEmailError}`);
       throw new Error("Provided email is invalid");
     }
-    //VALIDATE if user exist
-
-
 
     try {
-      user.roleId = 0;
-      axios.post(API.LOGIN, user)
-    } catch (e) {
-        logger.error('Could not login user');
-        throw new Error('Could not login user')
+      user.roleId = 1; //temporary
+      const apiResponse = await axios.post(API.LOGIN, user);
+
+      const token = apiResponse.data;
+      console.log('API Response:', token);
+
+
+      if (token) {
+        res.cookie('token', token, { httpOnly: true });
+      } else {
+        throw new Error('No token found in the response.');
+      }
+    } catch (e: any) {
+      logger.error(`Could not login user: ${e.message}`);
+      throw new Error('Could not login user');
     }
 }
 }

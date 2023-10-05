@@ -5,10 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import org.apache.commons.lang3.time.DateUtils;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
-import org.kainos.ea.exception.FailedToRegisterException;
-import org.kainos.ea.exception.InvalidEmailException;
-import org.kainos.ea.exception.InvalidPasswordException;
-import org.kainos.ea.exception.InvalidRoleIdException;
+import org.kainos.ea.exception.*;
 import org.kainos.ea.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -54,7 +51,7 @@ public class AuthService {
         }
     }
 
-    public String login(User user) throws FailedToLoginException, DatabaseConnectionException, UserDoesNotExistException, InvalidPasswordException {
+    public String login(User user) throws FailedToLoginException, UserDoesNotExistException, InvalidPasswordException {
         try {
             Optional<User> existingUser = authDao.getUserByEmail(user.getEmail(), databaseConnector.getConnection());
 

@@ -45,10 +45,9 @@ public class AuthController {
     @Path("/auth/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(User user) throws DatabaseConnectionException {
+    public Response login(User user) {
         try {
-            String token = authService.login(user);
-            return Response.ok().build();
+            return Response.ok().entity(authService.login(user)).build();
         } catch (FailedToLoginException | UserDoesNotExistException e) {
             logger.error("Failed to login! Error: {}", e.getMessage());
 

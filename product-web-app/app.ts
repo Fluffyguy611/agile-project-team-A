@@ -10,6 +10,8 @@ import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
+import cookieParser from 'cookie-parser';
+
 
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -28,6 +30,7 @@ nunjucks.configure(appViews, nunjucksConfig);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 
