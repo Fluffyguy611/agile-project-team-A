@@ -15,13 +15,13 @@ export default class AuthService {
     const validatePasswordError = this.authValidator.validatePassword(user.password);
     if (validatePasswordError) {
       logger.warn(`VALIDATION ERROR: ${validatePasswordError}`);
-      throw new Error("Provided password is invalid");
+      throw new Error('Provided password is invalid');
     }
 
     const validateEmailError = this.authValidator.validateEmail(user.email);
     if (validateEmailError) {
       logger.warn(`VALIDATION ERROR: ${validateEmailError}`);
-      throw new Error("Provided email is invalid");
+      throw new Error('Provided email is invalid');
     }
 
     if (user.password !== repeatPassword) {

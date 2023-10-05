@@ -6,10 +6,10 @@ import path from 'path';
 import nunjucks from 'nunjucks';
 import axios from 'axios';
 import logger from './service/logger.js';
+import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
-import JobRoleSingleViewController from './controller/jobRoleController.js';
 
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -36,6 +36,7 @@ axios.defaults.baseURL = API_URL;
 declare module 'express-session' {
   interface SessionData {
     token: string;
+    jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
   }
 }
@@ -47,14 +48,15 @@ app.listen(3000, () => {
   logger.info('Server listening on port 3000');
 });
 
-
 const authController = new AuthController();
 authController.appRoutes(app);
 
-const jobRoleSingleViewController = new JobRoleSingleViewController();
+authController.appRoutes(app);
+
+const jobRoleController = new JobRoleController();
+
+jobRoleController.appRoutes(app);
 
 app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
-
-jobRoleSingleViewController.appRoutes(app);

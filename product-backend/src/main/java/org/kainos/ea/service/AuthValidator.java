@@ -24,7 +24,7 @@ public class AuthValidator {
             return false;
         }
 
-        if (!password.matches(".*[!@#$%^&*()-_+=<>?].*")) {
+        if (!password.matches(".*[!@#$%^&*()_+=<>?].*")) {
             return false;
         }
 
