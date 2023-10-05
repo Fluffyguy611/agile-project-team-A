@@ -1,16 +1,14 @@
 package org.kainos.ea.service;
 
-import org.kainos.ea.client.FailedToGetJobRoleException;
-import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.db.JobRoleDao;
-import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
-import org.kainos.ea.exception.JobRoleAlreadyExistsException;
+import org.kainos.ea.exception.*;
 import org.kainos.ea.model.JobRole;
 import org.kainos.ea.model.JobRoleRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class JobRoleService {
@@ -22,6 +20,7 @@ public class JobRoleService {
     public JobRoleService(JobRoleDao jobRoleDao, JobRoleValidator jobRoleValidator) {
         this.jobRoleDao = jobRoleDao;
         this.jobRoleValidator = jobRoleValidator;
+
     }
 
     public JobRole createNewJobRole(JobRoleRequest jobRole) throws FailedToCreateNewJobRoleException, SQLException, JobRoleAlreadyExistsException {
@@ -52,9 +51,19 @@ public class JobRoleService {
 
             return jobRoleSingleView.get();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
-
+            logger.error("SQL exception! Error: {}", e.getMessage());
             throw new FailedToGetJobRoleException();
+        }
+    }
+
+    public List<JobRole> getAllJobRoles() throws SQLException, FailedToGetAllJobRolesException {
+
+        try {
+            List<JobRole> jobRoleList = jobRoleDao.getAllJobRoles();
+            return jobRoleList;
+        } catch (SQLException | DatabaseConnectionException e) {
+            logger.error("SQL exception! Error: {}", e.getMessage());
+            throw new FailedToGetAllJobRolesException();
         }
     }
 }

@@ -8,6 +8,7 @@ public class JobRoleRequest {
     private String description;
     private String sharePointLink;
 
+
     @JsonCreator
     public JobRoleRequest(
             @JsonProperty("name") String name,
@@ -19,26 +20,27 @@ public class JobRoleRequest {
     }
 
     public String getName() {
-        return name.trim();
+        return name;
     }
 
     public void setName(String name) {
-        this.name = name.trim();
+        this.name = name;
     }
 
     public String getDescription() {
-        return description.trim();
+        return description;
     }
 
     public void setDescription(String description) {
-        this.description = description.trim();
+        this.description = description;
     }
 
     public String getSharePointLink() {
-        return sharePointLink.trim();
+        return sharePointLink;
     }
 
     public void setSharePointLink(String sharePointLink) {
-        this.sharePointLink = sharePointLink.trim();
+        this.sharePointLink = sharePointLink;
     }
+
 }

@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
+import { API } from '../common/constants.js';
 import logger from '../service/logger.js';
 import mockAxios from './axios.instance.test.js';
 
@@ -94,6 +95,40 @@ describe('JobRole service', () => {
         const responseBody = await jobRoleService.getJobRoleSpecification(jobRolePrincipal.id);
 
         expect(responseBody.id).to.be.equal(jobRolePrincipal.id);
+      });
+    });
+
+    describe('getJobRoles', async () => {
+      const data = [
+        {
+          id: 1,
+          name: 'name',
+          description: 'description',
+          sharePointLink: 'exaple',
+        },
+      ];
+
+      it('when there are job roles expect job roles to be returned', async () => {
+
+        mockAxios.onGet(API.JOB_ROLES).reply(200, data);
+
+        const result = await jobRoleService.getJobRoles();
+        expect(result).to.deep.equal(data);
+      });
+
+      it('when Api is down expect exception to be thrown', async () => {
+       
+
+        mockAxios.onGet('/api/job-roles').reply(500, data);
+        let error;
+
+        try {
+          await jobRoleService.getJobRoles();
+        } catch (e: any) {
+          error = e.message;
+        }
+
+        expect(error).to.equal('Could not get job roles');
       });
     });
   });

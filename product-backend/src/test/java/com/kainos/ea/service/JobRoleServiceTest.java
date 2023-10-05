@@ -3,10 +3,10 @@ package com.kainos.ea.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kainos.ea.client.FailedToGetJobRoleException;
-import org.kainos.ea.client.JobRoleDoesNotExistException;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.DatabaseConnectionException;
+import org.kainos.ea.exception.FailedToGetJobRoleException;
+import org.kainos.ea.exception.JobRoleDoesNotExistException;
 import org.kainos.ea.model.JobRole;
 import org.kainos.ea.service.JobRoleService;
 import org.kainos.ea.service.JobRoleValidator;
