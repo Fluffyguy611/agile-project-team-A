@@ -6,6 +6,8 @@ import org.kainos.ea.model.JobRole;
 import org.kainos.ea.model.JobRoleRequest;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class JobRoleDao {
@@ -16,36 +18,37 @@ public class JobRoleDao {
         databaseConnector = new DatabaseConnector();
     }
 
-    public Optional<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
+    public List<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
         Connection c = databaseConnector.getConnection();
         Statement st = c.createStatement();
         ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink\n" + "FROM JobRole");
 
-        
+        List<JobRole> jobRoleList = new ArrayList<>();
         while (rs.next()) {
-            Optional.of (
-                new JobRole(
+
+            JobRole jobRole = new JobRole(
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),
-                    rs.getString("SharePointLink"),
-            ));
+                    rs.getString("SharePointLink"));
+            jobRoleList.add(jobRole);
+
         }
-        return Optional.empty();    
+        return jobRoleList;
     }
 
 
     public Optional<JobRole> createNewJobRole(JobRoleRequest jobRole) throws SQLException {
         Connection c = databaseConnector.getConnection();
 
-        String insertStatement = "INSERT INTO JobRole (Name, Description, SharePointLink) VALUES (?,?,?,?)";
+        String insertStatement = "INSERT INTO JobRole (Name, Description, SharePointLink) VALUES (?,?,?)";
 
         PreparedStatement st = c.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
 
         st.setString(1, jobRole.getName());
         st.setString(2, jobRole.getDescription());
         st.setString(3, jobRole.getSharePointLink());
-        
+
         st.executeUpdate();
 
         ResultSet rs = st.getGeneratedKeys();
@@ -56,8 +59,8 @@ public class JobRoleDao {
                             rs.getInt(1),
                             jobRole.getName(),
                             jobRole.getDescription(),
-                            jobRole.getSharePointLink(),
-            ));
+                            jobRole.getSharePointLink()
+                    ));
         }
         return Optional.empty();
     }
@@ -74,7 +77,7 @@ public class JobRoleDao {
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),
-                    rs.getString("SharePointLink"),
+                    rs.getString("SharePointLink")
             ));
         }
         return Optional.empty();
@@ -92,7 +95,7 @@ public class JobRoleDao {
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),
-                    rs.getString("SharePointLink"),
+                    rs.getString("SharePointLink")
             ));
         }
         return Optional.empty();

@@ -16,7 +16,6 @@ const jobRolePrincipal: JobRole = {
   name: 'Principal',
   description: 'his is a test case',
   sharePointLink: 'https://example.com',
-  capabilityId: 1,
 };
 
 const jobRoleTestEngi: JobRole = {
@@ -24,7 +23,6 @@ const jobRoleTestEngi: JobRole = {
   name: 'TestEngi',
   description: 'TestEngisStuff',
   sharePointLink: 'https://example.com',
-  capabilityId: 1,
 };
 
 const jobRoleService = new JobRoleService(jobRoleValidatorStub);

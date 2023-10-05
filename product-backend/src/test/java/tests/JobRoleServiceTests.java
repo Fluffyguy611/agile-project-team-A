@@ -56,7 +56,6 @@ class JobRoleServiceTests {
         when(jobRoleDaoMock.createNewJobRole(mockedJobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
 
         JobRole newJobRole = jobRoleService.createNewJobRole(mockedJobRoleRequest);
-
         assertThat(newJobRole).isEqualTo(mockedJobRoleInstance);
     }
 
@@ -114,13 +113,13 @@ class JobRoleServiceTests {
                 1,
                 "name",
                 "description",
-                "sharePointLink",
-              
+                "sharePointLink"
+
         ));
 
         Mockito.when(jobRoleDaoMock.getAllJobRoles()).thenReturn(mockedJobRole);
-        List<JobRole> result = jobRoleService.getAllJobRoles();
 
+        List<JobRole> result = jobRoleService.getAllJobRoles();
         assertEquals(result, mockedJobRole);
         verify(jobRoleDaoMock).getAllJobRoles();
     }

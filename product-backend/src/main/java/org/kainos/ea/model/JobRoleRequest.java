@@ -7,14 +7,13 @@ public class JobRoleRequest {
     private String name;
     private String description;
     private String sharePointLink;
-   
+
 
     @JsonCreator
     public JobRoleRequest(
             @JsonProperty("name") String name,
             @JsonProperty("description") String description,
-            @JsonProperty("sharePointLink") String sharePointLink
-             {
+            @JsonProperty("sharePointLink") String sharePointLink) {
         setName(name);
         setDescription(description);
         setSharePointLink(sharePointLink);
