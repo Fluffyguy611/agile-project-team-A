@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 public class JobRoleService {
@@ -51,15 +50,15 @@ public class JobRoleService {
 
             return jobRoleSingleView.get();
         } catch (SQLException e) {
-            logger.error("SQL exception! Error: {}. DatabaseConnection! Error: {}", e.getMessage(), e.getMessage());
+            logger.error("SQL exception! Error: {}", e.getMessage());
             throw new FailedToGetJobRoleException();
         }
     }
 
-    public List<JobRole> getAllJobRoles() throws SQLException, FailedToGetAllJobRolesException {
+    public Optional<JobRole> getAllJobRoles() throws SQLException, FailedToGetAllJobRolesException {
 
         try {
-            List<JobRole> jobRoleList = jobRoleDao.getAllJobRoles();
+            Optional<JobRole> jobRoleList = jobRoleDao.getAllJobRoles();
             return jobRoleList;
         } catch (SQLException | DatabaseConnectionException e) {
             logger.error("SQL exception! Error: {}. DatabaseConnection! Error: {}", e.getMessage(), e.getMessage());
