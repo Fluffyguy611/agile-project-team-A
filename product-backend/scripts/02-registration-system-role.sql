@@ -10,15 +10,6 @@ CREATE TABLE Role (
     PRIMARY KEY (Id)
 );
 
-CREATE TABLE User (
-	Id INT NOT NULL auto_increment,
-	Email VARCHAR(64) NOT NULL UNIQUE,
-    Password VARCHAR(64) NOT NULL,
-    RoleId TINYINT NOT NULL,
-    PRIMARY KEY (Id),
-    FOREIGN KEY (RoleId) REFERENCES Roles(Id)
-);
-
 END $$
 DELIMITER ;
 CALL Create_registration_tables();
