@@ -11,6 +11,7 @@ import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
 import JobRoleSingleViewController from './controller/jobRoleController.js';
 
+
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const app: Application = express();
@@ -34,6 +35,7 @@ axios.defaults.baseURL = API_URL;
 
 declare module 'express-session' {
   interface SessionData {
+    token: string;
     jobRoleSingleView: JobRole;
   }
 }

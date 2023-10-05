@@ -21,5 +21,22 @@ export default class AuthController {
         res.render('register', req.body);
       }
     });
+
+    app.get('/auth/login', async (req: Request, res: Response) => {
+      res.render('login')
+    })
+
+    app.post('/login', async (req: Request, res: Response) => {
+        let data: User = req.body
+
+        try {
+            await this.authService.login(data);
+
+            res.redirect('/#')
+        } catch (e: any) {
+            res.locals.errormessage = e.message
+            res.render('login', req.body)
+        }
+    })
   }
 }
