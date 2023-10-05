@@ -6,12 +6,16 @@ import path from 'path';
 import nunjucks from 'nunjucks';
 import axios from 'axios';
 import logger from './service/logger.js';
-import { API_URL } from './common/constants.js';
-import JobRole from './model/jobRole.js';
 import JobRoleController from './controller/jobRoleController.js';
+<<<<<<< HEAD
 import Capability from './model/capability.js';
 import JobRoleSingleViewController from './controller/jobRoleController.js';
 import CapabilityController from './controller/capabilityController.js';
+=======
+import { API_URL } from './common/constants.js';
+import AuthController from './controller/authController.js';
+import JobRole from './model/jobRole.js';
+>>>>>>> main
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -25,8 +29,6 @@ const nunjucksConfig = {
   express: app,
 };
 
-axios.defaults.baseURL = API_URL;
-
 nunjucks.configure(appViews, nunjucksConfig);
 
 app.use(express.json());
@@ -34,8 +36,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 
+axios.defaults.baseURL = API_URL;
+
 declare module 'express-session' {
   interface SessionData {
+    jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
     capability: Capability;
   }
@@ -48,14 +53,23 @@ app.listen(3000, () => {
   logger.info('Server listening on port 3000');
 });
 
+const authController = new AuthController();
+
+authController.appRoutes(app);
+
 const jobRoleController = new JobRoleController();
 const jobRoleSingleViewController = new JobRoleSingleViewController();
 const capabilityController = new CapabilityController();
 
+jobRoleController.appRoutes(app);
+
 app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
+<<<<<<< HEAD
 
 jobRoleController.appRoutes(app);
 jobRoleSingleViewController.appRoutes(app);
 capabilityController.appRoutes(app);
+=======
+>>>>>>> main

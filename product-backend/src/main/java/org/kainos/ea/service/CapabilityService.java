@@ -1,16 +1,8 @@
-package org.kainos.ea.api;
+package org.kainos.ea.service;
 
-import org.kainos.ea.cli.Capability;
-import org.kainos.ea.client.CapabilityDoesNotExistException;
-import org.kainos.ea.client.DatabaseConnectionException;
-import org.kainos.ea.client.FailedToGetCapabilityException;
 import org.kainos.ea.core.CapabilityValidator;
 import org.kainos.ea.db.CapabilityDao;
 import org.kainos.ea.db.DatabaseConnector;
-
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
 
 public class CapabilityService {
 
@@ -25,22 +17,22 @@ public class CapabilityService {
     }
 
 
-    public List<Capability> getEveryCapabilityLead() throws CapabilityDoesNotExistException, FailedToGetCapabilityException {
-        try {
-            Optional<List<Capability>> capabilityList = capabilityDao.getEveryCapabilityLead(databaseConnector.getConnection());
-
-            if (capabilityList.isEmpty()) {
-                throw new CapabilityDoesNotExistException();
-            }
-
-            return capabilityList.get();
-        } catch (SQLException | DatabaseConnectionException e) {
-            System.err.println(e.getMessage());
-
-            throw new FailedToGetCapabilityException();
-        }
-
-    }
+//    public List<Capability> getEveryCapabilityLead() throws CapabilityDoesNotExistException, FailedToGetCapabilityException {
+//        try {
+//            Optional<List<Capability>> capabilityList = capabilityDao.getEveryCapabilityLead(databaseConnector.getConnection());
+//
+//            if (capabilityList.isEmpty()) {
+//                throw new CapabilityDoesNotExistException();
+//            }
+//
+//            return capabilityList.get();
+//        } catch (SQLException | DatabaseConnectionException e) {
+//            System.err.println(e.getMessage());
+//
+//            throw new FailedToCreateCapabilityLeadException();
+//        }
+//
+//    }
 
 
 //        public int createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException {

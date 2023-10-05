@@ -1,25 +1,22 @@
-package org.kainos.ea.cli;
+package org.kainos.ea.model;
 
-public class JobRole {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private int id;
+public class JobRoleRequest {
     private String name;
     private String description;
     private String sharePointLink;
 
-    public JobRole(int id, String name, String description, String sharePointLink) {
-        setId(id);
+
+    @JsonCreator
+    public JobRoleRequest(
+            @JsonProperty("name") String name,
+            @JsonProperty("description") String description,
+            @JsonProperty("sharePointLink") String sharePointLink) {
         setName(name);
         setDescription(description);
         setSharePointLink(sharePointLink);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -45,4 +42,5 @@ public class JobRole {
     public void setSharePointLink(String sharePointLink) {
         this.sharePointLink = sharePointLink;
     }
+
 }

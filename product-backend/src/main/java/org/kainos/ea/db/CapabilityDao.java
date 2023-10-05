@@ -1,7 +1,7 @@
 package org.kainos.ea.db;
 
 
-import org.kainos.ea.cli.Capability;
+import org.kainos.ea.model.Capability;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
