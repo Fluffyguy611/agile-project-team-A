@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+<<<<<<< HEAD
 import org.kainos.ea.exception.FailedToGetJobRoleException;
 import org.kainos.ea.exception.JobRoleDoesNotExistException;
+=======
+>>>>>>> main
 import org.kainos.ea.db.JobRoleDao;
-import org.kainos.ea.exception.ErrorResponse;
-import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
-import org.kainos.ea.exception.JobRoleAlreadyExistsException;
+import org.kainos.ea.exception.*;
 import org.kainos.ea.model.JobRoleRequest;
 import org.kainos.ea.service.JobRoleService;
 import org.kainos.ea.service.JobRoleValidator;
@@ -23,6 +24,8 @@ import java.sql.SQLException;
 
 public class JobRoleController {
     private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
+
+
     private final JobRoleService jobRoleService = new JobRoleService(new JobRoleDao(), new JobRoleValidator());
 
     @POST
@@ -34,12 +37,23 @@ public class JobRoleController {
             return Response.ok(jobRoleService.createNewJobRole(jobRole)).build();
         } catch (FailedToCreateNewJobRoleException | SQLException e) {
             logger.error("Failed to create new Job Role! Error: {}", e.getMessage());
-
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
         } catch (JobRoleAlreadyExistsException e) {
             String errorMessage = "Job Role already exists!";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);
             return Response.status(Response.Status.BAD_REQUEST).entity(errorResponse).build();
+        }
+    }
+
+    @GET
+    @Path("/job-roles")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllJobRoles() {
+        try {
+            return Response.ok(jobRoleService.getAllJobRoles()).build();
+        } catch (FailedToGetAllJobRolesException | SQLException e) {
+            logger.error("Failed to get Job Roles! Error: {}", e.getMessage());
+            return Response.serverError().build();
         }
     }
 

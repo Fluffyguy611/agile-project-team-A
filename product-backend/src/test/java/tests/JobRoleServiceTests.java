@@ -3,21 +3,23 @@ package tests;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kainos.ea.db.JobRoleDao;
-import org.kainos.ea.exception.FailedToCreateNewJobRoleException;
-import org.kainos.ea.exception.InvalidJobRoleException;
-import org.kainos.ea.exception.JobRoleAlreadyExistsException;
+import org.kainos.ea.exception.*;
 import org.kainos.ea.model.JobRole;
 import org.kainos.ea.model.JobRoleRequest;
 import org.kainos.ea.service.JobRoleService;
 import org.kainos.ea.service.JobRoleValidator;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,7 +56,6 @@ class JobRoleServiceTests {
         when(jobRoleDaoMock.createNewJobRole(mockedJobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
 
         JobRole newJobRole = jobRoleService.createNewJobRole(mockedJobRoleRequest);
-
         assertThat(newJobRole).isEqualTo(mockedJobRoleInstance);
     }
 
@@ -66,5 +67,70 @@ class JobRoleServiceTests {
 
         assertThatExceptionOfType(JobRoleAlreadyExistsException.class)
                 .isThrownBy(() -> jobRoleService.createNewJobRole(mockedJobRoleRequest));
+    }
+
+    @Test
+    void getJobRole_shouldThrowFailedToGetJobRoleException_whenDaoThrowsSQLException() throws FailedToGetJobRoleException, DatabaseConnectionException, SQLException {
+        int jobRoleId = 1;
+        Mockito.when(jobRoleDaoMock.getJobRoleById(jobRoleId)).thenThrow(SQLException.class);
+
+        assertThrows(FailedToGetJobRoleException.class,
+                () -> jobRoleService.getJobRoleById(jobRoleId));
+    }
+
+
+    @Test
+    void getJobRole_shouldReturnJobRole_whenDaoReturnsAJobRole() throws DatabaseConnectionException, SQLException,
+            JobRoleDoesNotExistException, FailedToGetJobRoleException {
+        JobRole jobRole = new JobRole(
+                1,
+                "Principal",
+                "This is a test case",
+                "https://example.com"
+        );
+        int jobRoleId = 1;
+        Mockito.when(jobRoleDaoMock.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRole));
+
+        JobRole resultRole = jobRoleService.getJobRoleById(jobRoleId);
+
+        assertEquals(resultRole, jobRole);
+    }
+
+    @Test
+    void getJobRole_shouldThrowUserJobRoleNotExistException_whenDaoReturnsNull() throws SQLException, DatabaseConnectionException, JobRoleDoesNotExistException {
+        int id = 1;
+        Mockito.when(jobRoleDaoMock.getJobRoleById(id)).thenReturn(Optional.empty());
+
+        assertThrows(JobRoleDoesNotExistException.class,
+                () -> jobRoleService.getJobRoleById(id));
+    }
+
+    @Test
+    void getJobRoles_shouldReturnJobRoles_whenDaoReturnsJobRoles() throws SQLException, FailedToGetAllJobRolesException, DatabaseConnectionException {
+        List<JobRole> mockedJobRole = new ArrayList<>();
+
+        mockedJobRole.add(new JobRole(
+                1,
+                "name",
+                "description",
+                "sharePointLink"
+
+        ));
+
+        Mockito.when(jobRoleDaoMock.getAllJobRoles()).thenReturn(mockedJobRole);
+
+        List<JobRole> result = jobRoleService.getAllJobRoles();
+        assertEquals(result, mockedJobRole);
+        verify(jobRoleDaoMock).getAllJobRoles();
+    }
+
+    @Test
+    void getJobRole_shouldThrowsFailedToGetAllJobRolesException_whenFailedToGetAllJobs() throws SQLException, DatabaseConnectionException {
+        Mockito.when(jobRoleDaoMock.getAllJobRoles()).thenThrow(SQLException.class);
+
+        assertThatExceptionOfType(FailedToGetAllJobRolesException.class)
+                .isThrownBy(() -> jobRoleService.getAllJobRoles())
+                .withMessage("Failed to get job all job roles");
+
     }
 }

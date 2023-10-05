@@ -21,10 +21,12 @@ public class DatabaseConnector {
 
         try {
             Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
             user = dotenv.get("DB_USERNAME");
             password = dotenv.get("DB_PASSWORD");
             host = dotenv.get("DB_HOST");
             name = dotenv.get("DB_NAME");
+
 
             if (user == null || password == null || host == null || name == null)
                 throw new IllegalArgumentException("Properties file must exist " +
