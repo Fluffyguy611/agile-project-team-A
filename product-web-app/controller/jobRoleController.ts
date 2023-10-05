@@ -1,17 +1,39 @@
 import { Application, Request, Response } from 'express';
-import logger from '../service/logger.js';
-import JobRoleService from '../service/jobRoleService.js';
+import sanitizeHtml from 'sanitize-html';
 import JobRole from '../model/jobRole.js';
+import JobRoleService from '../service/jobRoleService.js';
+import JobRoleValidator from '../service/jobRoleValidator.js';
+import logger from '../service/logger.js';
 
-export default class JobRoleSingleViewController {
-  private JobRoleService = new JobRoleService();
+export default class JobRoleController {
+  private jobRoleService = new JobRoleService(new JobRoleValidator());
 
   appRoutes(app: Application) {
+    app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
+      res.render('add-new-job-role');
+    });
+
+    app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
+      const data: JobRole = req.body;
+      data.name = sanitizeHtml(data.name).trim();
+      data.description = sanitizeHtml(data.description).trim();
+      data.sharePointLink = sanitizeHtml(data.sharePointLink).trim();
+
+      try {
+        const newJobRole = await this.jobRoleService.createNewJobRole(data);
+        res.redirect(`/job-roles/${newJobRole.id}`);
+      } catch (e: any) {
+        logger.warn(e.message);
+        res.locals.errorMessage = e.message;
+        res.render('add-new-job-role', {jobRole: data});
+      }
+    });
+
     app.get('/job-roles/:id', async (req: Request, res: Response) => {
       let data = {};
 
       try {
-        data = await this.JobRoleService.getJobRoleSpecification(
+        data = await this.jobRoleService.getJobRoleSpecification(
           Number.parseInt(req.params.id, 10),
         );
       } catch (e) {
@@ -25,7 +47,7 @@ export default class JobRoleSingleViewController {
       let data: JobRole[] = [];
 
       try {
-        data = await this.JobRoleService.getJobRoles();
+        data = await this.jobRoleService.getJobRoles();
       } catch (e) {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
