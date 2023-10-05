@@ -10,7 +10,7 @@ CREATE TABLE User (
     Password VARCHAR(64) NOT NULL,
     RoleId TINYINT NOT NULL,
     PRIMARY KEY (Id),
-    FOREIGN KEY (RoleId) REFERENCES Roles(Id)
+    FOREIGN KEY (RoleId) REFERENCES Role(Id)
 );
 
 END $$
