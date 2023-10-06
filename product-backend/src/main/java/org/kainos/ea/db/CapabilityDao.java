@@ -2,14 +2,13 @@ package org.kainos.ea.db;
 
 
 import org.kainos.ea.model.Capability;
+import org.kainos.ea.model.CapabilityRequest;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 public class CapabilityDao {
 
@@ -34,30 +33,32 @@ public class CapabilityDao {
     }
 
 
-//        public int createCapabilityLead(CapabilityRequest capability, Connection c) throws SQLException {
-//         String insertStatement = "zapytanie sql";
-//
-//
-//        PreparedStatement st = c.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
-//
-//        st.setString(1, capability.Capability());
-//        st.setString(2, capability.Name());
-//        st.setString(3, capability.setPhoto());
-//        st.setString(4, capability.setMessage());
-//
-//        st.executeUpdate();
-//
-//        ResultSet rs = st.getGeneratedKeys();
-//
-//        if (rs.next()) {
-//            return rs.getInt(1);
-//        }
-//
-//        return -1;
-//
-//    }
+    public int createCapabilityLead(CapabilityRequest capability, Connection c) throws SQLException {
 
+
+        String insertStatement = "INSERT INTO Capability (Capability, Name, Photo, Message) VALUES (?,?,?,?)";
+
+        PreparedStatement st = c.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
+
+        st.setString(1, capability.getCapability());
+        st.setString(2, capability.getName());
+        st.setString(3, capability.getPhoto());
+        st.setString(4, capability.getMessage());
+
+        st.executeUpdate();
+
+
+        ResultSet rs = st.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+        return -1;
+
+    }
+    
 }
+
 
 
 
