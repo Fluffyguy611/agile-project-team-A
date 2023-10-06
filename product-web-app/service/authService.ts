@@ -3,7 +3,6 @@ import User from '../model/user.js';
 import AuthValidator from './authValidator.js';
 import logger from './logger.js';
 import { API } from '../common/constants.js';
-import { Response } from 'express';
 
 export default class AuthService {
   private authValidator: AuthValidator;
