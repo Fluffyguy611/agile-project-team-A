@@ -39,19 +39,9 @@ export default class AuthService {
   }
 
   async login(user: User, res: Response): Promise<void> {
-    const validateEmailError = this.authValidator.validateEmail(user.email);
-    if (validateEmailError) {
-      logger.warn(`VALIDATION ERROR: ${validateEmailError}`);
-      throw new Error("Provided email is invalid");
-    }
-
     try {
-      user.roleId = 1; //temporary
       const apiResponse = await axios.post(API.LOGIN, user);
-
       const token = apiResponse.data;
-      console.log('API Response:', token);
-
 
       if (token) {
         res.cookie('token', token, { httpOnly: true });

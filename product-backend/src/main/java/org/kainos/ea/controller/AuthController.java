@@ -13,6 +13,7 @@ import org.kainos.ea.exception.*;
 import org.kainos.ea.model.User;
 import org.kainos.ea.service.AuthService;
 import org.kainos.ea.service.AuthValidator;
+import org.kainos.ea.service.PasswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ import org.slf4j.LoggerFactory;
 @Path("/api")
 public class AuthController {
     private final static Logger logger = LoggerFactory.getLogger(AuthService.class);
-    private final AuthService authService = new AuthService(new DatabaseConnector(), new AuthDao(), new AuthValidator());
+    private final AuthService authService = new AuthService(new DatabaseConnector(), new AuthDao(), new AuthValidator(), new PasswordService());
 
     @POST
     @Path("/auth/register")

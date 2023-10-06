@@ -7,7 +7,6 @@ import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.User;
-import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +20,13 @@ public class AuthService {
     private final DatabaseConnector databaseConnector;
     private final AuthDao authDao;
     private final AuthValidator authValidator;
+    private final PasswordService passwordService;
 
-    public AuthService(DatabaseConnector databaseConnector, AuthDao authDao, AuthValidator authValidator) {
+    public AuthService(DatabaseConnector databaseConnector, AuthDao authDao, AuthValidator authValidator, PasswordService passwordService) {
         this.databaseConnector = databaseConnector;
         this.authDao = authDao;
         this.authValidator = authValidator;
+        this.passwordService = passwordService;
     }
 
     public void register(User user) throws FailedToRegisterException, InvalidEmailException, InvalidPasswordException, InvalidRoleIdException {
@@ -42,7 +43,7 @@ public class AuthService {
                 throw new InvalidRoleIdException();
             }
 
-            user.setPassword(hashPassword(user.getPassword()));
+            user.setPassword(passwordService.hashPassword(user.getPassword()));
             authDao.registerUser(user, databaseConnector.getConnection());
         } catch (SQLException e) {
             logger.error("SQL exception! Error: {}", e.getMessage());
@@ -59,11 +60,11 @@ public class AuthService {
                 throw new UserDoesNotExistException();
             }
 
-            if (!verifyHash(user.getPassword(), existingUser.get().getPassword())) {
+            if (!passwordService.verifyHash(user.getPassword(), existingUser.get().getPassword())) {
                 throw new InvalidPasswordException();
             }
 
-            return generateToken(user);
+            return generateToken(existingUser);
         } catch (SQLException e) {
             logger.error("SQL exception! Error: {}", e.getMessage());
 
@@ -71,22 +72,15 @@ public class AuthService {
         }
     }
 
-    public String hashPassword(String plainPassword) {
-        return BCrypt.hashpw(plainPassword, BCrypt.gensalt());
-    }
 
-    public boolean verifyHash(String password, String hash) {
-        return BCrypt.checkpw(password, hash);
-    }
-
-    public String generateToken(User user) throws SQLException {
+    public String generateToken(Optional<User> user) throws SQLException {
         Algorithm algorithm = Algorithm.HMAC256("erggv45wv54c53xd345vcg4v54yv2");
         Date expiry = DateUtils.addHours(new Date(), 1);
 
         String token = JWT.create()
                 .withIssuer("auth0")
-                .withClaim("email", user.getEmail())
-                .withClaim("role", user.getRoleId())
+                .withClaim("email", user.get().getEmail())
+                .withClaim("role", user.get().getRoleId())
                 .withExpiresAt(expiry)
                 .sign(algorithm);
 

@@ -4,7 +4,6 @@ import AuthService from '../service/authService.js';
 import AuthValidator from '../service/authValidator.js';
 import logger from '../service/logger.js';
 
-
 export default class AuthController {
   private authService = new AuthService(new AuthValidator());
 
@@ -37,7 +36,7 @@ export default class AuthController {
         res.redirect('/');
       } catch (e: any) {
         logger.error(`Login failed: ${e.message}`);
-        res.locals.errormessage = 'Login failed. Please try again.';  // Set a meaningful error message
+        res.locals.errormessage = 'Login failed. Please try again.';
         res.render('login');
       }
     });

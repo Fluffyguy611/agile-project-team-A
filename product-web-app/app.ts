@@ -10,14 +10,9 @@ import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
-import cookieParser from 'cookie-parser';
-
-
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
 const app: Application = express();
-
 const appViews = path.join(dirname, '/views');
 
 const nunjucksConfig = {
@@ -30,8 +25,6 @@ nunjucks.configure(appViews, nunjucksConfig);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
 app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 
 axios.defaults.baseURL = API_URL;
@@ -54,10 +47,7 @@ app.listen(3000, () => {
 const authController = new AuthController();
 authController.appRoutes(app);
 
-authController.appRoutes(app);
-
 const jobRoleController = new JobRoleController();
-
 jobRoleController.appRoutes(app);
 
 app.get('/', (eq: Request, res: Response) => {
