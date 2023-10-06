@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,7 @@ public class CapabilityServiceTest {
     @Test
     void getEveryCapability_When_ThereAreProducts_Expect_CapabilitiesToBeReturned() throws SQLException, FailedToGetCapabilityException, CapabilityDoesNotExistException {
         List<Capability> mockedList= List.of(capability);
-        when(capabilityDao.getEveryCapabilityLead(conn)).thenReturn(Optional.of(mockedList));
+        when(capabilityDao.getEveryCapabilityLead(conn)).thenReturn(mockedList);
 
         List<Capability> capabilityList = capabilityService.getEveryCapabilityLead();
 
@@ -52,7 +53,7 @@ public class CapabilityServiceTest {
 
     @Test
     void getEveryCapability_When_ThereIsNoCapabilities_Expect_CapabilityDoesNotExistExceptionToBeThrown() throws CapabilityDoesNotExistException, SQLException {
-        when(capabilityDao.getEveryCapabilityLead(conn)).thenReturn(Optional.empty());
+        when(capabilityDao.getEveryCapabilityLead(conn)).thenReturn(new ArrayList<>());
 
         assertThatExceptionOfType(CapabilityDoesNotExistException.class)
                 .isThrownBy(() -> capabilityService.getEveryCapabilityLead());
