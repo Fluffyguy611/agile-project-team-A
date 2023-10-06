@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 @Tag(name = "Capability")
 @Path("/api")
 public class CapabilityController {
-    private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
+    private final static Logger logger = LoggerFactory.getLogger(CapabilityService.class);
 
     CapabilityService capabilityService = new CapabilityService(new DatabaseConnector(), new CapabilityDao());
 

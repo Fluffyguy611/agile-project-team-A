@@ -26,13 +26,13 @@ public class CapabilityService {
 
     public List<Capability> getEveryCapabilityLead() throws CapabilityDoesNotExistException, FailedToGetCapabilityException {
         try {
-            Optional<List<Capability>> capabilityList = capabilityDao.getEveryCapabilityLead(databaseConnector.getConnection());
+            List<Capability> capabilityList = capabilityDao.getEveryCapabilityLead(databaseConnector.getConnection());
 
-            if (capabilityList.get().isEmpty()) {
+            if (capabilityList.isEmpty()) {
                 throw new CapabilityDoesNotExistException();
             }
 
-            return capabilityList.get();
+            return capabilityList;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
 

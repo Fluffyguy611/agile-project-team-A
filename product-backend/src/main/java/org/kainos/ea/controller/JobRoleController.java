@@ -4,11 +4,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-<<<<<<< HEAD
 import org.kainos.ea.exception.FailedToGetJobRoleException;
 import org.kainos.ea.exception.JobRoleDoesNotExistException;
-=======
->>>>>>> main
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.JobRoleRequest;

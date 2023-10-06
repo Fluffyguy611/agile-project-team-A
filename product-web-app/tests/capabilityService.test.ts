@@ -1,12 +1,11 @@
 import { expect } from 'chai';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import mockAxios from './axios.instance.test.js';
 import logger from '../service/logger.js';
 import Capability from '../model/capability.js';
 import CapabilityService from '../service/capabilityService.js';
+import { API } from '../common/constants.js';
 
 // This sets the mock adapter on the default instance
-const mockAxios = new MockAdapter(axios);
 
 const capability1: Capability = {
   id: 1,
@@ -40,15 +39,15 @@ describe('Capability service', () => {
   describe('getEveryCapability', () => {
     it('when API is online expect Capabilities to be returned', async () => {
       const data = [capability1, capability2];
-      mockAxios.onGet('/api/capability/').reply(200, data);
+      mockAxios.onGet(API.CAPABILITY).reply(200, data);
 
-      const responseBody = [capability1]; //= await capabilityService.getEveryCapabilityLead();
+      const responseBody = await capabilityService.getEveryCapabilityLead();
 
-      expect(responseBody).to.have.lengthOf(1);
+      expect(responseBody).to.deep.equal(data);
     });
 
     it('when API is down expect exception to be thrown', async () => {
-      mockAxios.onGet('/api/capability').reply(500);
+      mockAxios.onGet(API.CAPABILITY).reply(500);
 
       let exception: any;
       try {

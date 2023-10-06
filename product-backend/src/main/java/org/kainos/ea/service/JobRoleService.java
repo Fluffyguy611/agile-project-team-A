@@ -1,10 +1,7 @@
 package org.kainos.ea.service;
 
-<<<<<<< HEAD
 import org.kainos.ea.exception.FailedToGetJobRoleException;
 import org.kainos.ea.exception.JobRoleDoesNotExistException;
-=======
->>>>>>> main
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.JobRole;

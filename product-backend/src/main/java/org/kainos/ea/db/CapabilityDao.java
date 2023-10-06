@@ -13,7 +13,7 @@ import java.util.Optional;
 public class CapabilityDao {
 
 
-    public Optional<List<Capability>> getEveryCapabilityLead(Connection c) throws SQLException {
+    public List<Capability> getEveryCapabilityLead(Connection c) throws SQLException {
         String getStatement = "SELECT Id, Capability, Name, Photo, Message FROM `Capability`";
         PreparedStatement st = c.prepareStatement(getStatement);
         ResultSet rs = st.executeQuery();
@@ -30,7 +30,7 @@ public class CapabilityDao {
                     );
             capabilityList.add(capability);
         }
-        return Optional.of(capabilityList);
+        return capabilityList;
     }
 
 
