@@ -38,19 +38,19 @@ export default class AuthService {
     }
   }
 
-  async login(user: User, res: Response): Promise<void> {
+  async login(user: User): Promise<string> {
     try {
       const apiResponse = await axios.post(API.LOGIN, user);
       const token = apiResponse.data;
 
-      if (token) {
-        res.cookie('token', token, { httpOnly: true });
-      } else {
+      if (!token) {
         throw new Error('No token found in the response.');
       }
+
+      return token;
     } catch (e: any) {
       logger.error(`Could not login user: ${e.message}`);
       throw new Error('Could not login user');
     }
-}
+  }
 }

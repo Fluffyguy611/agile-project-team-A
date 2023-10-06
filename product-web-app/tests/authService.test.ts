@@ -1,25 +1,14 @@
-import chai, { expect } from 'chai';
-import * as sinon from 'sinon';
-import sinonChai from 'sinon-chai';
+import { expect } from 'chai';
 import AuthService from '../service/authService.js';
 import AuthValidator from '../service/authValidator.js';
 import logger from '../service/logger.js';
 import { API } from '../common/constants.js';
 import mockAxios from './axios.instance.test.js';
-import { Response } from 'express';
-
-chai.use(sinonChai);
-
-let mockedRes: Response;
 
 const mockedUser = {
   email: 'username@kainos.com',
   password: 'strongPassword123!',
   roleId: 1,
-};
-
-const mockResponse: Partial<Response> = {
-  cookie: sinon.spy(),
 };
 
 const authService = new AuthService(new AuthValidator());
@@ -91,25 +80,22 @@ describe('Auth service', () => {
           ...mockedUser,
           email: 'invalidemail',
         };
-
+  
         let error;
         try {
-          await authService.login(invalidUser, mockedRes);
+          await authService.login(invalidUser);
         } catch (e: any) {
           error = e;
         }
-
+  
         expect(error.message).to.equal('Could not login user');
       });
-
+  
       it('should return token when credentials are correct', async () => {
-        const mockApiResponse = { data: 'mockedToken' };
-        mockAxios.onPost(API.LOGIN, mockedUser).reply(200, mockApiResponse);
+        mockAxios.onPost(API.LOGIN, mockedUser).reply(200, 'mockedToken');
 
-        const response: any = { cookie: mockResponse.cookie };
+        const token = await authService.login(mockedUser);
 
-        await authService.login(mockedUser, response);
-
-        expect((mockResponse.cookie as sinon.SinonSpy).calledWithExactly('token', 'mockedToken', { httpOnly: true }));
+        expect(token).to.equal('mockedToken');
       });
   });

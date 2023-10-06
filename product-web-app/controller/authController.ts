@@ -28,11 +28,11 @@ export default class AuthController {
     })
 
     app.post('/login', async (req: Request, res: Response) => {
-      let user: User = req.body;
-    
+      const user: User = req.body;
+
       try {
-        await this.authService.login(user, res);
-    
+        const token = await this.authService.login(user);
+        res.cookie('token', token, { httpOnly: true });
         res.redirect('/');
       } catch (e: any) {
         logger.error(`Login failed: ${e.message}`);
