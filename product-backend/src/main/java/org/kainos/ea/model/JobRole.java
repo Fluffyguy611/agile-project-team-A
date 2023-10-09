@@ -6,14 +6,16 @@ public class JobRole {
     private String name;
     private String description;
     private String sharePointLink;
-   
+    private int capabilityId;
 
-    public JobRole(int id, String roleName, String description, String sharePointLink) {
+
+    public JobRole(int id, String name, String description, String sharePointLink, int capabilityId) {
         this.id = id;
-        this.name = roleName.trim();
-        this.description = description.trim();
-        this.sharePointLink = sharePointLink.trim();
-       
+        this.name = name;
+        this.description = description;
+        this.sharePointLink = sharePointLink;
+        this.capabilityId = capabilityId;
+
     }
 
     public int getId() {
@@ -48,4 +50,13 @@ public class JobRole {
         this.sharePointLink = sharePointLink;
     }
 
+    public int getCapabilitId() {
+        return capabilityId;
+    }
+
+    public void setCapabilitId(int capabilitId) {
+        this.capabilityId = capabilitId;
+    }
 }
+
+

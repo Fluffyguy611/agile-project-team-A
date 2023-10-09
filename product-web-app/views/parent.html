@@ -32,6 +32,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom">
             <div class="container-fluid">
                 <a class="navbar-brand" href="https://www.kainos.com/"><img src="https://cdn.phenompeople.com/CareerConnectResources/KAINGB/social/Kainos_logo_1024X512-1643380451515.png" alt="" width="205" height="102" href="/"></a>
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -57,8 +58,9 @@
                                 Available actions:
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                {% if role == 'admin' %}
-                                <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
+                                {% if role == 'admin' %}          
+                                <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li> 
+                                <li><a class="dropdown-item" href="/admin/add-capability">ADD NEW CAPABILITY</a> </li>
                                 <li><a class="dropdown-item" href="">Delete</a></li>
                                 <li><a class="dropdown-item" href="">Update</a></li>
                                 <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
@@ -73,11 +75,16 @@
             </div>
         </nav>
     </header>
-    <div id="content">{% block content %} {% endblock %}</div>
+    <div id="content">{% block content %}  {% endblock %}</div>
+ 
     {% else %} 
+
+
+
+    
     <header>YOU NEED TO BE SIGNED TO VIEW THIS PAGE</header>
         <div class="login">
-            <a href="/login">
+       <a href="/login"> 
                 <button class="login-button">Login</button>
                 </a>
         </div>
@@ -85,6 +92,8 @@
             <img src="https://media.tenor.com/lx2WSGRk8bcAAAAC/pulp-fiction-john-travolta.gif" alt="">
         </div>
     </div>
+
+    
     {% endif %}
 </body>
 </html>

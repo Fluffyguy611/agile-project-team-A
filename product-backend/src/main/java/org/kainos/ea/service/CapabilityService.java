@@ -18,7 +18,6 @@ public class CapabilityService {
 
     private DatabaseConnector databaseConnector;
     private CapabilityDao capabilityDao;
-
     private CapabilityValidator capabilityValidator = new CapabilityValidator();
 
     public CapabilityService(DatabaseConnector databaseConnector, CapabilityDao capabilityDao) {
@@ -30,15 +29,12 @@ public class CapabilityService {
     public List<Capability> getEveryCapabilityLead() throws CapabilityDoesNotExistException, FailedToGetCapabilityException, FailedToCreateCapabilityLeadException {
         try {
             Optional<List<Capability>> capabilityList = capabilityDao.getEveryCapabilityLead(databaseConnector.getConnection());
-
             if (capabilityList.isEmpty()) {
                 throw new CapabilityDoesNotExistException();
             }
-
             return capabilityList.get();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-
             throw new FailedToCreateCapabilityLeadException();
         }
 
@@ -48,17 +44,13 @@ public class CapabilityService {
     public int createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException {
         try {
             String validation = capabilityValidator.isValidCapabilityLead(capabilityRequest);
-
             if (validation != null) {
                 throw new InvalidCapabilityLeadException();
             }
-
             int id = capabilityDao.createCapabilityLead(capabilityRequest, databaseConnector.getConnection());
-
             if (id == -1) {
                 throw new FailedToCreateCapabilityLeadException();
             }
-
             return id;
         } catch (SQLException e) {
             throw new FailedToCreateCapabilityLeadException();

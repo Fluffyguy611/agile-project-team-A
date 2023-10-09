@@ -10,14 +10,13 @@ import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.CapabilityRequest;
 import org.kainos.ea.service.CapabilityService;
-import org.kainos.ea.service.JobRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Tag(name = "Capability")
 @Path("/api")
 public class CapabilityController {
-    private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
+    private final static Logger logger = LoggerFactory.getLogger(CapabilityController.class);
 
     CapabilityService capabilityService = new CapabilityService(new DatabaseConnector(), new CapabilityDao());
 
@@ -45,9 +44,10 @@ public class CapabilityController {
     @Path("/admin/add-capability")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDeliveryEmployee(CapabilityRequest capabilityRequest) {
+    public Response createCapability(CapabilityRequest capabilityRequest) {
         try {
-            return Response.ok(capabilityService.createCapabilityLead(capabilityRequest)).build();
+            int result = capabilityService.createCapabilityLead(capabilityRequest);
+            return Response.ok(result).build();
         } catch (FailedToCreateCapabilityLeadException e) {
             logger.error("Failed to create Capability! Error: {}", e.getMessage());
             return Response.serverError().build(); //500
