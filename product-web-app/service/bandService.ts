@@ -27,4 +27,26 @@ export default class BandService {
             throw new Error(e.response.data.message);
         }
     }
+
+    async getBandSpecification(id: number): Promise<Band> {
+        try {
+            const response = await axios.get(API.GET_BAND(id));
+
+        return response.data;
+        } catch (e) {
+            logger.error('Band not found');
+            throw new Error('Band not found');
+        }
+    }
+    
+    async getAllJobBands(): Promise<Band[]> {
+        try {
+          const response = await axios.get(API.BANDS);
+          return response.data;
+        } catch (e) {
+          logger.error('Job bands not found');
+          throw new Error('Could not get job bands');
+        }
+      }
+  
 }

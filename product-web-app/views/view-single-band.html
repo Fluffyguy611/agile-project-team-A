@@ -1,0 +1,49 @@
+{% extends "./parent.html" %}
+{% block content %}
+
+<style>
+    .left-sided {
+    position: relative;
+    text-align: center;
+    margin: 50px;
+    font-size: 50px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-color: #283583;
+    width: 500px;
+    top: 25%;
+    left: 25%;
+    transform: translate(-50%);
+    }
+
+    .right-sided {
+    position: relative;
+    text-align: center;
+    margin: 50px;
+    font-size: 50px;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+    background-color: #283583;
+    width: 500px;
+    top: 25%;
+    left: 25%;
+    transform: translate(-50%);
+    }
+</style>
+
+    <main class="container mt-4">
+        <section id="band" class="mt-4">
+           {% if band and band.name.length > 0 %}
+                <div class="img-container">
+                    <div class="left-sided">{{ band.name }}</div>
+                </div>
+                <div class="img-container">
+                    <div class="right-sided">{{ band.level }}</div>
+                </div>
+           {% else %}
+                Could not find Band.
+           {% endif %}
+        </section>
+    </main>
+
+{% endblock %}

@@ -6,12 +6,14 @@ public class JobRole {
     private String name;
     private String description;
     private String sharePointLink;
+    private int bandId;
 
-    public JobRole(int id, String roleName, String description, String sharePointLink) {
+    public JobRole(int id, String name, String description, String sharePointLink, int bandId) {
         this.id = id;
-        this.name = roleName.trim();
-        this.description = description.trim();
-        this.sharePointLink = sharePointLink.trim();
+        this.name = name;
+        this.description = description;
+        this.sharePointLink = sharePointLink;
+        this.bandId = bandId;
     }
 
     public int getId() {
@@ -23,26 +25,34 @@ public class JobRole {
     }
 
     public String getName() {
-        return name.trim();
+        return name;
     }
 
     public void setName(String name) {
-        this.name = name.trim();
+        this.name = name;
     }
 
     public String getDescription() {
-        return description.trim();
+        return description;
     }
 
     public void setDescription(String description) {
-        this.description = description.trim();
+        this.description = description;
     }
 
     public String getSharePointLink() {
-        return sharePointLink.trim();
+        return sharePointLink;
     }
 
     public void setSharePointLink(String sharePointLink) {
-        this.sharePointLink = sharePointLink.trim();
+        this.sharePointLink = sharePointLink;
+    }
+
+    public int getBandId() {
+        return bandId;
+    }
+
+    public void setBandId(int bandId) {
+        this.bandId = bandId;
     }
 }

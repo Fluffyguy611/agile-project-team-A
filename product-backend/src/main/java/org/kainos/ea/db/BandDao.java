@@ -4,6 +4,8 @@ import org.kainos.ea.model.Band;
 import org.kainos.ea.model.BandRequest;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class BandDao {
@@ -51,4 +53,40 @@ public class BandDao {
         return Optional.empty();
     }
 
+    public Optional<Band> getBandById(int id) throws SQLException {
+        Connection c = databaseConnector.getConnection();
+        String getStatement = "SELECT * FROM `Band` WHERE `Id`=?;";
+        PreparedStatement st = c.prepareStatement(getStatement);
+        st.setInt(1, id);
+        ResultSet rs = st.executeQuery();
+
+        while (rs.next()) {
+            return Optional.of(new Band(
+                    rs.getInt("Id"),
+                    rs.getString("Name"),
+                    rs.getInt("Level")
+            ));
+
+        }
+
+        return Optional.empty();
+    }
+
+    public List<Band> getAllJobBands() throws SQLException {
+        Connection c = databaseConnector.getConnection();
+        Statement st = c.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM Band");
+
+        List<Band> bandList = new ArrayList<>();
+        while (rs.next()) {
+
+            Band band = new Band(
+                    rs.getInt("Id"),
+                    rs.getString("Name"),
+                    rs.getInt("Level"));
+            bandList.add(band);
+
+        }
+        return bandList;
+    }
 }

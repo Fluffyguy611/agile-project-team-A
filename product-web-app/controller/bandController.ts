@@ -26,5 +26,41 @@ export default class BandController {
                 res.render('add-new-job-role-band', req.body);
             }
         });
+
+        app.get('/band/:id', async (req: Request, res: Response) => {
+            let data = {};
+      
+            try {
+              data = await this.bandService.getBandSpecification(
+                Number.parseInt(req.params.id, 10),
+              );
+            } catch (e) {
+              logger.error(`Couldnt get Band! Error: ${e}`);
+            }
+      
+            res.render('view-single-band', { band: data });
+          });
+
+          app.get('/admin/bands', async (req: Request, res: Response) => {
+            let data: Band[] = [];
+      
+            try {
+              data = await this.bandService.getAllJobBands();
+            } catch (e) {
+              logger.error(`Couldnt get Job Band! Error: ${e}`);
+            }
+            res.render('view-all-job-bands', { Band: data });
+          });
+
+          app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
+            let data: Band[] = [];
+      
+            try {
+              data = await this.bandService.getAllJobBands();
+            } catch (e) {
+              logger.error(`Couldnt get Job Band! Error: ${e}`);
+            }
+            res.render('add-new-job-role', { Band: data });
+          });
     }
 }

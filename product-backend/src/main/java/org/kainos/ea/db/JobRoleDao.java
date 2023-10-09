@@ -13,13 +13,14 @@ public class JobRoleDao {
     public Optional<JobRole> createNewJobRole(JobRoleRequest jobRole) throws SQLException {
         Connection c = databaseConnector.getConnection();
 
-        String insertStatement = "INSERT INTO JobRole (Name, Description, SharePointLink) VALUES (?,?,?)";
+        String insertStatement = "INSERT INTO JobRole (Name, Description, SharePointLink, BandId) VALUES (?,?,?,?);";
 
         PreparedStatement st = c.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
 
         st.setString(1, jobRole.getName());
         st.setString(2, jobRole.getDescription());
         st.setString(3, jobRole.getSharePointLink());
+        st.setInt(4, jobRole.getBandId());
 
         st.executeUpdate();
 
@@ -31,7 +32,8 @@ public class JobRoleDao {
                             rs.getInt(1),
                             jobRole.getName(),
                             jobRole.getDescription(),
-                            jobRole.getSharePointLink()));
+                            jobRole.getSharePointLink(),
+                            jobRole.getBandId()));
         }
         return Optional.empty();
     }
@@ -48,7 +50,8 @@ public class JobRoleDao {
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),
-                    rs.getString("SharePointLink")
+                    rs.getString("SharePointLink"),
+                    rs.getInt("BandId")
             ));
 
         }
@@ -68,12 +71,12 @@ public class JobRoleDao {
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),
-                    rs.getString("SharePointLink")
+                    rs.getString("SharePointLink"),
+                    rs.getInt("BandId")
             ));
 
         }
 
         return Optional.empty();
     }
-
 }

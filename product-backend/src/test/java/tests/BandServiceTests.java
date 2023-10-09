@@ -3,10 +3,7 @@ package tests;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kainos.ea.db.BandDao;
-import org.kainos.ea.exception.BandAlreadyExistsException;
-import org.kainos.ea.exception.FailedToCreateNewBandException;
-import org.kainos.ea.exception.InvalidJobBandException;
-import org.kainos.ea.exception.JobBandAlreadyExistsException;
+import org.kainos.ea.exception.*;
 import org.kainos.ea.model.Band;
 import org.kainos.ea.model.BandRequest;
 import org.kainos.ea.service.BandService;
@@ -29,7 +26,7 @@ class BandServiceTests {
     private final Band mockedBandInstance = new Band(100, "New job Band", 5);
 
     @Test
-    public void createNewJobBandSuccess() throws SQLException, FailedToCreateNewBandException, BandAlreadyExistsException {
+    public void createNewJobBandSuccess() throws SQLException, FailedToCreateNewBandException, BandAlreadyExistsException, FailedToCreateNewBandInvalidLevelException {
         BandRequest bandRequest = new BandRequest("Test Band", 6);
         when(bandDaoMock.createNewBand(bandRequest)).thenReturn(Optional.of(mockedBandInstance));
 
@@ -49,7 +46,7 @@ class BandServiceTests {
     }
 
     @Test
-    public void createNewJobBandFailsWhenInputIsIncorrect() throws SQLException, FailedToCreateNewBandException, InvalidJobBandException, JobBandAlreadyExistsException, BandAlreadyExistsException {
+    public void createNewJobBandFailsWhenInputIsIncorrect() throws SQLException, FailedToCreateNewBandException, InvalidJobBandException, JobBandAlreadyExistsException, BandAlreadyExistsException, FailedToCreateNewBandInvalidLevelException {
         BandRequest mockedBandRequest = new BandRequest("Test Band", 8);
         when(bandDaoMock.createNewBand(mockedBandRequest)).thenReturn(Optional.of(mockedBandInstance));
 

@@ -1,7 +1,8 @@
 {% extends "./parent.html" %}
 {% block content %}
+
     <main class="container mt-4">
-        <section id="form" class="bg-light py-5">
+        <section id="admin/add-job-roles" class="bg-light py-5">
             <div class="container"></div>
             <p>Enter Job Role details</p>
             {% if errorMessage %}
@@ -9,7 +10,7 @@
                 {{ errorMessage }}
             </div>
             {% endif %}
-            <form action="/admin/add-job-roles" method="post">
+            <form action="./add-job-roles" method="post">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" name="name" class="form-control" value="{{ jobRole.name }}" required>
@@ -23,7 +24,18 @@
                     <label for="sharePointLink">SharePoint Link</label>
                     <input type="text" name="sharePointLink" value="{{ jobRole.sharePointLink }}" class="form-control" required>
                 </div>
-                <button class="btn btn-primary" type="submit">Submit new Job Role</button>
+                <div class="form-group">
+                    <label for="band">Select desired Job Band</label>
+                    <select select id="admin/bands" name="bandId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
+                        {% for Band in Band %}
+                            <option value="{{ Band.id }}">
+                                {{ Band.name }}
+                                 <span class="level">{{ Band.level }}</span>
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn btn-primary mt-2" type="submit">Submit new Job Role</button>
             </form>
         </section>
     </main>

@@ -4,43 +4,42 @@ import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import logger from '../service/logger.js';
+import BandService from '../service/bandService.js';
+import BandValidator from '../service/bandValidator.js';
 
 export default class JobRoleController {
-  private jobRoleService = new JobRoleService(new JobRoleValidator());
+    private jobRoleService = new JobRoleService(new JobRoleValidator());
+    private bandService = new BandService(new BandValidator());
 
-  appRoutes(app: Application) {
-    app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
-      res.render('add-new-job-role');
-    });
+    appRoutes(app: Application) {
+        app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
+            const data: JobRole = req.body;
+            data.name = sanitizeHtml(data.name).trim();
+            data.description = sanitizeHtml(data.description).trim();
+            data.sharePointLink = sanitizeHtml(data.sharePointLink).trim();
 
-    app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
-      const data: JobRole = req.body;
-      data.name = sanitizeHtml(data.name).trim();
-      data.description = sanitizeHtml(data.description).trim();
-      data.sharePointLink = sanitizeHtml(data.sharePointLink).trim();
+            try {
+                const newJobRole = await this.jobRoleService.createNewJobRole(data);
+                res.redirect(`/job-roles/${newJobRole.id}`);
+            } catch (e: any) {
+                logger.warn(e.message);
+                res.locals.errorMessage = e.message;
+                res.render('add-new-job-role', req.body);
+            }
+        });
 
-      try {
-        const newJobRole = await this.jobRoleService.createNewJobRole(data);
-        res.redirect(`/job-roles/${newJobRole.id}`);
-      } catch (e: any) {
-        logger.warn(e.message);
-        res.locals.errorMessage = e.message;
-        res.render('add-new-job-role', req.body);
-      }
-    });
+        app.get('/job-roles/:id', async (req: Request, res: Response) => {
+            let data = {};
 
-    app.get('/job-roles/:id', async (req: Request, res: Response) => {
-      let data = {};
+            try {
+                data = await this.jobRoleService.getJobRoleSpecification(
+                    Number.parseInt(req.params.id, 10),
+                );
+            } catch (e) {
+                logger.error(`Couldnt get job Role! Error: ${e}`);
+            }
 
-      try {
-        data = await this.jobRoleService.getJobRoleSpecification(
-          Number.parseInt(req.params.id, 10),
-        );
-      } catch (e) {
-        logger.error(`Couldnt get job Role! Error: ${e}`);
-      }
-
-      res.render('view-single-jobRole', { jobRole: data });
-    });
-  }
+            res.render('view-single-jobRole', { jobRole: data });
+        });
+    }
 }

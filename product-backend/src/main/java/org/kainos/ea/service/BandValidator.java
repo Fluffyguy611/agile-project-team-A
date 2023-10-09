@@ -13,7 +13,14 @@ public class BandValidator {
         } else if (band.getName().length() < 2) {
             return Optional.of("Name shorter than 2 characters");
         }
-
         return Optional.empty();
+    }
+
+    public Optional<Integer> isValidBandLevel(BandRequest band) {
+        if (band.getLevel() >= 0 && band.getLevel() <= 9) {
+            return Optional.of(Integer.valueOf("Correct Level input"));
+        } else {
+            return Optional.empty();
+        }
     }
 }
