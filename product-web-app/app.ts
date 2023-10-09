@@ -10,6 +10,8 @@ import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
+import CapabilityController from './controller/capabilityController.js';
+import Capability from './model/capability.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -36,6 +38,7 @@ declare module 'express-session' {
   interface SessionData {
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
+    capability: Capability;
   }
 }
 
@@ -51,9 +54,14 @@ const authController = new AuthController();
 authController.appRoutes(app);
 
 const jobRoleController = new JobRoleController();
+const capabilityController = new CapabilityController();
 
 jobRoleController.appRoutes(app);
+capabilityController.appRoutes(app);
 
 app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
+
+
+
