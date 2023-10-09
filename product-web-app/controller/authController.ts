@@ -3,6 +3,7 @@ import User from '../model/user.js';
 import AuthService from '../service/authService.js';
 import AuthValidator from '../service/authValidator.js';
 import logger from '../service/logger.js';
+import dayjs from 'dayjs';
 
 export default class AuthController {
   private authService = new AuthService(new AuthValidator());
@@ -32,7 +33,9 @@ export default class AuthController {
 
       try {
         const token = await this.authService.login(user);
-        res.cookie('token', token, { httpOnly: true });
+        const expirationTime = dayjs().add(1, 'hour').toDate();
+        
+        res.cookie('token', token, { httpOnly: true, expires: expirationTime, maxAge: 3600000 });
         res.redirect('/');
       } catch (e: any) {
         logger.error(`Login failed: ${e.message}`);
