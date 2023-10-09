@@ -10,7 +10,7 @@ export default class BandController {
 
     appRoutes(app: Application) {
         app.get('/admin/band', async (req: Request, res: Response) => {
-            res.render('add-new-job-role-band');
+            res.render('add-new-band');
         });
 
         app.post('/admin/band', async (req: Request, res: Response) => {
@@ -23,7 +23,7 @@ export default class BandController {
             } catch (e: any) {
                 logger.warn(e.message);
                 res.locals.errorMessage = e.message;
-                res.render('add-new-job-role-band', req.body);
+                res.render('add-new-band', req.body);
             }
         });
 

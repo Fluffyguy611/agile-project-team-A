@@ -18,7 +18,7 @@ import java.sql.SQLException;
 @Path("/api")
 
 public class BandController {
-    private final static Logger logger = LoggerFactory.getLogger(BandService.class);
+    private final static Logger logger = LoggerFactory.getLogger(BandController.class);
     private final BandService bandService = new BandService(new BandDao(), new BandValidator());
 
     @POST
@@ -36,19 +36,6 @@ public class BandController {
             String errorMessage = "Band already exists!";
             ErrorResponse errorResponse = new ErrorResponse(errorMessage);
             return Response.status(Response.Status.BAD_REQUEST).entity(errorResponse).build();
-        }
-    }
-
-    @GET
-    @Path("/band/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getBandById(@PathParam("id") int id) {
-        try {
-            return Response.ok(bandService.getBandById(id)).build();
-        } catch (FailedToGetBandException | BandDoesNotExistException e) {
-            logger.error("Failed to get the Band! Error: {}", (e.getMessage()));
-
-            return Response.serverError().build();
         }
     }
 

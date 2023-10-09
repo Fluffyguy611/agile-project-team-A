@@ -1,7 +1,10 @@
 package org.kainos.ea.service;
 
 import org.kainos.ea.db.BandDao;
-import org.kainos.ea.exception.*;
+import org.kainos.ea.exception.BandAlreadyExistsException;
+import org.kainos.ea.exception.FailedToCreateNewBandException;
+import org.kainos.ea.exception.FailedToCreateNewBandInvalidLevelException;
+import org.kainos.ea.exception.FailedToGetAllJobBandsException;
 import org.kainos.ea.model.Band;
 import org.kainos.ea.model.BandRequest;
 import org.slf4j.Logger;
@@ -42,22 +45,6 @@ public class BandService {
         Optional<Band> optionalBand = bandDao.createNewBand(band);
 
         return optionalBand.orElseThrow(() -> new FailedToCreateNewBandException("Couldn't create new band!"));
-    }
-
-    public Band getBandById(int id) throws BandDoesNotExistException, FailedToGetBandException {
-        try {
-            Optional<Band> bandSingleView = bandDao.getBandById(id);
-
-            if (bandSingleView.isEmpty()) {
-                throw new BandDoesNotExistException();
-            }
-
-            return bandSingleView.get();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-
-            throw new FailedToGetBandException();
-        }
     }
 
     public List<Band> getAllJobBands() throws SQLException, FailedToGetAllJobBandsException {

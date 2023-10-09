@@ -1,11 +1,10 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 import BandValidator from '../service/bandValidator.js';
 import Band from '../model/band.js';
 import BandService from '../service/bandService.js';
 import logger from '../service/logger.js';
+import mockAxios from './axios.instance.test.js';
 
 const bandValidatorStub = sinon.stub(new BandValidator());
 
@@ -29,7 +28,6 @@ after(() => {
 
     describe('createNewBand', () => {
         it('When API online expect Band to be created', async () => {
-            const mockAxios = new MockAdapter(axios);
             bandValidatorStub.validateBand.returns(null);
 
             mockAxios.onPost('/api/admin/band').reply(200, testBandEngi);
@@ -43,7 +41,6 @@ after(() => {
         });
 
         it('When Band has invalid fields expect exception', async () => {
-            const mockAxios = new MockAdapter(axios);
             const validationError = 'Name longer than 64 characters';
             bandValidatorStub.validateBand.returns(validationError);
             mockAxios.onPost('mockedApiUrl}/api/admin/band').reply(200, testBandEngi);
