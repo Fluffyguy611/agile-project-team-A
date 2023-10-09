@@ -7,4 +7,5 @@ export const API = {
   CREATE_CAPABILITY: '/api/admin/capability',
   ADD_JOB_ROLES: '/api/admin/job-roles',
   REGISTER: '/api/auth/register',
+  LOGIN: '/api/auth/login'
 };

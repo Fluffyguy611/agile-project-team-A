@@ -36,14 +36,20 @@ export default class AuthService {
       throw new Error('Could not register user');
     }
   }
-
-  async login(user: User): Promise<void> {
+  
+  async login(user: User): Promise<string> {
     try {
-      const response = await axios.post('http://localhost:8080/api/login', user);
+      const apiResponse = await axios.post(API.LOGIN, user);
+      const token = apiResponse.data;
 
-      return response.data;
-    } catch (e) {
-      throw new Error('Could not login');
+      if (!token) {
+        throw new Error('No token found in the response.');
+      }
+
+      return token;
+    } catch (e: any) {
+      logger.error(`Could not login user: ${e.message}`);
+      throw new Error('Could not login user');
     }
   }
 }

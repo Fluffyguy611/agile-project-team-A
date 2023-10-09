@@ -36,7 +36,6 @@
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                {% if isLoggedIn %} 
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item active">
@@ -63,9 +62,11 @@
                                 <li><a class="dropdown-item" href="">Update</a></li>
                                 <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
                                 <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
-                                {% else %}
-                                <li><a class="dropdown-item" href="/job-roles">View Capability Leads</a></li>
+                                {% elif role == 'employee' %}
+                                <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
                                 <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                {% else %}
+                                <li><a class="dropdown-item" href="/auth/register">Register</a></li>
                                 {% endif %}
                             </li>
                             </ul>
@@ -76,17 +77,5 @@
         </nav>
     </header>
     <div id="content">{% block content %} {% endblock %}</div>
-    {% else %} 
-    <header>YOU NEED TO BE SIGNED TO VIEW THIS PAGE</header>
-        <div class="login">
-            <a href="/login">
-                <button class="login-button">Login</button>
-                </a>
-        </div>
-        <div>
-            <img src="https://media.tenor.com/lx2WSGRk8bcAAAAC/pulp-fiction-john-travolta.gif" alt="">
-        </div>
-    </div>
-    {% endif %}
 </body>
 </html>

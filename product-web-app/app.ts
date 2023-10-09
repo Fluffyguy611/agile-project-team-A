@@ -12,6 +12,7 @@ import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
 import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
+import AuthMiddleware from './middleware/auth.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -39,6 +40,7 @@ declare module 'express-session' {
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
     capability: Capability;
+    token: string;
   }
 }
 
@@ -52,6 +54,9 @@ app.listen(3000, () => {
 const authController = new AuthController();
 
 authController.appRoutes(app);
+
+const authMiddleware = new AuthMiddleware();
+authMiddleware.appRoutes(app);
 
 const jobRoleController = new JobRoleController();
 const capabilityController = new CapabilityController();
