@@ -1,32 +1,94 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.kainos.com">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
-
 <style>
-    .login-button {
-      background: rgb(4, 119, 63);
-      border: 0;
-      color: white;
-      padding: 10px;
-      margin-left: 50px;
-      border-radius: 15px;
-      transition: 0.4s ease;
+    html {
+        height: 100%;
+    }
+
+    body {
+        min-height: 100%;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        text-align: left;
+        font-family: sans-serif;
+    }
+
+    ol, ul {
+        list-style: none;
+        margin: 0; padding: 0;
+    }
+
+    li {
+        text-align: left;
+    }
+
+    a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    a:hover {
+        color: #fff;
+    }
+
+    .footer {
+        font-weight: 300;
+        color: #fff;
+        grid-row-start: 2;
+        grid-row-end: 3;
+        padding-top: 50px;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, #252d4f 0%, rgba(37, 45, 79, 0) 100%), linear-gradient(90deg, #004631 0.02%, #61a83f 27.47%, #61a83f 40.06%, #41679f 69.71%, #283583 100%);
+    }
+
+    .footer__nav-list-link {
+        text-decoration: none;
+    }
+
+    .footer__bottom {
+        padding: 25px 0 40px;
+        background: url('https://www.kainos.com/globalassets/images/6_flux/flux_white_footer.png?width=1200&mode=crop&quality=80');
+        background-repeat: no-repeat;
+    }
+
+    .footer__slogan {
+        font-weight: 600;
+        font-size: 3em;
+    }
+
+    .footer__slogan > span {
+        color: #cfd600;
+    }
+
+    .footer__copyrights {
+        text-align: end;
+        font-size: 1.1rem;
+    }
+
+    .login-button, .register-button{
+        background: rgb(4, 119, 63);
+        border: 0;
+        color: white;
+        padding: 10px;
+        margin-left: 50px;
+        border-radius: 15px;
+        transition: 0.4s ease;
     }
   
-    .login-button:hover {
-      background: black;
-      cursor: pointer;
+    .login-button:hover, .register-button:hover {
+        background: black;
+        cursor: pointer;
     }
 </style>
-
-
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom">
@@ -57,36 +119,115 @@
                                 Available actions:
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                {% if role == 'admin' %}
-                                <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
-                                <li><a class="dropdown-item" href="">Delete</a></li>
-                                <li><a class="dropdown-item" href="">Update</a></li>
-                                <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
-                                <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
-                                {% else %}
-                                <li><a class="dropdown-item" href="/job-roles">View Capability Leads</a></li>
-                                <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                {% if role.length > 0 %}
+                                <li class="nav-item active">
+                                    <a class="logout-nav" aria-current="page" href="/auth/logout">Logout</a>
+                                </li>
                                 {% endif %}
-                            </li>
+                                {% if role == "1" %}
+                                    <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
+                                    <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
+                                    <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                {% elif role == "2" %}
+                                    <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
+                                    <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="/auth/register">Register</a></li>
+                                    <li><a class="dropdown-item" href="/auth/login">Login</a></li>
+                                {% endif %}
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-    </header>
-    <div id="content">{% block content %} {% endblock %}</div>
-    {% else %} 
-    <header>YOU NEED TO BE SIGNED TO VIEW THIS PAGE</header>
-        <div class="login">
-            <a href="/login">
-                <button class="login-button">Login</button>
-                </a>
-        </div>
-        <div>
-            <img src="https://media.tenor.com/lx2WSGRk8bcAAAAC/pulp-fiction-john-travolta.gif" alt="">
-        </div>
+        <div id="content">{% block content %} {% endblock %}</div>
+        {% else %} 
+        <div>LOG IN OR SIGN UP TO VIEW THIS PAGE</div>
+            <div class="login">
+                <a href="/auth/login"><button class="login-button">Login</button></a>
+            </div>
+            <div>
+                <img src="https://media.tenor.com/lx2WSGRk8bcAAAAC/pulp-fiction-john-travolta.gif" alt="">
+            </div>
+            <div class="register">
+                <a href="/auth/register"><button class="register-button">Register</button></a>
+            </div>
     </div>
     {% endif %}
+    </header>
+    <footer class="footer">
+        <div class="footer__container container">
+            <div class="footer__nav row">
+                <div class="footer__nav-column col-12 col-md-3">
+                    <h5 class="footer__nav-title">Navigation</h5>
+                        <ul class="footer__nav-list">
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/digital-services" class="footer__nav-list-link">Digital Services</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/workday" class="footer__nav-list-link">Workday</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://careers.kainos.com/gb/en" class="footer__nav-list-link">Careers</a>
+                        </li>
+                        </ul>
+                </div>
+                <div class="footer__nav-column col-12 col-md-3">
+                    <h5 class="footer__nav-title">About Kainos</h5>
+                        <ul class="footer__nav-list">
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/about-us" class="footer__nav-list-link">About us</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/about-us/our-culture" class="footer__nav-list-link">Our culture</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/about-us/sustainability" class="footer__nav-list-link">Sustainability</a>
+                        </li>
+                        </ul>
+                </div>
+                <div class="footer__nav-column col-12 col-md-3">
+                    <h5 class="footer__nav-title">Investor Relations</h5>
+                        <ul class="footer__nav-list">
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/investor-relations" class="footer__nav-list-link">Investor relations home</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/investor-relations/investor-tools" class="footer__nav-list-link">Investor tools</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/investor-relations/people-and-policies" class="footer__nav-list-link">People and policies</a>
+                        </li>
+                        </ul>
+                </div>
+                <div class="footer__nav-column col-12 col-md-3">
+                    <h5 class="footer__nav-title">Legal</h5>
+                        <ul class="footer__nav-list">
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/information/privacy-notice" class="footer__nav-list-link">Privacy notice</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/information/corporate-information" class="footer__nav-list-link">Corporate information</a>
+                        </li>
+                        <li class="footer__nav-list-item">
+                            <a href="https://www.kainos.com/information/recruitment-notice" class="footer__nav-list-link">Recruitment notice</a>
+                        </li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <div class="footer__bg-image footer__bg-image--desktop"></div>
+            <div class="footer__container footer__container--image container">
+                <div class="footer__slogan">
+                    <b>Thinking</b><br>
+                    <span>beyond</span><br>
+                    <b>limitations</b>
+                </div>
+                    <div class="footer__copyrights">Copyright © 2023 Dziki Adriana</div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
