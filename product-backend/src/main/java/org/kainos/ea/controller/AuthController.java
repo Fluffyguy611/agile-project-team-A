@@ -49,11 +49,11 @@ public class AuthController {
     public Response login(User user) {
         try {
             return Response.ok().entity(authService.login(user)).build();
-        } catch (FailedToLoginException | UserDoesNotExistException e) {
+        } catch (FailedToLoginException e) {
             logger.error("Failed to login! Error: {}", e.getMessage());
 
             return Response.serverError().entity(new ErrorResponse(e.getMessage())).build();
-        } catch (InvalidPasswordException e) {
+        } catch (InvalidPasswordException | UserDoesNotExistException e) {
             logger.error("Invalid password! Error: {}", e.getMessage());
 
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
