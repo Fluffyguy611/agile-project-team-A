@@ -1,20 +1,18 @@
 package org.kainos.ea.db;
 
-
 import org.kainos.ea.model.Capability;
 import org.kainos.ea.model.CapabilityRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class CapabilityDao {
 
 
-    public Optional<List<Capability>> getEveryCapabilityLead(Connection c) throws SQLException {
-        String getStatement = "SELECT * FROM `Capability`";
+    public List<Capability> getEveryCapabilityLead(Connection c) throws SQLException {
+        String getStatement = "SELECT Id, Capability, Name, Photo, Message FROM `Capability`";
         PreparedStatement st = c.prepareStatement(getStatement);
         ResultSet rs = st.executeQuery();
 
@@ -27,14 +25,14 @@ public class CapabilityDao {
                     rs.getString("Name"),
                     rs.getString("Photo"),
                     rs.getString("Message"));
+
             capabilityList.add(capability);
         }
-        return Optional.of(capabilityList);
+        return capabilityList;
     }
 
 
     public int createCapabilityLead(CapabilityRequest capability, Connection c) throws SQLException {
-
 
         String insertStatement = "INSERT INTO Capability (Capability, Name, Photo, Message) VALUES (?,?,?,?)";
 
@@ -47,7 +45,6 @@ public class CapabilityDao {
 
         st.executeUpdate();
 
-
         ResultSet rs = st.getGeneratedKeys();
         if (rs.next()) {
             return rs.getInt(1);
@@ -56,7 +53,7 @@ public class CapabilityDao {
         return -1;
 
     }
-    
+
 }
 
 

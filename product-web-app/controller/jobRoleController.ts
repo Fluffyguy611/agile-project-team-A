@@ -5,7 +5,6 @@ import JobRoleService from '../service/jobRoleService.js';
 import mock from '../common/req.express.session.mock.js';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import logger from '../service/logger.js';
-import Capability from '../model/capability.js';
 import CapabilityService from '../service/capabilityService.js';
 
 export default class JobRoleController {
@@ -14,9 +13,11 @@ export default class JobRoleController {
 
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
+      var capabilities = await this.capabilityService.getEveryCapability();
       res.render('add-new-job-role', {
       role: mock.role,
-      isLoggedIn: mock.isLoggedIn,});
+      isLoggedIn: mock.isLoggedIn,
+      Capability: capabilities});
     });
 
     app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
@@ -24,7 +25,8 @@ export default class JobRoleController {
       data.name = sanitizeHtml(data.name).trim();
       data.description = sanitizeHtml(data.description).trim();
       data.sharePointLink = sanitizeHtml(data.sharePointLink).trim();
-
+      data.capabilityId = (data.capabilityId);
+   
       try {
         const newJobRole = await this.jobRoleService.createNewJobRole(data);
         res.redirect(`/job-roles/${newJobRole.id}`,);
@@ -66,23 +68,6 @@ export default class JobRoleController {
         role: mock.role,
         isLoggedIn: mock.isLoggedIn});
     });
-
-    app.get('/view-all-capability', async (req: Request, res: Response) => {
-      let data: Capability[] = [];
-      
-      try {
-        data = await this.capabilityService.getEveryCapabilityLead();
-      }catch (e) {
-        logger.error(`Could not get capability: ${e}`);
-      }
-      res.render('/add-new-job', {capability: data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn
-      })
-      
-      })
-
-
 
   }
 }

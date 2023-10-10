@@ -8,11 +8,12 @@ public class Capability {
     private String message;
 
     public Capability(int id, String capability, String name, String photo, String message) {
-        this.id = id;
-        this.capability = capability;
-        this.name = name;
-        this.photo = photo;
-        this.message = message;
+        setId(id);
+        setCapability(capability);
+        setName(name);
+        setPhoto(photo);
+        setMessage(message);
+
     }
 
     public int getId() {

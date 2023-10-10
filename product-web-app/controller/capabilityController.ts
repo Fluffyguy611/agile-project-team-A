@@ -6,27 +6,29 @@ import sanitizeHtml from 'sanitize-html';
 import multer from 'multer';
 import mock from '../common/req.express.session.mock.js';
 
-export default class capabilityController {
+export default class CapabilityController {
   private capabilityService = new CapabilityService();
   private upload = multer();
   appRoutes(app: Application) {
-    // app.get('/capability', async (req: Request, res: Response) => {
-    //   let data = {};
-
-    //   try {
-    //     await this.capabilityService.getEveryCapabilityLead();
-    //   } catch (e) {
-    //     logger.error(`Couldnt get Capability! Error: ${e}`);
-    //   }
-
-    //   res.render('capabilities', { jobRole: data });
-    // });
-
+   
     app.get('/admin/add-capability', async (req: Request, res: Response) => {
       res.render('add-new-capability', {
         role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
+        isLoggedIn: mock.isLoggedIn});
       });
+
+    app.get('/capability', async (req: Request, res: Response) => {
+      let data: Capability[] = [];
+
+      try {
+        data = await this.capabilityService.getEveryCapability();
+      } catch (e) {
+        logger.error(`Couldnt get Capability Leads! Error: ${e}`);
+      }
+
+      res.render('list-capability-leads', { capability: data,
+        role: mock.role,
+        isLoggedIn: mock.isLoggedIn});
     });
 
     app.post(
@@ -45,7 +47,7 @@ export default class capabilityController {
         data.message = sanitizeHtml(data.message).trim();
 
         try {
-          const newCapability = await this.capabilityService.createCapabilityLead(data);
+          const newCapability = await this.capabilityService.createCapability(data);
           res.redirect(`/${newCapability.id}`);
         } catch (e: any) {
           logger.warn(e.message);

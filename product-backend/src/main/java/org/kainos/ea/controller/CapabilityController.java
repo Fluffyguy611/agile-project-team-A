@@ -1,14 +1,17 @@
 package org.kainos.ea.controller;
 
-
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kainos.ea.db.CapabilityDao;
 import org.kainos.ea.db.DatabaseConnector;
-import org.kainos.ea.exception.*;
+import org.kainos.ea.exception.CapabilityDoesNotExistException;
+import org.kainos.ea.exception.FailedToCreateCapabilityLeadException;
+import org.kainos.ea.exception.FailedToGetCapabilityException;
+import org.kainos.ea.exception.InvalidCapabilityLeadException;
 import org.kainos.ea.model.CapabilityRequest;
+import org.kainos.ea.model.ErrorResponse;
 import org.kainos.ea.service.CapabilityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +19,8 @@ import org.slf4j.LoggerFactory;
 @Tag(name = "Capability")
 @Path("/api")
 public class CapabilityController {
-    private final static Logger logger = LoggerFactory.getLogger(CapabilityController.class);
+
+    private final static Logger logger = LoggerFactory.getLogger(CapabilityService.class);
 
     CapabilityService capabilityService = new CapabilityService(new DatabaseConnector(), new CapabilityDao());
 

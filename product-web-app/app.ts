@@ -7,12 +7,12 @@ import nunjucks from 'nunjucks';
 import axios from 'axios';
 import logger from './service/logger.js';
 import JobRoleController from './controller/jobRoleController.js';
-import Capability from './model/capability.js';
 import JobRoleSingleViewController from './controller/jobRoleController.js';
 import CapabilityController from './controller/capabilityController.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
+import Capability from './model/capability.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -56,11 +56,9 @@ const jobRoleSingleViewController = new JobRoleSingleViewController();
 const capabilityController = new CapabilityController();
 
 
-
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
-
 
 
 jobRoleController.appRoutes(app);

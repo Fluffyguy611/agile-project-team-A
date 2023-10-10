@@ -27,13 +27,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="capability">Select desired Capability</label>
-                    <select select id="/admin/add-capability" name="capability" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
-                        {% for capability in capability %}
-                            <option value="{{ capability.id }}">
-                                {{ capability.name }}
-                            </option>
-                        {% endfor %}
+                    <label for="capabilityId">Select desired Capability</label>
+                    <select select id="/capability" name="capabilityId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
+                    {% for Capability in Capability %}
+                        <option value="{{ Capability.id }}">{{Capability.capability}}</option>
+                    {% endfor%}
                     </select>
                 </div>
                 <button class="btn btn-primary mt-2" type="submit">Submit new Job Role</button>
