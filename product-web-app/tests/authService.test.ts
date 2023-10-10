@@ -4,7 +4,6 @@ import AuthValidator from '../service/authValidator.js';
 import logger from '../service/logger.js';
 import { API } from '../common/constants.js';
 import mockAxios from './axios.instance.test.js';
-import UserCredentials from '../model/userCredentials.js';
 
 const mockedUser = {
   email: 'username@kainos.com',
