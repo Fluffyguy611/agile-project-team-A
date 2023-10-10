@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
+import org.kainos.ea.model.LoginRequest;
 import org.kainos.ea.model.User;
 import org.kainos.ea.service.AuthService;
 import org.kainos.ea.service.AuthValidator;
@@ -90,51 +91,51 @@ class AuthServiceTest {
 
     @Test
     void loginUser_When_UserIsValid_Expect_TokenReturned() throws SQLException, InvalidPasswordException, UserDoesNotExistException, FailedToLoginException {
-        User mockedUser = new User("username@kainos.com", "strongPassword123!", 1);
+        LoginRequest mockedLogin = new LoginRequest("username@kainos.com", "strongPassword123!");
         Optional<User> existingUserMock = Optional.of(new User("username@kainos.com", "strongPassword123!", 1));
 
-        when(passwordServiceMock.verifyHash(mockedUser.getPassword(), existingUserMock.get().getPassword())).thenReturn(true);
-        when(authDaoMock.getUserByEmail(mockedUser.getEmail(), databaseConnectorMock.getConnection())).thenReturn(existingUserMock);
+        when(passwordServiceMock.verifyHash(mockedLogin.getPassword(), existingUserMock.get().getPassword())).thenReturn(true);
+        when(authDaoMock.getUserByEmail(mockedLogin.getEmail(), databaseConnectorMock.getConnection())).thenReturn(existingUserMock);
 
-        String token = authService.login(mockedUser);
+        String token = authService.login(mockedLogin);
 
         assertThat(token).isNotEmpty();
     }
 
     @Test
     void loginUser_When_ThereIsWrongPasswordError_Expect_InvalidPasswordException() throws SQLException {
-        User mockedUser = new User("username@kainos.com", "invalid_password", 1);
+        LoginRequest mockedLogin = new LoginRequest("username@kainos.com", "invalid_password");
         Optional<User> existingUserMock = Optional.of(new User("username@kainos.com", "strongPassword123!", 1));
 
-        when(passwordServiceMock.verifyHash(mockedUser.getPassword(), existingUserMock.get().getPassword())).thenReturn(false);
-        when(authDaoMock.getUserByEmail(mockedUser.getEmail(), databaseConnectorMock.getConnection())).thenReturn(existingUserMock);
+        when(passwordServiceMock.verifyHash(mockedLogin.getPassword(), existingUserMock.get().getPassword())).thenReturn(false);
+        when(authDaoMock.getUserByEmail(mockedLogin.getEmail(), databaseConnectorMock.getConnection())).thenReturn(existingUserMock);
 
         assertThatExceptionOfType(InvalidPasswordException.class)
-                .isThrownBy(() -> authService.login(mockedUser))
+                .isThrownBy(() -> authService.login(mockedLogin))
                 .withMessage("Provided password is invalid");
     }
 
     @Test
     void loginUser_When_ThereIsWrongPasswordError_Expect_FailedToLoginException() throws SQLException {
-        User mockedUser = new User("username@kainos.com", "strongPassword123!", 1);
+        LoginRequest mockedLogin = new LoginRequest("username@kainos.com", "strongPassword123!");
         Optional<User> existingUserMock = Optional.of(new User("username@kainos.com", "strongPassword123!", 1));
 
-        when(passwordServiceMock.verifyHash(mockedUser.getPassword(), existingUserMock.get().getPassword())).thenReturn(true);
-        when(authDaoMock.getUserByEmail(mockedUser.getEmail(), databaseConnectorMock.getConnection())).thenThrow(new SQLException());
+        when(passwordServiceMock.verifyHash(mockedLogin.getPassword(), existingUserMock.get().getPassword())).thenReturn(true);
+        when(authDaoMock.getUserByEmail(mockedLogin.getEmail(), databaseConnectorMock.getConnection())).thenThrow(new SQLException());
 
         assertThatExceptionOfType(FailedToLoginException.class)
-                .isThrownBy(() -> authService.login(mockedUser))
+                .isThrownBy(() -> authService.login(mockedLogin))
                 .withMessageMatching("Failed to login");
     }
 
     @Test
     void loginUser_When_UserDoesNotExistError_Expect_UserDoesNotExistException() throws SQLException {
-        User mockedUser = new User("username@kainos.com", "strongPassword123!", 1);
+        LoginRequest mockedLogin = new LoginRequest("username@kainos.com", "strongPassword123!");
 
-        when(authDaoMock.getUserByEmail(mockedUser.getEmail(), databaseConnectorMock.getConnection())).thenReturn(Optional.empty());
+        when(authDaoMock.getUserByEmail(mockedLogin.getEmail(), databaseConnectorMock.getConnection())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(UserDoesNotExistException.class)
-                .isThrownBy(() -> authService.login(mockedUser))
+                .isThrownBy(() -> authService.login(mockedLogin))
                 .withMessageMatching("User does not exist");
     }
 }

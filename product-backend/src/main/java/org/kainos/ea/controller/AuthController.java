@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.Response;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
+import org.kainos.ea.model.LoginRequest;
 import org.kainos.ea.model.User;
 import org.kainos.ea.service.AuthService;
 import org.kainos.ea.service.AuthValidator;
@@ -46,9 +47,9 @@ public class AuthController {
     @Path("/auth/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(User user) {
+    public Response login(LoginRequest login) {
         try {
-            return Response.ok().entity(authService.login(user)).build();
+            return Response.ok().entity(authService.login(login)).build();
         } catch (FailedToLoginException e) {
             logger.error("Failed to login! Error: {}", e.getMessage());
 

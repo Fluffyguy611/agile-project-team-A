@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
+import org.kainos.ea.model.LoginRequest;
 import org.kainos.ea.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,15 +53,15 @@ public class AuthService {
         }
     }
 
-    public String login(User user) throws FailedToLoginException, UserDoesNotExistException, InvalidPasswordException {
+    public String login(LoginRequest login) throws FailedToLoginException, UserDoesNotExistException, InvalidPasswordException {
         try {
-            Optional<User> existingUser = authDao.getUserByEmail(user.getEmail(), databaseConnector.getConnection());
+            Optional<User> existingUser = authDao.getUserByEmail(login.getEmail(), databaseConnector.getConnection());
 
             if (existingUser.isEmpty()) {
                 throw new UserDoesNotExistException();
             }
 
-            if (!passwordService.verifyHash(user.getPassword(), existingUser.get().getPassword())) {
+            if (!passwordService.verifyHash(login.getPassword(), existingUser.get().getPassword())) {
                 throw new InvalidPasswordException();
             }
 
