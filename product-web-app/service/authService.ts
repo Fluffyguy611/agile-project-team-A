@@ -37,10 +37,11 @@ export default class AuthService {
       throw new Error('Could not register user');
     }
   }
+
   async login(user: User): Promise<UserCredentials> {
     try {
       const apiResponse = await axios.post(API.LOGIN, user);
-      let credentials: UserCredentials = apiResponse.data;
+      const credentials: UserCredentials = apiResponse.data;
 
       if (!credentials.token) {
         throw new Error('No token found in the response.');

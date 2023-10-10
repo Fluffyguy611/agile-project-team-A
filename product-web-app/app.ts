@@ -5,6 +5,7 @@ import session from 'express-session';
 import path from 'path';
 import nunjucks from 'nunjucks';
 import axios from 'axios';
+import cookieParser from 'cookie-parser';
 import logger from './service/logger.js';
 import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
@@ -13,7 +14,6 @@ import JobRole from './model/jobRole.js';
 import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
 import AuthMiddleware from './middleware/auth.js';
-import cookieParser from 'cookie-parser';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const app: Application = express();
@@ -68,6 +68,3 @@ capabilityController.appRoutes(app);
 app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
-
-
-

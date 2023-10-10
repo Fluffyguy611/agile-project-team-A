@@ -1,5 +1,5 @@
 export default class UserCredentials {
-    token!: string;
-    roleId!: number;
-  }
-  
+  token!: string;
+
+  roleId!: number;
+}

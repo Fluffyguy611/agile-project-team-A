@@ -16,8 +16,10 @@ export default class CapabilityController {
         logger.error(`Couldnt get Capability Leads! Error: ${e}`);
       }
 
-      res.render('list-capability-leads', { capability: data,
-        role: req.session.isAdmin});
+      res.render('list-capability-leads', {
+        capability: data,
+        role: req.session.isAdmin,
+      });
     });
   }
 }
