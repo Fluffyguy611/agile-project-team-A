@@ -54,7 +54,7 @@ public class AuthController {
 
             return Response.serverError().entity(new ErrorResponse(e.getMessage())).build();
         } catch (InvalidPasswordException | UserDoesNotExistException e) {
-            logger.error("Invalid password! Error: {}", e.getMessage());
+            logger.error("Error: {}", e.getMessage());
 
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
         }
