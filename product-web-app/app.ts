@@ -16,7 +16,6 @@ import AuthMiddleware from './middleware/auth.js';
 import cookieParser from 'cookie-parser';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
 const app: Application = express();
 
 app.use(cookieParser());
@@ -33,17 +32,16 @@ nunjucks.configure(appViews, nunjucksConfig);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 
 axios.defaults.baseURL = API_URL;
 
 declare module 'express-session' {
   interface SessionData {
+    token: string;
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
     capability: Capability;
-    token: string;
   }
 }
 
@@ -55,7 +53,6 @@ app.listen(3000, () => {
 });
 
 const authController = new AuthController();
-
 authController.appRoutes(app);
 
 const authMiddleware = new AuthMiddleware();
