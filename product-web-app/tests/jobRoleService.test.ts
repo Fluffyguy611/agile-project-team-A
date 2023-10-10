@@ -4,9 +4,10 @@ import JobRoleValidator from '../service/jobRoleValidator.js';
 import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
 import logger from '../service/logger.js';
-import mockAxios from './axios.instance.test.js';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 
-const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+
 
 const jobRolePrincipal: JobRole = {
   id: 5,
@@ -24,7 +25,7 @@ const jobRoleTestEngi: JobRole = {
   bandId: 1,
 };
 
-const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+
 
 describe('JobRole service', () => {
   before(() => {
@@ -37,9 +38,13 @@ describe('JobRole service', () => {
 
   describe('createNewJobRole', () => {
     it('When API online expect JobRole to be created', async () => {
+      const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+      const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+      const mockAxios = new MockAdapter(axios);
+
       jobRoleValidatorStub.validateJobRole.returns(null);
 
-      mockAxios.onPost('/api/admin/job-roles').reply(200, jobRoleTestEngi);
+      mockAxios.onPost('/api/admin/job-roles', jobRoleTestEngi).reply(200, jobRoleTestEngi);
 
       const responseBody = await jobRoleService.createNewJobRole(jobRoleTestEngi);
 
@@ -51,6 +56,11 @@ describe('JobRole service', () => {
 
     it('When Job Role has invalid fields expect exception', async () => {
       const validationError = 'Name longer than 64 characters';
+
+      const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+      const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+      const mockAxios = new MockAdapter(axios);
+
       jobRoleValidatorStub.validateJobRole.returns(validationError);
       mockAxios.onPost('mockedApiUrl}/api/admin/job-roles').reply(200, jobRoleTestEngi);
 
@@ -68,6 +78,10 @@ describe('JobRole service', () => {
 
     describe('getJobRoleById', () => {
       it('when API is down expect exception to be thrown', async () => {
+        const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+        const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+        const mockAxios = new MockAdapter(axios);
+
         mockAxios.onGet('/api/job-roles/1').reply(500);
 
         let exception: any;
@@ -83,6 +97,10 @@ describe('JobRole service', () => {
       });
 
       it('when jobRole have invalid id expect exception to be thrown', async () => {
+        const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+        const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+        const mockAxios = new MockAdapter(axios);
+        
         mockAxios.onGet('/api/job-roles/100000').reply(400);
 
         let exception: any;
@@ -98,6 +116,10 @@ describe('JobRole service', () => {
       });
 
       it('when API is online expect jobRole to be returned', async () => {
+        const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+        const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+        const mockAxios = new MockAdapter(axios);
+
         mockAxios.onGet(`/api/job-roles/${jobRolePrincipal.id}`).reply(200, jobRolePrincipal);
 
         const responseBody = await jobRoleService.getJobRoleSpecification(jobRolePrincipal.id);

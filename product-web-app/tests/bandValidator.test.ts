@@ -26,6 +26,16 @@ describe('Band validator', () => {
       );
     });
 
+    it('expect name too short', () => {
+      const band: Partial<Band> = {
+        name: '1',
+      };
+
+      expect(bandValidator.validateBand(band as Band)).to.be.equal(
+        'Name shorter than 2 characters',
+      );
+    });
+
     it('expect no errors', () => {
       const band: Band = {
         id: 99,
@@ -34,7 +44,6 @@ describe('Band validator', () => {
       };
 
       expect(bandValidator.validateBand(band)).to.be.null;
-
 
     });
 
