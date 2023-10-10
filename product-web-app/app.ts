@@ -13,10 +13,13 @@ import JobRole from './model/jobRole.js';
 import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
 import AuthMiddleware from './middleware/auth.js';
+import cookieParser from 'cookie-parser';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const app: Application = express();
+
+app.use(cookieParser());
 
 const appViews = path.join(dirname, '/views');
 

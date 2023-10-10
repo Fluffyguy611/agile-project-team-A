@@ -8,8 +8,8 @@ export default class AuthMiddleware {
         if(req.path == '/auth/register'){
             next();
         }
-        else if (req.session.token) {
-            axios.defaults.headers.common['Authorization'] = req.session.token;
+        else if (req.cookies.token) {
+            //axios.defaults.headers.common['Authorization'] = req.session.token;
             next();
         } else {
             res.redirect('/auth/login');
