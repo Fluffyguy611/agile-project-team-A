@@ -44,7 +44,6 @@ describe('Band validator', () => {
       };
 
       expect(bandValidator.validateBand(band)).to.be.null;
-
     });
 
     it('expect Level input to be incorrect', () => {
@@ -58,9 +57,7 @@ describe('Band validator', () => {
       const band: Partial<Band> = {
         level: 5,
       };
-      expect(bandValidator.validateBandLevel(band as Band)).to.be.equal(
-        'Correct Level input',
-      );
+      expect(bandValidator.validateBandLevel(band as Band)).to.be.equal('Correct Level input');
     });
   });
 });

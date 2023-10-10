@@ -1,16 +1,12 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
 import { API } from '../common/constants.js';
 import logger from '../service/logger.js';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
-import mockAxios from './axios.instance.test.js';
-
-const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
-const jobRoleService = new JobRoleService(jobRoleValidatorStub);
 
 const jobRolePrincipal: JobRole = {
   id: 5,
@@ -27,8 +23,6 @@ const jobRoleTestEngi: JobRole = {
   sharePointLink: 'https://example.com',
   bandId: 1,
 };
-
-
 
 describe('JobRole service', () => {
   before(() => {
@@ -103,7 +97,7 @@ describe('JobRole service', () => {
         const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
         const jobRoleService = new JobRoleService(jobRoleValidatorStub);
         const mockAxios = new MockAdapter(axios);
-        
+
         mockAxios.onGet('/api/job-roles/100000').reply(400);
 
         let exception: any;
@@ -144,6 +138,9 @@ describe('JobRole service', () => {
       ];
 
       it('when there are job roles expect job roles to be returned', async () => {
+        const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+        const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+        const mockAxios = new MockAdapter(axios);
         mockAxios.onGet(API.JOB_ROLES).reply(200, data);
 
         const result = await jobRoleService.getJobRoles();
@@ -151,6 +148,9 @@ describe('JobRole service', () => {
       });
 
       it('when Api is down expect exception to be thrown', async () => {
+        const jobRoleValidatorStub = sinon.stub(new JobRoleValidator());
+        const jobRoleService = new JobRoleService(jobRoleValidatorStub);
+        const mockAxios = new MockAdapter(axios);
         mockAxios.onGet(API.JOB_ROLES).reply(500, data);
         let error;
 

@@ -22,80 +22,80 @@ describe('Auth service', () => {
     logger.unsilent();
   });
 
-    describe('register', () => {
-      it('should throw an error for an invalid email', async () => {
-        const userWithInvalidEmail = {
-          ...mockedUser,
-          email: 'invalidemail',
-        };
+  describe('register', () => {
+    it('should throw an error for an invalid email', async () => {
+      const userWithInvalidEmail = {
+        ...mockedUser,
+        email: 'invalidemail',
+      };
 
-        let error;
-        try {
-          await authService.register(userWithInvalidEmail, 'strongPassword123!');
-        } catch (e: any) {
-          error = e;
-        }
+      let error;
+      try {
+        await authService.register(userWithInvalidEmail, 'strongPassword123!');
+      } catch (e: any) {
+        error = e;
+      }
 
-        expect(error.message).to.equal('Provided email is invalid');
-      });
+      expect(error.message).to.equal('Provided email is invalid');
+    });
 
-      it('should throw an error for an invalid password', async () => {
-        const userWithInvalidPassword = {
-          ...mockedUser,
-          password: 'weakpassword',
-        };
+    it('should throw an error for an invalid password', async () => {
+      const userWithInvalidPassword = {
+        ...mockedUser,
+        password: 'weakpassword',
+      };
 
-        let error;
-        try {
-          await authService.register(userWithInvalidPassword, 'weakpassword');
-        } catch (e: any) {
-          error = e;
-        }
+      let error;
+      try {
+        await authService.register(userWithInvalidPassword, 'weakpassword');
+      } catch (e: any) {
+        error = e;
+      }
 
-        expect(error.message).to.equal('Provided password is invalid');
-      });
+      expect(error.message).to.equal('Provided password is invalid');
+    });
 
-      it('should throw an error if password and repeatPassword do not match', async () => {
-        let error;
-        try {
-          await authService.register(mockedUser, 'MismatchedPassword');
-        } catch (e: any) {
-          error = e;
-        }
+    it('should throw an error if password and repeatPassword do not match', async () => {
+      let error;
+      try {
+        await authService.register(mockedUser, 'MismatchedPassword');
+      } catch (e: any) {
+        error = e;
+      }
 
-        expect(error.message).to.equal('Password and repeated password do not match');
-      });
+      expect(error.message).to.equal('Password and repeated password do not match');
+    });
 
-      it('should register a user when valid email, password, and repeatPassword are provided', async () => {
-        mockAxios.onPost(API.REGISTER, mockedUser).reply(200);
+    it('should register a user when valid email, password, and repeatPassword are provided', async () => {
+      mockAxios.onPost(API.REGISTER, mockedUser).reply(200);
 
-        await authService.register(mockedUser, 'strongPassword123!');
-      });
+      await authService.register(mockedUser, 'strongPassword123!');
     });
   });
- 
-    describe('login', () => {
-      it('should throw an error for an invalid credentials', async () => {
-        const invalidUser = {
-          ...mockedUser,
-          email: 'invalidemail',
-        };
-  
-        let error;
-        try {
-          await authService.login(invalidUser);
-        } catch (e: any) {
-          error = e;
-        }
-  
-        expect(error.message).to.equal('Could not login user');
-      });
-  
-      it('should return token when credentials are correct', async () => {
-        mockAxios.onPost(API.LOGIN, mockedUser).reply(200, 'mockedToken');
+});
 
-        const token = await authService.login(mockedUser);
+describe('login', () => {
+  it('should throw an error for an invalid credentials', async () => {
+    const invalidUser = {
+      ...mockedUser,
+      email: 'invalidemail',
+    };
 
-        expect(token).to.equal('mockedToken');
-      });
+    let error;
+    try {
+      await authService.login(invalidUser);
+    } catch (e: any) {
+      error = e;
+    }
+
+    expect(error.message).to.equal('Could not login user');
   });
+
+  it('should return token when credentials are correct', async () => {
+    mockAxios.onPost(API.LOGIN, mockedUser).reply(200, 'mockedToken');
+
+    const token = await authService.login(mockedUser);
+
+    expect(token).to.equal('mockedToken');
+  });
+});

@@ -17,9 +17,11 @@ export default class CapabilityController {
         logger.error(`Couldnt get Capability Leads! Error: ${e}`);
       }
 
-      res.render('list-capability-leads', { capability: data,
+      res.render('list-capability-leads', {
+        capability: data,
         role: mock.role,
-        isLoggedIn: mock.isLoggedIn});
+        isLoggedIn: mock.isLoggedIn,
+      });
     });
   }
 }

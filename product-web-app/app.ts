@@ -15,7 +15,6 @@ import Band from './model/band.js';
 import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
 
-
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const app: Application = express();
 const appViews = path.join(dirname, '/views');
@@ -71,4 +70,3 @@ bandController.appRoutes(app);
 app.post('/', (req: Request, res: Response) => {
   res.redirect('/band');
 });
-
