@@ -4,12 +4,18 @@ import AuthValidator from '../service/authValidator.js';
 import logger from '../service/logger.js';
 import { API } from '../common/constants.js';
 import mockAxios from './axios.instance.test.js';
+import UserCredentials from '../model/userCredentials.js';
 
 const mockedUser = {
   email: 'username@kainos.com',
   password: 'strongPassword123!',
   roleId: 1,
 };
+
+const userCredentials = {
+  token: "MockToken",
+  roleId: 1,
+}
 
 const authService = new AuthService(new AuthValidator());
 
@@ -92,10 +98,10 @@ describe('login', () => {
   });
 
   it('should return token when credentials are correct', async () => {
-    mockAxios.onPost(API.LOGIN, mockedUser).reply(200, 'mockedToken');
+    mockAxios.onPost(API.LOGIN, mockedUser).reply(200, userCredentials);
 
-    const token = await authService.login(mockedUser);
+    const credentials = await authService.login(mockedUser);
 
-    expect(token).to.equal('mockedToken');
+    expect(credentials.token).to.equal('MockToken');
   });
 });
