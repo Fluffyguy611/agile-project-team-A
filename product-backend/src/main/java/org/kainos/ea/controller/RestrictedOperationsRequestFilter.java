@@ -8,6 +8,7 @@ import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.PreMatching;
 import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
@@ -30,6 +31,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 @Provider
+@PreMatching
 @Priority(Priorities.AUTHORIZATION)
 public class RestrictedOperationsRequestFilter implements ContainerRequestFilter {
 
@@ -37,6 +39,11 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
 
     @Override
     public void filter(ContainerRequestContext ctx) throws IOException {
+        String url = ctx.getUriInfo().getRequestUri().getPath();
+
+        if(url.contains("/api/auth")){
+            return;
+        }
 
         if (!ctx.getHeaders().containsKey("Authorization")){
             logger.error("No token!");
@@ -45,7 +52,7 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
         }
         try{
             DecodedJWT decodedJWT = getDecodedJWT(ctx);
-            String url = ctx.getUriInfo().getRequestUri().getPath();
+
             if (url.contains("/api/admin/")){
                 Integer roleClaim = decodedJWT.getClaim("role").asInt();
 

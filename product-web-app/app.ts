@@ -42,6 +42,7 @@ declare module 'express-session' {
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
     capability: Capability;
+    isAdmin: number;
   }
 }
 

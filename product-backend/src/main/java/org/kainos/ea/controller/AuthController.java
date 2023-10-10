@@ -12,11 +12,17 @@ import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.LoginRequest;
 import org.kainos.ea.model.User;
+import org.kainos.ea.model.UserCredentials;
 import org.kainos.ea.service.AuthService;
 import org.kainos.ea.service.AuthValidator;
 import org.kainos.ea.service.PasswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Authorisation")
 @Path("/api")
@@ -49,7 +55,8 @@ public class AuthController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginRequest login) {
         try {
-            return Response.ok().entity(authService.login(login)).build();
+            UserCredentials userCredentials = authService.login(login);
+            return Response.ok().entity(userCredentials).build();
         } catch (FailedToLoginException e) {
             logger.error("Failed to login! Error: {}", e.getMessage());
 
