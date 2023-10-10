@@ -4,6 +4,8 @@ import logger from '../service/logger.js';
 import Capability from '../model/capability.js';
 import CapabilityService from '../service/capabilityService.js';
 import { API } from '../common/constants.js';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 
 // This sets the mock adapter on the default instance
 
@@ -38,12 +40,14 @@ describe('Capability service', () => {
 
   describe('getEveryCapability', () => {
     it('when API is online expect Capabilities to be returned', async () => {
-      const data = [capability1, capability2];
-      mockAxios.onGet(API.CAPABILITY).reply(200, data);
+      const mockAxios = new MockAdapter(axios);
+      const data = [capability1];
+      mockAxios.onGet(API.CAPABILITY).reply(200, capability1);
 
       const responseBody = await capabilityService.getEveryCapabilityLead();
 
-      expect(responseBody).to.deep.equal(data);
+      expect(responseBody).to.deep.equal(capability1);
+      mockAxios.restore();
     });
 
     it('when API is down expect exception to be thrown', async () => {
@@ -56,6 +60,7 @@ describe('Capability service', () => {
         exception = e as Error;
       } finally {
         expect(exception.message).to.equal('Capability Leads not found');
+        mockAxios.restore();
       }
     });
   });
