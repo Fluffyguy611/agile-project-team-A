@@ -2,6 +2,8 @@ import { Application, Request, Response } from 'express';
 import User from '../model/user.js';
 import AuthService from '../service/authService.js';
 import AuthValidator from '../service/authValidator.js';
+import logger from '../service/logger.js';
+import dayjs from 'dayjs';
 
 export default class AuthController {
   private authService = new AuthService(new AuthValidator());
@@ -15,10 +17,30 @@ export default class AuthController {
       const data: User = req.body;
       try {
         await this.authService.register(data, req.body.repeatPassword);
-        res.redirect('/login');
+        res.redirect('/auth/login');
       } catch (e: any) {
         res.locals.errormessage = e.message;
         res.render('register', req.body);
+      }
+    });
+
+    app.get('/auth/login', async (req: Request, res: Response) => {
+      res.render('login')
+    })
+
+    app.post('/login', async (req: Request, res: Response) => {
+      const user: User = req.body;
+
+      try {
+        const token = await this.authService.login(user);
+        const expirationTime = dayjs().add(1, 'hour').toDate();
+        
+        res.cookie('token', token, { httpOnly: true, expires: expirationTime, maxAge: 3600000 });
+        res.redirect('/');
+      } catch (e: any) {
+        logger.error(`Login failed: ${e.message}`);
+        res.locals.errormessage = 'Login failed. Please try again.';
+        res.render('login');
       }
     });
   }

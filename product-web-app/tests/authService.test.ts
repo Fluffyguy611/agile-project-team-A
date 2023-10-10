@@ -22,9 +22,7 @@ describe('Auth service', () => {
     logger.unsilent();
   });
 
-  describe('AuthService', () => {
     describe('register', () => {
-
       it('should throw an error for an invalid email', async () => {
         const userWithInvalidEmail = {
           ...mockedUser,
@@ -75,4 +73,29 @@ describe('Auth service', () => {
       });
     });
   });
-});
+ 
+    describe('login', () => {
+      it('should throw an error for an invalid credentials', async () => {
+        const invalidUser = {
+          ...mockedUser,
+          email: 'invalidemail',
+        };
+  
+        let error;
+        try {
+          await authService.login(invalidUser);
+        } catch (e: any) {
+          error = e;
+        }
+  
+        expect(error.message).to.equal('Could not login user');
+      });
+  
+      it('should return token when credentials are correct', async () => {
+        mockAxios.onPost(API.LOGIN, mockedUser).reply(200, 'mockedToken');
+
+        const token = await authService.login(mockedUser);
+
+        expect(token).to.equal('mockedToken');
+      });
+  });

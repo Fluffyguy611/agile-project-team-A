@@ -14,9 +14,7 @@ import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
-
 const app: Application = express();
-
 const appViews = path.join(dirname, '/views');
 
 const nunjucksConfig = {
@@ -29,13 +27,13 @@ nunjucks.configure(appViews, nunjucksConfig);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(session({ secret: 'NOT_HARDCODED_SECRET', cookie: { maxAge: 60000 } }));
 
 axios.defaults.baseURL = API_URL;
 
 declare module 'express-session' {
   interface SessionData {
+    token: string;
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
     capability: Capability;
@@ -50,7 +48,6 @@ app.listen(3000, () => {
 });
 
 const authController = new AuthController();
-
 authController.appRoutes(app);
 
 const jobRoleController = new JobRoleController();
