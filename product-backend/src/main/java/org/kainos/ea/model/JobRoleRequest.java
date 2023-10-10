@@ -9,6 +9,7 @@ public class JobRoleRequest {
     private String sharePointLink;
     private int bandId;
 
+
     @JsonCreator
     public JobRoleRequest(
             @JsonProperty("name") String name,
@@ -52,4 +53,5 @@ public class JobRoleRequest {
     public void setBandId(int bandId) {
         this.bandId = bandId;
     }
+
 }

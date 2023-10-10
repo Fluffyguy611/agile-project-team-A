@@ -55,4 +55,5 @@ public class JobRole {
     public void setBandId(int bandId) {
         this.bandId = bandId;
     }
+
 }

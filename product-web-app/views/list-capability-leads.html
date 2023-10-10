@@ -1,0 +1,41 @@
+{% extends "./parent.html" %}
+{% block content %}
+<style>
+    .float_div {
+        float: left;
+        padding : 2%;
+        color: black;
+        width: 30%;
+        border: white;
+    }
+</style>
+
+<title>{% block title %} Capability Leads {% endblock %}</title>
+<main class="container mt-4">
+    <table class="table">
+       {% if capability and capability.length > 0 %}
+        {%for lead in capability %}
+        <div class="float_div">
+        <section id="Capability" class="mt-4">
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="data:image/jpeg;base64, {{ lead.photo }}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{ lead.capability }} - {{ lead.name }}</h5>
+              <p class="card-text">{{ lead.message }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted"></small>
+              </div>
+            </div>
+          </div>
+    </section>
+</div>
+        {% endfor %}
+
+       {% else %}
+            Could not find Capability Leads.
+       {% endif %}
+    </table>
+    
+</main>
+
+{% endblock %}

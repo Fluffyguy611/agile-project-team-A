@@ -1,14 +1,43 @@
 package org.kainos.ea.db;
 
+
+import org.kainos.ea.exception.DatabaseConnectionException;
 import org.kainos.ea.model.JobRole;
 import org.kainos.ea.model.JobRoleRequest;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class JobRoleDao {
 
     private static DatabaseConnector databaseConnector = new DatabaseConnector();
+
+    public JobRoleDao() {
+        databaseConnector = new DatabaseConnector();
+    }
+
+    public List<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
+        Connection c = databaseConnector.getConnection();
+        Statement st = c.createStatement();
+        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.BandId\n" + "FROM JobRole");
+
+        List<JobRole> jobRoleList = new ArrayList<>();
+        while (rs.next()) {
+
+            JobRole jobRole = new JobRole(
+                    rs.getInt("Id"),
+                    rs.getString("Name"),
+                    rs.getString("Description"),
+                    rs.getString("SharePointLink"),
+                    rs.getInt("BandId"));
+            jobRoleList.add(jobRole);
+
+        }
+        return jobRoleList;
+    }
+
 
     public Optional<JobRole> createNewJobRole(JobRoleRequest jobRole) throws SQLException {
         Connection c = databaseConnector.getConnection();
@@ -53,9 +82,7 @@ public class JobRoleDao {
                     rs.getString("SharePointLink"),
                     rs.getInt("BandId")
             ));
-
         }
-
         return Optional.empty();
     }
 
@@ -74,9 +101,8 @@ public class JobRoleDao {
                     rs.getString("SharePointLink"),
                     rs.getInt("BandId")
             ));
-
         }
-
         return Optional.empty();
     }
 }
+

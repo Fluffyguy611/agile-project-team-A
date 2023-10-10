@@ -1,0 +1,29 @@
+{% extends "./parent.html" %}
+{% block content %}
+<title>{% block title %}Job Roles{% endblock %}</title>
+    <main class="container mt-4">
+      <section id="roles" class="mt-4">
+
+      {% if roles and roles.length > 0 %}
+            <table class="table">
+              <thead>
+                      <tr class="bg-dark text-light">
+                        <th scope="col">JOB ROLES</th>
+                        <th scope="col" style="text-align: center;">SHOW DETAILS</th>
+                      </tr>
+              </thead>
+              <tbody>
+                {% for role in roles %}
+                <tr>
+                  <td ><strong>{{ role.name }}</strong></td>
+                  <td style="text-align: center;"><a href= "/job-roles/{{ role.id }}">Details</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>    
+{% else %}
+There are no job roles
+{% endif %}
+      </section>
+    </main>
+{% endblock %}

@@ -5,6 +5,10 @@ export const API = {
   ADD_BANDS: '/api/admin/band',
   JOB_ROLES: '/api/job-roles/',
   BANDS: '/api/admin/bands/',
+  CAPABILITY: '/api/capability',
+  CREATE_CAPABILITY: '/api/admin/capability',
+  REGISTER: '/api/auth/register',
+  LOGIN: '/api/auth/login',
   GET_JOB_ROLE: (id: number) => `api/job-roles/${id}`,
   GET_BAND: (id: number) => `api/band/${id}`,
 };
