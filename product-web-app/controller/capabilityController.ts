@@ -48,10 +48,11 @@ export default class CapabilityController {
 
         try {
           const newCapability = await this.capabilityService.createCapability(data);
-          res.redirect(`/${newCapability.id}`);
+          res.redirect(`/capability`);
         } catch (e: any) {
           logger.warn(e.message);
-          res.render('add-new-capability', { capability: data });
+          res.render('add-new-capability', { capability: data , role: mock.role,
+            isLoggedIn: mock.isLoggedIn} );
         }
       },
     );

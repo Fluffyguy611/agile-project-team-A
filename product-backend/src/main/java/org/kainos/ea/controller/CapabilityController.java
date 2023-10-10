@@ -16,6 +16,8 @@ import org.kainos.ea.service.CapabilityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
+
 @Tag(name = "Capability")
 @Path("/api")
 public class CapabilityController {
@@ -52,7 +54,7 @@ public class CapabilityController {
         try {
             int result = capabilityService.createCapabilityLead(capabilityRequest);
             return Response.ok(result).build();
-        } catch (FailedToCreateCapabilityLeadException e) {
+        } catch (FailedToCreateCapabilityLeadException | SQLException e) {
             logger.error("Failed to create Capability! Error: {}", e.getMessage());
             return Response.serverError().build(); //500
         } catch (InvalidCapabilityLeadException e) {

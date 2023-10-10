@@ -41,21 +41,24 @@ public class CapabilityService {
 
     }
 
-    public int createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException {
-        try {
+
+    public int createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException, SQLException {
+//        try {
 //            String validation = capabilityValidator.isValidCapabilityLead(capabilityRequest);
 //            if (validation != null) {
 //                throw new InvalidCapabilityLeadException();
 //            }
-            int id = capabilityDao.createCapabilityLead(capabilityRequest, databaseConnector.getConnection());
-            if (id == -1) {
-                throw new FailedToCreateCapabilityLeadException();
-            }
-            return id;
-        } catch (SQLException e) {
+        int id = capabilityDao.createCapabilityLead(capabilityRequest, databaseConnector.getConnection());
+        if (id == -1) {
             throw new FailedToCreateCapabilityLeadException();
         }
+        return id;
     }
-
-
 }
+
+
+
+
+
+
+
