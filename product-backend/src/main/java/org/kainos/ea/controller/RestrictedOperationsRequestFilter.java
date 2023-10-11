@@ -12,6 +12,7 @@ import jakarta.ws.rs.container.PreMatching;
 import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
+import org.kainos.ea.core.Secrets;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.FailedToVerifyTokenException;
@@ -35,7 +36,7 @@ import java.util.Properties;
 @Priority(Priorities.AUTHORIZATION)
 public class RestrictedOperationsRequestFilter implements ContainerRequestFilter {
 
-    private final static Logger logger = LoggerFactory.getLogger(CapabilityService.class);
+    // private final static Logger logger = LoggerFactory.getLogger(RestrictedOperationsRequestFilter.class);
 
     @Override
     public void filter(ContainerRequestContext ctx) throws IOException {
@@ -46,7 +47,6 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
         }
 
         if (!ctx.getHeaders().containsKey("Authorization")){
-            logger.error("No token!");
             ctx.abortWith(Response.status(Response.Status.FORBIDDEN).entity("No token").build());
             return;
         }
@@ -64,12 +64,11 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
 
         }catch (FailedToVerifyTokenException e){
             ctx.abortWith(Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build());
-            logger.info("Failed to Verify Token");
         }
     }
 
     public DecodedJWT getDecodedJWT(ContainerRequestContext ctx) throws FailedToVerifyTokenException {
-        Algorithm algorithm = Algorithm.HMAC256("erggv45wv54c53xd345vcg4v54yv2");
+        Algorithm algorithm = Algorithm.HMAC256(Secrets.TOKEN_SECRET);
         String token = ctx.getHeaderString("Authorization");
         DecodedJWT decodedJWT;
         try {
@@ -78,7 +77,6 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
                     .build();
             decodedJWT = verifier.verify(token);
         } catch (JWTVerificationException exception){
-            logger.error("No token!");
             throw new FailedToVerifyTokenException();
         }
         return decodedJWT;

@@ -99,9 +99,10 @@ class AuthServiceTest {
         when(passwordServiceMock.verifyHash(mockedLogin.getPassword(), existingUserMock.get().getPassword())).thenReturn(true);
         when(authDaoMock.getUserByEmail(mockedLogin.getEmail(), databaseConnectorMock.getConnection())).thenReturn(existingUserMock);
 
-        UserCredentials token = authService.login(mockedLogin);
+        UserCredentials userCredentials = authService.login(mockedLogin);
 
-        assertThat(token).isNotNull();
+        assertThat(userCredentials.getToken()).isInstanceOf(String.class);
+        assertThat(userCredentials.getRoleId()).isEqualTo(1);
     }
 
     @Test

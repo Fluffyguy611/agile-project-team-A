@@ -3,6 +3,7 @@ package org.kainos.ea.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.apache.commons.lang3.time.DateUtils;
+import org.kainos.ea.core.Secrets;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
@@ -79,7 +80,7 @@ public class AuthService {
 
 
     public String generateToken(Optional<User> user) throws SQLException {
-        Algorithm algorithm = Algorithm.HMAC256("erggv45wv54c53xd345vcg4v54yv2");
+        Algorithm algorithm = Algorithm.HMAC256(Secrets.TOKEN_SECRET);
         Date expiry = DateUtils.addHours(new Date(), 1);
 
         String token = JWT.create()

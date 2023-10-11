@@ -41,8 +41,7 @@ export default class JobRoleController {
       }
 
       res.render('view-single-jobRole', {
-        jobRole: data,
-        role: req.session.isAdmin,
+        jobRole: data
       });
     });
 
@@ -55,8 +54,7 @@ export default class JobRoleController {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
       res.render('job-roles', {
-        roles: data,
-        role: req.session.isAdmin,
+        roles: data
       });
     });
   }

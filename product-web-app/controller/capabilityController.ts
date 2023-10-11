@@ -17,8 +17,7 @@ export default class CapabilityController {
       }
 
       res.render('list-capability-leads', {
-        capability: data,
-        role: req.session.isAdmin,
+        capability: data
       });
     });
   }

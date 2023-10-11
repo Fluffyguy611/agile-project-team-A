@@ -29,9 +29,14 @@ export default class AuthController {
       res.render('login');
     });
 
+    app.get('/not_found', async (req: Request, res: Response) => {
+      res.render('not_found');
+    });
+
     app.get('/auth/logout', async (req: Request, res: Response) => {
       res.clearCookie('token');
       res.clearCookie('roleId');
+      app.locals.isAdmin = null;
       res.redirect('/auth/login');
     });
 
