@@ -1,5 +1,5 @@
 INSERT INTO Capability (Capability, Name, Photo, Message) VALUES
-("Financials ", "Mark Alexander", "0123456789ABCDEF", "Experienced financial leader adept at steering teams towards fiscal excellence. Proficient in strategic planning, budgeting, and financial analysis. Demonstrated ability to drive organizational growth through sound financial management.");
-('Engineering', 'Ronan O Connor', '0xx', 'Message 1'),
-('Testing and Quality Assurance', 'Kowalski', '0xx', 'Message 2'),
-('Architecture', 'Rinan McCallen', '0xx', 'Message 2');
+("Financials ", 'Mark Alexander', 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', "Experienced financial leader adept at steering teams towards fiscal excellence. Proficient in strategic planning, budgeting, and financial analysis. Demonstrated ability to drive organizational growth through sound financial management.");
+('Engineering', 'Ronan O Connor', 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'Message 2'),
+('Testing and Quality Assurance', 'Kowalski','iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'Message 3'),
+('Architecture', 'Rinan McCallen', 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'Message 4');

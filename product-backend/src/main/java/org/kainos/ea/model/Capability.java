@@ -13,7 +13,6 @@ public class Capability {
         setName(name);
         setPhoto(photo);
         setMessage(message);
-
     }
 
     public int getId() {

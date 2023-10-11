@@ -20,7 +20,6 @@ public class CapabilityRequest {
         setName(name);
         setPhoto(photo);
         setMessage(message);
-
     }
 
 
@@ -55,6 +54,4 @@ public class CapabilityRequest {
     public void setMessage(String message) {
         this.message = message;
     }
-
-
 }

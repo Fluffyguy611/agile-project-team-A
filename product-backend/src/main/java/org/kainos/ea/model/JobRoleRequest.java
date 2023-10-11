@@ -9,7 +9,6 @@ public class JobRoleRequest {
     private String sharePointLink;
     private int capabilityId;
 
-
     @JsonCreator
     public JobRoleRequest(
             @JsonProperty("name") String name,
@@ -20,7 +19,6 @@ public class JobRoleRequest {
         setDescription(description);
         setSharePointLink(sharePointLink);
         setCapabilityId(capabilityId);
-
     }
 
     public String getName() {
@@ -54,7 +52,6 @@ public class JobRoleRequest {
     public void setCapabilityId(int capabilityId) {
         this.capabilityId = capabilityId;
     }
-
 }
 
 

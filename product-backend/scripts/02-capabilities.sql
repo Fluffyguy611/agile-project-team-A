@@ -20,4 +20,4 @@ REFERENCES Capability(Id);
 
 END $$
 DELIMITER ;
-CALL Create_role_table();
+CALL Create_capability_table();

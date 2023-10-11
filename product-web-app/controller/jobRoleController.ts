@@ -18,7 +18,7 @@ export default class JobRoleController {
       res.render('add-new-job-role', {
         role: mock.role,
         isLoggedIn: mock.isLoggedIn,
-        Capability: capabilities,
+        capabilities,
       });
     });
 

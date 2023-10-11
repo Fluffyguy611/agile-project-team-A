@@ -15,7 +15,6 @@ public class JobRole {
         this.description = description;
         this.sharePointLink = sharePointLink;
         this.capabilityId = capabilityId;
-
     }
 
     public int getId() {
