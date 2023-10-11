@@ -7,7 +7,7 @@ export default class AuthMiddleware {
       if (req.path.match('/auth')) {
         next();
       } else if (req.cookies.token) {
-        axios.defaults.headers.common.Authorization = req.cookies.token;
+        axios.defaults.headers.common.Authorisation = req.cookies.token;
         app.locals.isAdmin = req.cookies.roleId;
         if (req.path.match('/admin') && req.cookies.roleId !== '1') {
           res.redirect('/job-roles');
@@ -15,7 +15,7 @@ export default class AuthMiddleware {
           next();
         }
       } else {
-        res.redirect('/not_found');
+        res.redirect('/not-found');
       }
     });
   }

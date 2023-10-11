@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.Properties;
 
 @Provider
-@PreMatching
 @Priority(Priorities.AUTHORIZATION)
 public class RestrictedOperationsRequestFilter implements ContainerRequestFilter {
 
@@ -42,11 +41,11 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
     public void filter(ContainerRequestContext ctx) throws IOException {
         String url = ctx.getUriInfo().getRequestUri().getPath();
 
-        if(url.contains("/api/auth")){
+        if(url.contains("/api/auth") || url.contains("swagger") || url.contains("/openapi.json")){
             return;
         }
 
-        if (!ctx.getHeaders().containsKey("Authorization")){
+        if (!ctx.getHeaders().containsKey("Authorisation")){
             logger.error("Failed to get token!");
             ctx.abortWith(Response.status(Response.Status.FORBIDDEN).entity("No token").build());
             return;
@@ -65,13 +64,13 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
 
 
         }catch (FailedToVerifyTokenException e){
-            ctx.abortWith(Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build());
+            ctx.abortWith(Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build());
         }
     }
 
     public DecodedJWT getDecodedJWT(ContainerRequestContext ctx) throws FailedToVerifyTokenException {
         Algorithm algorithm = Algorithm.HMAC256(Secrets.TOKEN_SECRET);
-        String token = ctx.getHeaderString("Authorization");
+        String token = ctx.getHeaderString("Authorisation");
         DecodedJWT decodedJWT;
         try {
             JWTVerifier verifier = JWT.require(algorithm)

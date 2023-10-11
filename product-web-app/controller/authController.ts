@@ -29,8 +29,8 @@ export default class AuthController {
       res.render('login');
     });
 
-    app.get('/not_found', async (req: Request, res: Response) => {
-      res.render('not_found');
+    app.get('/not-found', async (req: Request, res: Response) => {
+      res.render('not-found');
     });
 
     app.get('/auth/logout', async (req: Request, res: Response) => {
