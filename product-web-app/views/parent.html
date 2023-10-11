@@ -71,12 +71,6 @@
         cursor: pointer;
     }
 
-    .logout-nav {
-        float: right;
-        margin-top: 6px;
-        margin-left: 60px;
-    }
-
     .custom-logout-button {
         color: white;
         background: #1b2db5;
@@ -134,12 +128,10 @@
                                 {% endif %}
                             </ul>
                         </li>
-                        {% if isAdmin == "1" or isAdmin == "2" %}
-                        <li class="nav-item active ms-auto">
-                            <button class="btn custom-logout-button" onclick="window.location.href='/auth/logout'">Logout</button>
-                        </li>                        
-                        {% endif %}
                     </ul>
+                    {% if isAdmin == "1" or isAdmin == "2" %}
+                    <button class="btn custom-logout-button ms-auto" onclick="window.location.href='/auth/logout'">Logout</button>
+                    {% endif %}
                 </div>
             </div>
         </nav>
