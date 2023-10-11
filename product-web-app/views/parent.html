@@ -71,14 +71,22 @@
         cursor: pointer;
     }
 
-    .logout-button .btn {
+    .logout-nav {
+        float: right;
+        margin-top: 6px;
+        margin-left: 60px;
+    }
+
+    .custom-logout-button {
         color: white;
-        background: rgb(4, 119, 63);
+        background: #1b2db5;
         border: none;
     }
 
-    .logout-button .btn:hover {
-        background-color: black
+    .custom-logout-button:hover {
+        color: white;
+        background: black;
+        cursor: pointer;
     }
 
 </style>
@@ -91,7 +99,6 @@
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                {% if isLoggedIn %} 
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item active">
@@ -112,43 +119,31 @@
                                 Available actions:
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                {% if role.length > 0 %}
-                               
-                                {% endif %}
-                                {% if role == "1" %}
-                                    <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
-                                    <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
-                                    <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
-                                {% elif role == "2" %}
-                                    <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
-                                    <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                {% if isAdmin == "1" %}
+                                <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
+                                <li><a class="dropdown-item" href="">Delete</a></li>
+                                <li><a class="dropdown-item" href="">Update</a></li>
+                                <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
+                                <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                {% elif isAdmin == "2" %}
+                                <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
+                                <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
                                 {% else %}
-                                    <li><a class="dropdown-item" href="/auth/register">Register</a></li>
-                                    <li><a class="dropdown-item" href="/auth/login">Login</a></li>
+                                <li><a class="dropdown-item" href="/auth/register">Register</a></li>
+                                <li><a class="dropdown-item" href="/auth/login">Login</a></li>
                                 {% endif %}
                             </ul>
                         </li>
-                        <li class="nav-item active logout-button">
-                            <a class="nav-link" aria-current="page" href="/auth/logout"><button class="btn">Logout</button></a>
+                        {% if isAdmin == "1" or isAdmin == "2" %}
+                        <li class="nav-item active ms-auto">
+                            <button class="btn custom-logout-button" onclick="window.location.href='/auth/logout'">Logout</button>
                         </li>                        
-                    </ul>    
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </nav>
-        <div id="content">{% block content %} {% endblock %}</div>
-        {% else %} 
-        <div>LOG IN OR SIGN UP TO VIEW THIS PAGE</div>
-            <div class="login">
-                <a href="/auth/login"><button class="login-button">Login</button></a>
-            </div>
-            <div>
-                <img src="https://media.tenor.com/lx2WSGRk8bcAAAAC/pulp-fiction-john-travolta.gif" alt="">
-            </div>
-            <div class="register">
-                <a href="/auth/register"><button class="register-button">Register</button></a>
-            </div>
-    </div>
-    {% endif %}
+    <div id="content">{% block content %} {% endblock %}</div>
     </header>
     <footer class="footer">     
         <div class="footer__bottom">

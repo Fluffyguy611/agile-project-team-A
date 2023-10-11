@@ -5,6 +5,7 @@ import session from 'express-session';
 import path from 'path';
 import nunjucks from 'nunjucks';
 import axios from 'axios';
+import cookieParser from 'cookie-parser';
 import logger from './service/logger.js';
 import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
@@ -12,9 +13,13 @@ import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
 import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
+import AuthMiddleware from './middleware/auth.js';
 
 const dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const app: Application = express();
+
+app.use(cookieParser());
+
 const appViews = path.join(dirname, '/views');
 
 const nunjucksConfig = {
@@ -37,6 +42,7 @@ declare module 'express-session' {
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
     capability: Capability;
+    isAdmin: number;
   }
 }
 
@@ -50,6 +56,9 @@ app.listen(3000, () => {
 const authController = new AuthController();
 authController.appRoutes(app);
 
+const authMiddleware = new AuthMiddleware();
+authMiddleware.appRoutes(app);
+
 const jobRoleController = new JobRoleController();
 const capabilityController = new CapabilityController();
 
@@ -59,6 +68,3 @@ capabilityController.appRoutes(app);
 app.get('/', (eq: Request, res: Response) => {
   res.redirect('/job-roles');
 });
-
-
-

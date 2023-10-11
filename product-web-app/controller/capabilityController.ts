@@ -2,7 +2,6 @@ import { Application, Request, Response } from 'express';
 import logger from '../service/logger.js';
 import CapabilityService from '../service/capabilityService.js';
 import Capability from '../model/capability.js';
-import mock from '../common/req.express.session.mock.js';
 
 export default class CapabilityController {
   private capabilityService = new CapabilityService();
@@ -17,9 +16,9 @@ export default class CapabilityController {
         logger.error(`Couldnt get Capability Leads! Error: ${e}`);
       }
 
-      res.render('list-capability-leads', { capability: data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn});
+      res.render('list-capability-leads', {
+        capability: data
+      });
     });
   }
 }

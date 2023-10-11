@@ -29,7 +29,7 @@ public class JobRoleController {
     @Path("/admin/job-roles")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNewJobRole(JobRoleRequest jobRole) {
+    public Response createNewJobRole(@HeaderParam("Authorisation") String token, JobRoleRequest jobRole) {
         try {
             return Response.ok(jobRoleService.createNewJobRole(jobRole)).build();
         } catch (FailedToCreateNewJobRoleException | SQLException e) {
@@ -45,7 +45,7 @@ public class JobRoleController {
     @GET
     @Path("/job-roles")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllJobRoles() {
+    public Response getAllJobRoles(@HeaderParam("Authorisation") String token) {
         try {
             return Response.ok(jobRoleService.getAllJobRoles()).build();
         } catch (FailedToGetAllJobRolesException | SQLException e) {
@@ -57,7 +57,7 @@ public class JobRoleController {
     @GET
     @Path("/job-roles/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getJobRoleById(@PathParam("id") int id) {
+    public Response getJobRoleById(@HeaderParam("Authorisation") String token, @PathParam("id") int id) {
         try {
             return Response.ok(jobRoleService.getJobRoleById(id)).build();
         } catch (FailedToGetJobRoleException e) {
