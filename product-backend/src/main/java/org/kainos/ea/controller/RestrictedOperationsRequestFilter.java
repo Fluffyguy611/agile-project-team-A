@@ -36,7 +36,7 @@ import java.util.Properties;
 @Priority(Priorities.AUTHORIZATION)
 public class RestrictedOperationsRequestFilter implements ContainerRequestFilter {
 
-    // private final static Logger logger = LoggerFactory.getLogger(RestrictedOperationsRequestFilter.class);
+     private final static Logger logger = LoggerFactory.getLogger(RestrictedOperationsRequestFilter.class);
 
     @Override
     public void filter(ContainerRequestContext ctx) throws IOException {
@@ -47,6 +47,7 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
         }
 
         if (!ctx.getHeaders().containsKey("Authorization")){
+            logger.error("Failed to get token!");
             ctx.abortWith(Response.status(Response.Status.FORBIDDEN).entity("No token").build());
             return;
         }
@@ -57,6 +58,7 @@ public class RestrictedOperationsRequestFilter implements ContainerRequestFilter
                 Integer roleClaim = decodedJWT.getClaim("role").asInt();
 
                 if (roleClaim == Role.EMPLOYEE){
+                    logger.error("No admin rights");
                     ctx.abortWith(Response.status(Response.Status.FORBIDDEN).entity("No admin rights").build());
                 }
             }
