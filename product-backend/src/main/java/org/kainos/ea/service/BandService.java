@@ -26,15 +26,15 @@ public class BandService {
 
     public Band createNewBand(BandRequest band) throws FailedToCreateNewBandException, SQLException, BandAlreadyExistsException, FailedToCreateNewBandInvalidLevelException {
         Optional<String> validationError = bandValidator.isValidBandName(band);
-        Optional<String> validationLevelError = bandValidator.isValidBandLevel(band);
+//        Optional<String> validationLevelError = bandValidator.isValidBandLevel(band);
 
         if (validationError.isPresent()) {
             throw new FailedToCreateNewBandException(validationError.get());
         }
 
-        if (validationLevelError.isPresent()) {
-            throw new FailedToCreateNewBandInvalidLevelException(validationLevelError.get());
-        }
+//        if (validationLevelError.isPresent()) {
+//            throw new FailedToCreateNewBandInvalidLevelException(validationLevelError.get());
+//        }
 
         Optional<Band> existingBand = bandDao.getBandByName(band.getName());
 
