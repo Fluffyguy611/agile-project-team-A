@@ -26,6 +26,14 @@ describe ('Job Role Page', async () => {
         await loginPage.loginUser();
         await browser.pause(5000);
 
-
     } )
+    it ('go to add job role page and add job role' ,async () => {
+        await addNewJobRole.open();
+        await addNewJobRole.addNewJobRole();
+        await browser.pause(5000);
+    })
+    it ('go to view job role page', async () => {
+        await jobRoleDetailPage.open();
+        await browser.pause(5000);
+    })
 })
