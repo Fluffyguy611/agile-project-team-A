@@ -70,6 +70,17 @@
         background: black;
         cursor: pointer;
     }
+
+    .logout-button .btn {
+        color: white;
+        background: rgb(4, 119, 63);
+        border: none;
+    }
+
+    .logout-button .btn:hover {
+        background-color: black
+    }
+
 </style>
 <body>
     <header>
@@ -102,9 +113,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% if role.length > 0 %}
-                                <li class="nav-item active">
-                                    <a class="logout-nav" aria-current="page" href="/auth/logout">Logout</a>
-                                </li>
+                               
                                 {% endif %}
                                 {% if role == "1" %}
                                     <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
@@ -119,7 +128,10 @@
                                 {% endif %}
                             </ul>
                         </li>
-                    </ul>
+                        <li class="nav-item active logout-button">
+                            <a class="nav-link" aria-current="page" href="/auth/logout"><button class="btn">Logout</button></a>
+                        </li>                        
+                    </ul>    
                 </div>
             </div>
         </nav>
