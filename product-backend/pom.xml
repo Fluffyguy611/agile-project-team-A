@@ -118,9 +118,12 @@
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version> <!-- Or the latest version available -->
         </dependency>
-
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.4.0</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
