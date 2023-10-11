@@ -28,10 +28,10 @@
                 <div class="form-group">
                     <label for="band">Select desired Job Band</label>
                     <select select id="admin/bands" name="bandId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
-                        {% for Band in Band %}
-                            <option value="{{ Band.id }}">
-                                {{ Band.name }}
-                                 <span class="level">{{ Band.level }}</span>
+                        {% for band in bands %}
+                            <option value="{{ band.id }}">
+                                {{ band.name }}
+                                 <span class="level">{{ band.level }}</span>
                             </option>
                         {% endfor %}
                     </select>
