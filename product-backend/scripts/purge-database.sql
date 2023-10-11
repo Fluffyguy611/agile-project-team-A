@@ -7,7 +7,7 @@ BEGIN
     DROP TABLE IF EXISTS JobRole;
     DROP TABLE IF EXISTS Band;
     DROP TABLE IF EXISTS `User`;
-    DROP TABLE IF EXISTS Role;
+    DROP TABLE IF EXISTS `Role`;
     drop TABLE IF EXISTS Capability;
     
         COMMIT;

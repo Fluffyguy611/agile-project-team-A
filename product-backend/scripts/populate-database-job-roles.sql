@@ -1,8 +1,8 @@
-INSERT INTO JobRole (Name, Description, SharePointLink, BandId) VALUES
-("Techssnology Lesdfsdfader", "Responsible for leading technology initiatives and teams within the organization.", "https://example.com/techleader", 1),
+INSERT INTO JobRole (`Name`, `Description`, `SharePointLink`, `BandId`) VALUES
+('Techssnology Lesdfsdfader', 'Responsible for leading technology initiatives and teams within the organization.', 'https://example.com/techleader', 1),
 ('Principal', 'A high-level position with significant responsibilities in the organization.', 'https://example.com/principal', 2),
 ('Principal Architect', 'Responsible for designing and overseeing architectural solutions.', 'https://example.com/principalarchitect', 3),
-('Principal Test Architect', 'Responsible for designing and managing test architecture.', 'https://example.com/principaltestarchitect', 0),
+('Principal Test Architect', 'Responsible for designing and managing test architecture.', 'https://example.com/principaltestarchitect', 1),
 ('Manager', 'Manages a team or department within the organization.', 'https://example.com/manager', 5),
 ('Dynamics 365 / Power Platform Solution Architect', 'Designs solutions using Dynamics 365 and Power Platform.', 'https://example.com/dynamicsarchitect', 6),
 ('Solution Architect', 'Designs comprehensive solutions for various business challenges.', 'https://example.com/solutionarchitect', 7),
