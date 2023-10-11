@@ -40,13 +40,10 @@ public class CapabilityController {
             logger.error("Capability does not exist! Error: {}", (e.getMessage()));
 
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
-        } catch (FailedToCreateCapabilityLeadException e) {
-            throw new RuntimeException(e);
         }
     }
 
     @POST
-
     @Path("/admin/add-capability")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

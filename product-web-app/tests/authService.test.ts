@@ -24,7 +24,6 @@ describe('Auth service', () => {
 
   describe('AuthService', () => {
     describe('register', () => {
-
       it('should throw an error for an invalid email', async () => {
         const userWithInvalidEmail = {
           ...mockedUser,

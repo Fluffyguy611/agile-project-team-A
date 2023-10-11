@@ -73,23 +73,5 @@ public class JobRoleController {
         }
     }
 
-
-    @GET
-    @Path("/all-capability")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getCapability() {
-        try {
-            return Response.ok(capabilityService.getEveryCapabilityLead()).build();
-        } catch (FailedToGetCapabilityException e) {
-            logger.error("Failed to get the job Role! Error: {}", (e.getMessage()));
-            return Response.serverError().build();
-        } catch (CapabilityDoesNotExistException |
-                 FailedToCreateCapabilityLeadException e) {
-            logger.error("capability does not exist! Error: {}", (e.getMessage()));
-            return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
-
-
-        }
-    }
 }
 

@@ -5,7 +5,6 @@ import Capability from '../model/capability.js';
 import CapabilityService from '../service/capabilityService.js';
 import { API } from '../common/constants.js';
 
-
 const capability1: Capability = {
   id: 1,
   capability: 'capability 1',
@@ -59,35 +58,26 @@ describe('Capability service', () => {
     });
   });
 
-
   describe('createCapability', () => {
     it('when API is online expect capability to be created', async () => {
-
       mockAxios.onPost(API.CREATE_CAPABILITY).reply(200, capability1);
 
-      const responseBody = await capabilityService.createCapability( capability1);
+      const responseBody = await capabilityService.createCapability(capability1);
 
       expect(responseBody).to.deep.equal(capability1);
+    });
+  });
 
-    } )
-  })
+  it('when API is down expect exception to be thrown', async () => {
+    mockAxios.onPost(API.CREATE_CAPABILITY).reply(500, { message: 'Could not create capability' });
 
-
-    it('when API is down expect exception to be thrown', async () => {
-
-      mockAxios.onPost(API.CREATE_CAPABILITY).reply(500);
-
-      let exception: any;
-      try {
-        await capabilityService.createCapability(capability1);
-      }catch (e) {
-        exception = e as Error;
-      } finally {
-        expect(exception.message).to.equal('Could not create capability')
-      }
-
-    })
-
-
-
+    let exception: any;
+    try {
+      await capabilityService.createCapability(capability1);
+    } catch (e) {
+      exception = e as Error;
+    } finally {
+      expect(exception.message).to.equal('Could not create capability');
+    }
+  });
 });

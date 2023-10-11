@@ -9,15 +9,17 @@ import CapabilityService from '../service/capabilityService.js';
 
 export default class JobRoleController {
   private jobRoleService = new JobRoleService(new JobRoleValidator());
+
   private capabilityService = new CapabilityService();
 
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
-      var capabilities = await this.capabilityService.getEveryCapability();
+      const capabilities = await this.capabilityService.getEveryCapability();
       res.render('add-new-job-role', {
-      role: mock.role,
-      isLoggedIn: mock.isLoggedIn,
-      Capability: capabilities});
+        role: mock.role,
+        isLoggedIn: mock.isLoggedIn,
+        Capability: capabilities,
+      });
     });
 
     app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
@@ -25,16 +27,18 @@ export default class JobRoleController {
       data.name = sanitizeHtml(data.name).trim();
       data.description = sanitizeHtml(data.description).trim();
       data.sharePointLink = sanitizeHtml(data.sharePointLink).trim();
-      data.capabilityId = (data.capabilityId);
-   
+
       try {
         const newJobRole = await this.jobRoleService.createNewJobRole(data);
-        res.redirect(`/job-roles/${newJobRole.id}`,);
+        res.redirect(`/job-roles/${newJobRole.id}`);
       } catch (e: any) {
         logger.warn(e.message);
         res.locals.errorMessage = e.message;
-        res.render('add-new-job-role', {jobRole: data, role: mock.role,
-          isLoggedIn: mock.isLoggedIn});
+        res.render('add-new-job-role', {
+          jobRole: data,
+          role: mock.role,
+          isLoggedIn: mock.isLoggedIn,
+        });
       }
     });
 
@@ -64,12 +68,11 @@ export default class JobRoleController {
       } catch (e) {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
-      res.render('job-roles', { roles: data,
+      res.render('job-roles', {
+        roles: data,
         role: mock.role,
-        isLoggedIn: mock.isLoggedIn});
+        isLoggedIn: mock.isLoggedIn,
+      });
     });
-
   }
 }
-
-
