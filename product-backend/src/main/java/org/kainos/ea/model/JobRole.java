@@ -10,7 +10,7 @@ public class JobRole {
     private int bandId;
 
 
-    public JobRole(int id, String name, String description, String sharePointLink, int capabilityId, int bandI) {
+    public JobRole(int id, String name, String description, String sharePointLink, int capabilityId, int bandId) {
         this.id = id;
         this.name = name;
         this.description = description;

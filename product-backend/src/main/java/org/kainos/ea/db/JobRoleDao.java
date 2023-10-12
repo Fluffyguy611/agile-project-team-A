@@ -20,7 +20,7 @@ public class JobRoleDao {
     public List<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
         Connection c = databaseConnector.getConnection();
         Statement st = c.createStatement();
-        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, JobRole.BandId \n" + "FROM JobRole");
+        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, JobRole.BandId \n" + "FROM JobRole ORDER BY JobRole.Name ASC");
 
         List<JobRole> jobRoleList = new ArrayList<>();
         while (rs.next()) {
