@@ -70,7 +70,7 @@
         <section id="jobRole" class="mt-4">
            {% if jobRole and jobRole.name.length > 0 %}
            <div class="img-container">
-            <div class="centered">{{ jobRole.name }}</div>
+            <div class="centered">{{ jobRole.bandName }} {{ jobRole.name }}</div>
            </div>
            <table class="table">
            </section>
@@ -78,16 +78,12 @@
                 <tr>
                     <th scope="col" class="role-description-td">Description</th>
                     <th scope="col" class="role-sharepointlink-td">Specification</th>
-                    <th scope="col" class="band-name-td">Assigned Band</th>
-                    <th scope="col" class="band-level-td">Band Level</th>
                 </tr>
                 <tbody>
                     <tr>
                         <td class="role-details-td">{{ jobRole.description }} </td>
                         <td class="role-details-td"><a href="{{ jobRole.sharePointLink }}">
                             <button class="details-job-role">View Details</button>
-                        <td class="role-details-td">{{ jobRole.bandName }} </td>
-                        <td class="role-details-td">{{ jobRole.bandLevel }} </td>
                             </a>
                         </td>
                     </tr>

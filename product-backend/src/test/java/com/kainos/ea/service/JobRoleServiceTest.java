@@ -8,7 +8,6 @@ import org.kainos.ea.exception.DatabaseConnectionException;
 import org.kainos.ea.exception.FailedToGetJobRoleException;
 import org.kainos.ea.exception.JobRoleDoesNotExistException;
 import org.kainos.ea.model.JobRole;
-import org.kainos.ea.model.JobRolePlusBandResponse;
 import org.kainos.ea.service.JobRoleService;
 import org.kainos.ea.service.JobRoleValidator;
 import org.mockito.Mockito;
@@ -49,7 +48,7 @@ public class JobRoleServiceTest {
     @Test
     void getJobRole_shouldReturnJobRole_whenDaoReturnsAJobRole() throws DatabaseConnectionException, SQLException,
             JobRoleDoesNotExistException, FailedToGetJobRoleException {
-        JobRolePlusBandResponse jobRolePlusBandResponse = new JobRolePlusBandResponse(
+        JobRole jobRole = new JobRole(
                 1,
                 "Principal",
                 "This is a test case",
@@ -59,11 +58,11 @@ public class JobRoleServiceTest {
                 4
         );
         int jobRoleId = 1;
-        Mockito.when(jobRoleDao.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRolePlusBandResponse));
+        Mockito.when(jobRoleDao.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRole));
 
-        JobRolePlusBandResponse resultRole = jobRoleService.getJobRoleById(jobRoleId);
+        JobRole resultRole = jobRoleService.getJobRoleById(jobRoleId);
 
-        assertEquals(resultRole, jobRolePlusBandResponse);
+        assertEquals(resultRole, jobRole);
     }
 
     @Test

@@ -3,7 +3,6 @@ package org.kainos.ea.db;
 
 import org.kainos.ea.exception.DatabaseConnectionException;
 import org.kainos.ea.model.JobRole;
-import org.kainos.ea.model.JobRolePlusBandResponse;
 import org.kainos.ea.model.JobRoleRequest;
 
 import java.sql.*;
@@ -19,7 +18,7 @@ public class JobRoleDao {
         databaseConnector = new DatabaseConnector();
     }
 
-    public List<JobRolePlusBandResponse> getAllJobRoles() throws SQLException, DatabaseConnectionException {
+    public List<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
         Connection c = databaseConnector.getConnection();
         Statement st = c.createStatement();
         ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.BandId, Band.Name, Band.Level" +
@@ -27,10 +26,10 @@ public class JobRoleDao {
                 "INNER JOIN Band " +
                 "ON Band.Id = JobRole.BandId ");
 
-        List<JobRolePlusBandResponse> jobRolePlusBandResponseList = new ArrayList<>();
+        List<JobRole> jobRolePlusBandResponseList = new ArrayList<>();
         while (rs.next()) {
 
-            JobRolePlusBandResponse jobRolePlusBandResponse = new JobRolePlusBandResponse(
+            JobRole jobRolePlusBandResponse = new JobRole(
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),
@@ -73,7 +72,7 @@ public class JobRoleDao {
         return Optional.empty();
     }
 
-    public Optional<JobRolePlusBandResponse> getJobRoleById(int id) throws SQLException {
+    public Optional<JobRole> getJobRoleById(int id) throws SQLException {
         Connection c = databaseConnector.getConnection();
         String getStatement = "SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.BandId, Band.Name, Band.Level" +
                 " FROM JobRole " +
@@ -85,7 +84,7 @@ public class JobRoleDao {
         ResultSet rs = st.executeQuery();
 
         while (rs.next()) {
-            return Optional.of(new JobRolePlusBandResponse(
+            return Optional.of(new JobRole(
                     rs.getInt("Id"),
                     rs.getString("Name"),
                     rs.getString("Description"),

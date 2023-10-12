@@ -7,6 +7,8 @@ public class JobRole {
     private String description;
     private String sharePointLink;
     private int bandId;
+    private String bandName;
+    private int bandLevel;
 
     public JobRole(int id, String name, String description, String sharePointLink, int bandId) {
         this.id = id;
@@ -14,6 +16,32 @@ public class JobRole {
         this.description = description;
         this.sharePointLink = sharePointLink;
         this.bandId = bandId;
+    }
+
+    public JobRole(int id, String name, String description, String sharePointLink, int bandId, String bandName, int bandLevel) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.sharePointLink = sharePointLink;
+        this.bandId = bandId;
+        this.bandName = bandName;
+        this.bandLevel = bandLevel;
+    }
+
+    public String getBandName() {
+        return bandName;
+    }
+
+    public void setBandName(String bandName) {
+        this.bandName = bandName;
+    }
+
+    public int getBandLevel() {
+        return bandLevel;
+    }
+
+    public void setBandLevel(int bandLevel) {
+        this.bandLevel = bandLevel;
     }
 
     public int getId() {
