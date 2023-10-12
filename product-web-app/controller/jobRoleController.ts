@@ -2,7 +2,6 @@ import { Application, Request, Response } from 'express';
 import sanitizeHtml from 'sanitize-html';
 import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
-import mock from '../common/req.express.session.mock.js';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import logger from '../service/logger.js';
 
@@ -11,9 +10,7 @@ export default class JobRoleController {
 
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
-      res.render('add-new-job-role', {
-      role: mock.role,
-      isLoggedIn: mock.isLoggedIn,});
+      res.render('add-new-job-role', { role: req.session.isAdmin });
     });
 
     app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
@@ -24,12 +21,11 @@ export default class JobRoleController {
 
       try {
         const newJobRole = await this.jobRoleService.createNewJobRole(data);
-        res.redirect(`/job-roles/${newJobRole.id}`,);
+        res.redirect(`/job-roles/${newJobRole.id}`);
       } catch (e: any) {
         logger.warn(e.message);
         res.locals.errorMessage = e.message;
-        res.render('add-new-job-role', {jobRole: data, role: mock.role,
-          isLoggedIn: mock.isLoggedIn});
+        res.render('add-new-job-role', { jobRole: data, role: req.session.isAdmin });
       }
     });
 
@@ -45,9 +41,7 @@ export default class JobRoleController {
       }
 
       res.render('view-single-jobRole', {
-        jobRole: data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
+        jobRole: data
       });
     });
 
@@ -59,9 +53,9 @@ export default class JobRoleController {
       } catch (e) {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
-      res.render('job-roles', { roles: data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn});
+      res.render('job-roles', {
+        roles: data
+      });
     });
   }
 }

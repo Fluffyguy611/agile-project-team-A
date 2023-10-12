@@ -16,7 +16,9 @@
                 {% for role in roles %}
                 <tr>
                   <td ><strong>{{ role.name }}</strong></td>
-                  <td style="text-align: center;"><a href= "/job-roles/{{ role.id }}">Details</a></td>
+                  <td style="text-align: center;">
+                    <button class="btn btn-success" onclick="window.location.href='/job-roles/{{ role.id }}'">Details</button>
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
