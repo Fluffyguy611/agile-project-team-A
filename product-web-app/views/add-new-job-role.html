@@ -25,6 +25,15 @@
                     <label for="sharePointLink">SharePoint Link</label>
                     <input type="text" name="sharePointLink" value="{{ jobRole.sharePointLink }}" class="form-control" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="capabilityId">Select desired Capability</label>
+                    <select select id="/capability" name="capabilityId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
+                    {% for capability in capabilities %}
+                        <option value="{{ capability.id }}">{{capability.capability}}</option>
+                    {% endfor%}
+                    </select>
+                </div>
                 <div class="form-group">
                     <label for="band">Select desired Job Band</label>
                     <select select id="admin/bands" name="bandId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>

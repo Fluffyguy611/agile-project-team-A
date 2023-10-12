@@ -8,12 +8,12 @@ import axios from 'axios';
 import cookieParser from 'cookie-parser';
 import logger from './service/logger.js';
 import JobRoleController from './controller/jobRoleController.js';
+import CapabilityController from './controller/capabilityController.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
 import BandController from './controller/bandController.js';
 import Band from './model/band.js';
-import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
 import AuthMiddleware from './middleware/auth.js';
 
@@ -75,7 +75,4 @@ app.get('/', (req: Request, res: Response) => {
 const bandController = new BandController();
 
 bandController.appRoutes(app);
-
-app.post('/', (req: Request, res: Response) => {
-  res.redirect('/band');
-});
+capabilityController.appRoutes(app);
