@@ -16,7 +16,7 @@ export default class BandController {
     app.post('/admin/band', async (req: Request, res: Response) => {
       const data: Band = req.body;
       data.name = sanitizeHtml(data.name).trim();
-
+      console.log(data);
       try {
         await this.bandService.createNewBand(data);
         res.redirect('/');
@@ -27,19 +27,6 @@ export default class BandController {
           band: data,
         });
       }
-    });
-
-    app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
-      let data: Band[] = [];
-
-      try {
-        data = await this.bandService.getAllJobBands();
-      } catch (e) {
-        logger.error(`Couldnt get Job Band! Error: ${e}`);
-      }
-      res.render('add-new-job-role', {
-        band: data,
-      });
     });
   }
 }

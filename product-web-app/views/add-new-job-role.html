@@ -30,7 +30,7 @@
                     <label for="capabilityId">Select desired Capability</label>
                     <select select id="/capability" name="capabilityId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
                     {% for capability in capabilities %}
-                        <option value="{{ capability.id }}">{{capability.name}}</option>
+                        <option value="{{ capability.id }}">{{capability.capability}}</option>
                     {% endfor%}
                     </select>
                 </div>
