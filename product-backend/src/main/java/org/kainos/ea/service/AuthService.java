@@ -3,16 +3,20 @@ package org.kainos.ea.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.apache.commons.lang3.time.DateUtils;
+import org.kainos.ea.core.Secrets;
 import org.kainos.ea.db.AuthDao;
 import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.LoginRequest;
 import org.kainos.ea.model.User;
+import org.kainos.ea.model.UserCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -53,7 +57,7 @@ public class AuthService {
         }
     }
 
-    public String login(LoginRequest login) throws FailedToLoginException, UserDoesNotExistException, InvalidPasswordException {
+    public UserCredentials login(LoginRequest login) throws FailedToLoginException, UserDoesNotExistException, InvalidPasswordException {
         try {
             Optional<User> existingUser = authDao.getUserByEmail(login.getEmail(), databaseConnector.getConnection());
 
@@ -64,8 +68,9 @@ public class AuthService {
             if (!passwordService.verifyHash(login.getPassword(), existingUser.get().getPassword())) {
                 throw new InvalidPasswordException();
             }
+            UserCredentials userCredentials = new UserCredentials(generateToken(existingUser), existingUser.get().getRoleId());
+            return userCredentials;
 
-            return generateToken(existingUser);
         } catch (SQLException e) {
             logger.error("SQL exception! Error: {}", e.getMessage());
 
@@ -75,7 +80,7 @@ public class AuthService {
 
 
     public String generateToken(Optional<User> user) throws SQLException {
-        Algorithm algorithm = Algorithm.HMAC256("erggv45wv54c53xd345vcg4v54yv2");
+        Algorithm algorithm = Algorithm.HMAC256(Secrets.TOKEN_SECRET);
         Date expiry = DateUtils.addHours(new Date(), 1);
 
         String token = JWT.create()

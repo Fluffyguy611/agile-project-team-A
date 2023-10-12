@@ -4,4 +4,5 @@ export default interface JobRole {
   description: string;
   sharePointLink: string;
   capabilityId: number;
+  bandId: number;
 }

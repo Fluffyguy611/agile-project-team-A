@@ -29,7 +29,7 @@ public class CapabilityController {
     @GET
     @Path("/capability")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getEveryCapability() {
+    public Response getEveryCapability(@HeaderParam("Authorisation") String token) {
         try {
             return Response.ok(capabilityService.getEveryCapabilityLead()).build();
         } catch (FailedToGetCapabilityException e) {
@@ -47,7 +47,7 @@ public class CapabilityController {
     @Path("/admin/add-capability")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createCapability(CapabilityRequest capabilityRequest) {
+    public Response createCapability(@HeaderParam("Authorisation") String token, CapabilityRequest capabilityRequest) {
         try {
             capabilityService.createCapabilityLead(capabilityRequest);
             return Response.ok().build();

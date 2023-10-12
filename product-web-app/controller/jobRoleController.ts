@@ -2,32 +2,32 @@ import { Application, Request, Response } from 'express';
 import sanitizeHtml from 'sanitize-html';
 import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
-import mock from '../common/req.express.session.mock.js';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import logger from '../service/logger.js';
 import CapabilityService from '../service/capabilityService.js';
+import BandService from '../service/bandService.js';
+import BandValidator from '../service/bandValidator.js';
 
 export default class JobRoleController {
   private jobRoleService = new JobRoleService(new JobRoleValidator());
 
   private capabilityService = new CapabilityService();
+  private bandService = new BandService(new BandValidator());
 
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
       const capabilities = await this.capabilityService.getEveryCapability();
+      const bands = await this.bandService.getAllJobBands();
       res.render('add-new-job-role', {
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
         capabilities,
+        bands
       });
     });
-
     app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
       const data: JobRole = req.body;
       data.name = sanitizeHtml(data.name).trim();
       data.description = sanitizeHtml(data.description).trim();
       data.sharePointLink = sanitizeHtml(data.sharePointLink).trim();
-
       try {
         const newJobRole = await this.jobRoleService.createNewJobRole(data);
         res.redirect(`/job-roles/${newJobRole.id}`);
@@ -36,8 +36,7 @@ export default class JobRoleController {
         res.locals.errorMessage = e.message;
         res.render('add-new-job-role', {
           jobRole: data,
-          role: mock.role,
-          isLoggedIn: mock.isLoggedIn,
+          role: req.session.isAdmin,
         });
       }
     });
@@ -55,8 +54,6 @@ export default class JobRoleController {
 
       res.render('view-single-jobRole', {
         jobRole: data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
       });
     });
 
@@ -70,8 +67,6 @@ export default class JobRoleController {
       }
       res.render('job-roles', {
         roles: data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
       });
     });
   }

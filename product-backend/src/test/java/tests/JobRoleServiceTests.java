@@ -88,7 +88,6 @@ class JobRoleServiceTests {
                 "This is a test case",
                 "https://example.com",
                 1
-
         );
         int jobRoleId = 1;
         Mockito.when(jobRoleDaoMock.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRole));
@@ -115,7 +114,6 @@ class JobRoleServiceTests {
                 "description",
                 "sharePointLink",
                 1
-
 
         ));
 

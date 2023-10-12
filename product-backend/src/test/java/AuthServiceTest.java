@@ -4,11 +4,13 @@ import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.LoginRequest;
 import org.kainos.ea.model.User;
+import org.kainos.ea.model.UserCredentials;
 import org.kainos.ea.service.AuthService;
 import org.kainos.ea.service.AuthValidator;
 import org.kainos.ea.service.PasswordService;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -97,9 +99,10 @@ class AuthServiceTest {
         when(passwordServiceMock.verifyHash(mockedLogin.getPassword(), existingUserMock.get().getPassword())).thenReturn(true);
         when(authDaoMock.getUserByEmail(mockedLogin.getEmail(), databaseConnectorMock.getConnection())).thenReturn(existingUserMock);
 
-        String token = authService.login(mockedLogin);
+        UserCredentials userCredentials = authService.login(mockedLogin);
 
-        assertThat(token).isNotEmpty();
+        assertThat(userCredentials.getToken()).isInstanceOf(String.class);
+        assertThat(userCredentials.getRoleId()).isEqualTo(1);
     }
 
     @Test
