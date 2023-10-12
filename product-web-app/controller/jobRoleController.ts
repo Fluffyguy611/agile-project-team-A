@@ -35,9 +35,12 @@ export default class JobRoleController {
       } catch (e: any) {
         logger.warn(e.message);
         res.locals.errorMessage = e.message;
+        const capabilities = await this.capabilityService.getEveryCapability();
+        const bands = await this.bandService.getAllJobBands();
         res.render('add-new-job-role', {
           jobRole: data,
-          role: req.session.isAdmin,
+          capabilities,
+          bands
         });
       }
     });
