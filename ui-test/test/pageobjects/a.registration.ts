@@ -2,28 +2,27 @@ import Page from "./page.js";
 
 export default class RegistrationPage extends Page {
 
-async addUser() { 
+async addUser(userEmail: string, password: string) { 
     
     const emailField = await $("input[id = 'email']");
     emailField.isEnabled;
     console.log(emailField.isEnabled);
 
-    await emailField.addValue('Testowy6@kainos.com');
-    await browser.pause (5000);
+    await emailField.addValue(userEmail);
     
     const passwordField = await $("input[id = 'password']");
     passwordField.isEnabled;
     console.log(passwordField.isEnabled);
 
-    await passwordField.addValue('Testowy6@kainos.com');
-    await browser.pause(5000);
+    await passwordField.addValue(password);
+    
 
     const repeatPasswordField = await $("input[id='repeatPassword']")
     repeatPasswordField.isEnabled;
     console.log(repeatPasswordField.isEnabled);
 
-    await repeatPasswordField.addValue('Testowy6@kainos.com');
-    await browser.pause(5000);
+    await repeatPasswordField.addValue(password);
+    
 
     
     const selectID = await $('#roleId');
@@ -31,8 +30,8 @@ async addUser() {
     selectID.isEnabled;
     console.log(selectID.isEnabled);
 
-    await selectID.selectByIndex(1);
-    await browser.pause(5000);
+    await selectID.selectByIndex(0);
+   
 
     const submitButton = await $('//*[@id="form"]/div/form/button');
     submitButton.click();
