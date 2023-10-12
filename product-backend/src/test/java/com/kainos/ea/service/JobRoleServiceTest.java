@@ -54,10 +54,12 @@ public class JobRoleServiceTest {
                 "Principal",
                 "This is a test case",
                 "https://example.com",
+                4,
                 1,
-                1
-
+                "band A",
+                4
         );
+
         int jobRoleId = 1;
         Mockito.when(jobRoleDao.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRole));
 

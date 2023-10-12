@@ -6,6 +6,7 @@ INSERT INTO Band (Name, Level) VALUES
 ('Band E', 9),
 ('Band F', 8),
 ('Band G', 7),
-('Band H', 5),
+('Band H', 0),
 ('Band I', 4);
+
 

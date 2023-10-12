@@ -70,7 +70,7 @@ export default class JobRoleController {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
       res.render('job-roles', {
-        roles: data,
+        jobRole: data,
       });
     });
   }
