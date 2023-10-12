@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS JobRole (
 	Id int AUTO_INCREMENT primary key, 
     Name VARCHAR(64) NOT NULL unique,
     Description VARCHAR(3000) NOT NULL,
-    SharePointLink VARCHAR(2137) NOT NULL
+    SharePointLink VARCHAR(2137) NOT NULL,
+    BandId int NOT NULL,
+    CONSTRAINT fk_BandId FOREIGN KEY (BandId) REFERENCES Band (Id)
 );
 
 END $$

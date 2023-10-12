@@ -28,11 +28,11 @@ class JobRoleServiceTests {
     private final JobRoleDao jobRoleDaoMock = mock(JobRoleDao.class);
     private final JobRoleValidator jobRoleValidatorMock = mock(JobRoleValidator.class);
     private final JobRoleService jobRoleService = new JobRoleService(jobRoleDaoMock, jobRoleValidatorMock);
-    private final JobRole mockedJobRoleInstance = new JobRole(1500, "Engineer", "blabla", "http://wp.pl");
+    private final JobRole mockedJobRoleInstance = new JobRole(1500, "Engineer", "blabla", "http://wp.pl", 1);
 
     @Test
     public void createNewJobRoleSuccess() throws SQLException, FailedToCreateNewJobRoleException, JobRoleAlreadyExistsException {
-        JobRoleRequest jobRoleRequest = new JobRoleRequest("TestRole5678", "Tests stuff", "some sharepoint link");
+        JobRoleRequest jobRoleRequest = new JobRoleRequest("TestRole5678", "Tests stuff", "some sharepoint link", 1);
         when(jobRoleDaoMock.createNewJobRole(jobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
 
         JobRole newJobRole = jobRoleService.createNewJobRole(jobRoleRequest);
@@ -43,7 +43,7 @@ class JobRoleServiceTests {
 
     @Test
     public void createNewJobRoleFailure() throws FailedToCreateNewJobRoleException, SQLException {
-        JobRoleRequest jobRoleRequest = new JobRoleRequest("TestRole5789", "Tests stuff", "link");
+        JobRoleRequest jobRoleRequest = new JobRoleRequest("TestRole5789", "Tests stuff", "link", 1);
         when(jobRoleDaoMock.createNewJobRole(jobRoleRequest)).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(FailedToCreateNewJobRoleException.class)
@@ -52,7 +52,7 @@ class JobRoleServiceTests {
 
     @Test
     public void createNewJobRoleFailsWhenInputIsIncorrect() throws SQLException, FailedToCreateNewJobRoleException, InvalidJobRoleException, JobRoleAlreadyExistsException {
-        JobRoleRequest mockedJobRoleRequest = new JobRoleRequest("MockedName", "MockedDescription", "MockedSPLink");
+        JobRoleRequest mockedJobRoleRequest = new JobRoleRequest("MockedName", "MockedDescription", "MockedSPLink", 1);
         when(jobRoleDaoMock.createNewJobRole(mockedJobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
 
         JobRole newJobRole = jobRoleService.createNewJobRole(mockedJobRoleRequest);
@@ -61,9 +61,9 @@ class JobRoleServiceTests {
 
     @Test
     public void createNewJobRole_When_JobAlreadyExist_Then_Expect_JobAlreadyExistExceptionToBeThrown() throws SQLException, FailedToCreateNewJobRoleException, InvalidJobRoleException, JobRoleAlreadyExistsException {
-        JobRoleRequest mockedJobRoleRequest = new JobRoleRequest("MockedName", "MockedDescription", "MockedSPLink");
+        JobRoleRequest mockedJobRoleRequest = new JobRoleRequest("MockedName", "MockedDescription", "MockedSPLink", 1);
         when(jobRoleDaoMock.createNewJobRole(mockedJobRoleRequest)).thenReturn(Optional.of(mockedJobRoleInstance));
-        when(jobRoleDaoMock.getJobRoleByName("MockedName")).thenReturn(Optional.of(new JobRole(1, "", "", "")));
+        when(jobRoleDaoMock.getJobRoleByName("MockedName")).thenReturn(Optional.of(new JobRole(1, "", "", "", 1)));
 
         assertThatExceptionOfType(JobRoleAlreadyExistsException.class)
                 .isThrownBy(() -> jobRoleService.createNewJobRole(mockedJobRoleRequest));
@@ -86,7 +86,8 @@ class JobRoleServiceTests {
                 1,
                 "Principal",
                 "This is a test case",
-                "https://example.com"
+                "https://example.com",
+                1
         );
         int jobRoleId = 1;
         Mockito.when(jobRoleDaoMock.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRole));
@@ -113,7 +114,8 @@ class JobRoleServiceTests {
                 1,
                 "name",
                 "description",
-                "sharePointLink"
+                "sharePointLink",
+                1
 
         ));
 

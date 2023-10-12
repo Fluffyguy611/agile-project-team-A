@@ -11,6 +11,8 @@ import JobRoleController from './controller/jobRoleController.js';
 import { API_URL } from './common/constants.js';
 import AuthController from './controller/authController.js';
 import JobRole from './model/jobRole.js';
+import BandController from './controller/bandController.js';
+import Band from './model/band.js';
 import CapabilityController from './controller/capabilityController.js';
 import Capability from './model/capability.js';
 import AuthMiddleware from './middleware/auth.js';
@@ -41,6 +43,7 @@ declare module 'express-session' {
     token: string;
     jobRole: Partial<JobRole>;
     jobRoleSingleView: JobRole;
+    band: Partial<Band>;
     capability: Capability;
     isAdmin: number;
   }
@@ -65,6 +68,14 @@ const capabilityController = new CapabilityController();
 jobRoleController.appRoutes(app);
 capabilityController.appRoutes(app);
 
-app.get('/', (eq: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.redirect('/job-roles');
+});
+
+const bandController = new BandController();
+
+bandController.appRoutes(app);
+
+app.post('/', (req: Request, res: Response) => {
+  res.redirect('/band');
 });

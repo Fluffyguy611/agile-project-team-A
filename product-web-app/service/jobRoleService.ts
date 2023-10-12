@@ -42,6 +42,7 @@ export default class JobRoleService {
   async getJobRoles(): Promise<JobRole[]> {
     try {
       const response = await axios.get(API.JOB_ROLES);
+
       return response.data;
     } catch (e) {
       logger.error('Job roles not found');

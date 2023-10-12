@@ -4,28 +4,37 @@ import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import logger from '../service/logger.js';
+import BandService from '../service/bandService.js';
+import BandValidator from '../service/bandValidator.js';
 
 export default class JobRoleController {
   private jobRoleService = new JobRoleService(new JobRoleValidator());
 
+  private bandService = new BandService(new BandValidator());
+
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
-      res.render('add-new-job-role', { role: req.session.isAdmin });
+      const bands = await this.bandService.getAllJobBands();
+      res.render('add-new-job-role', {
+        role: req.session.isAdmin,
+        bands,
+      });
     });
-
     app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
       const data: JobRole = req.body;
       data.name = sanitizeHtml(data.name).trim();
       data.description = sanitizeHtml(data.description).trim();
       data.sharePointLink = sanitizeHtml(data.sharePointLink).trim();
-
       try {
         const newJobRole = await this.jobRoleService.createNewJobRole(data);
         res.redirect(`/job-roles/${newJobRole.id}`);
       } catch (e: any) {
         logger.warn(e.message);
         res.locals.errorMessage = e.message;
-        res.render('add-new-job-role', { jobRole: data, role: req.session.isAdmin });
+        res.render('add-new-job-role', {
+          jobRole: data,
+          role: req.session.isAdmin,
+        });
       }
     });
 
@@ -41,7 +50,7 @@ export default class JobRoleController {
       }
 
       res.render('view-single-jobRole', {
-        jobRole: data
+        jobRole: data,
       });
     });
 
@@ -54,7 +63,7 @@ export default class JobRoleController {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
       res.render('job-roles', {
-        roles: data
+        roles: data,
       });
     });
   }
