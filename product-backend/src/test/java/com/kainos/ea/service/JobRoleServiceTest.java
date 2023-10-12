@@ -31,7 +31,8 @@ public class JobRoleServiceTest {
             1,
             "Principal",
             "This is a test case",
-            "https://example.com"
+            "https://example.com",
+            1
     );
 
     @Test
@@ -51,7 +52,8 @@ public class JobRoleServiceTest {
                 1,
                 "Principal",
                 "This is a test case",
-                "https://example.com"
+                "https://example.com",
+                1
         );
         int jobRoleId = 1;
         Mockito.when(jobRoleDao.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRole));

@@ -1,19 +1,22 @@
 package org.kainos.ea.model;
 
-
-public class JobRole {
+public class JobRolePlusBandResponse {
     private int id;
     private String name;
     private String description;
     private String sharePointLink;
     private int bandId;
+    private String bandName;
+    private int bandLevel;
 
-    public JobRole(int id, String name, String description, String sharePointLink, int bandId) {
+    public JobRolePlusBandResponse(int id, String name, String description, String sharePointLink, int bandId, String bandName, int bandLevel) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.sharePointLink = sharePointLink;
         this.bandId = bandId;
+        this.bandName = bandName;
+        this.bandLevel = bandLevel;
     }
 
     public int getId() {
@@ -56,4 +59,19 @@ public class JobRole {
         this.bandId = bandId;
     }
 
+    public String getBandName() {
+        return bandName;
+    }
+
+    public void setBandName(String bandName) {
+        this.bandName = bandName;
+    }
+
+    public int getBandLevel() {
+        return bandLevel;
+    }
+
+    public void setBandLevel(int bandLevel) {
+        this.bandLevel = bandLevel;
+    }
 }

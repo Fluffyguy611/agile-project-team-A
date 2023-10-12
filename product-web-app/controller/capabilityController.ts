@@ -17,7 +17,7 @@ export default class CapabilityController {
       }
 
       res.render('list-capability-leads', {
-        capability: data
+        capability: data,
       });
     });
   }

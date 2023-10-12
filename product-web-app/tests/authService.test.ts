@@ -12,9 +12,9 @@ const mockedUser = {
 };
 
 const userCredentials = {
-  token: "MockToken",
+  token: 'MockToken',
   roleId: 1,
-}
+};
 
 const authService = new AuthService(new AuthValidator());
 
