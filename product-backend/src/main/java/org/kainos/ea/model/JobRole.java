@@ -7,6 +7,7 @@ public class JobRole {
     private String description;
     private String sharePointLink;
     private int capabilityId;
+    private String capabilityName;
     private int bandId;
     private String bandName;
     private int bandLevel;
@@ -21,15 +22,24 @@ public class JobRole {
         this.bandId = bandId;
     }
 
-    public JobRole(int id, String name, String description, String sharePointLink, int bandId, int capabilityId, String bandName, int bandLevel) {
+    public JobRole(int id, String name, String description, String sharePointLink, int capabilityId, String capabilityName, int bandId, String bandName, int bandLevel) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.sharePointLink = sharePointLink;
         this.capabilityId = capabilityId;
+        this.capabilityName = capabilityName;
         this.bandId = bandId;
         this.bandName = bandName;
         this.bandLevel = bandLevel;
+    }
+
+    public String getCapabilityName() {
+        return capabilityName;
+    }
+
+    public void setCapabilityName(String capabilityName) {
+        this.capabilityName = capabilityName;
     }
 
     public String getBandName() {

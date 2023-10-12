@@ -20,12 +20,13 @@ public class JobRoleDao {
     public List<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
         Connection c = databaseConnector.getConnection();
         Statement st = c.createStatement();
-        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, JobRole.BandId, Band.Name, Band.Level" +
+        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, Capability.Name, JobRole.BandId, Band.Name, Band.Level" +
                 " FROM JobRole " +
                 "INNER JOIN Band " +
                 "ON Band.Id = JobRole.BandId " +
+                "INNER JOIN Capability " +
+                "ON Capability.Id = JobRole.CapabilityId " +
                 "ORDER BY JobRole.Name ASC");
-
         List<JobRole> jobRoleList = new ArrayList<>();
         while (rs.next()) {
 
@@ -35,6 +36,7 @@ public class JobRoleDao {
                     rs.getString("Description"),
                     rs.getString("SharePointLink"),
                     rs.getInt("CapabilityId"),
+                    rs.getString("Capability.Name"),
                     rs.getInt("BandId"),
                     rs.getString("Band.Name"),
                     rs.getInt("Band.Level"));
@@ -78,10 +80,12 @@ public class JobRoleDao {
 
     public Optional<JobRole> getJobRoleById(int id) throws SQLException {
         Connection c = databaseConnector.getConnection();
-        String getStatement = "SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, JobRole.BandId, Band.Name, Band.Level" +
+        String getStatement = "SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, Capability.Name, JobRole.BandId, Band.Name, Band.Level" +
                 " FROM JobRole " +
                 "INNER JOIN Band " +
                 "ON Band.Id = JobRole.BandId " +
+                "INNER JOIN Capability " +
+                "ON Capability.Id = JobRole.CapabilityId " +
                 "WHERE JobRole.Id = ?; ";
         PreparedStatement st = c.prepareStatement(getStatement);
         st.setInt(1, id);
@@ -94,6 +98,7 @@ public class JobRoleDao {
                     rs.getString("Description"),
                     rs.getString("SharePointLink"),
                     rs.getInt("CapabilityId"),
+                    rs.getString("Capability.Name"),
                     rs.getInt("BandId"),
                     rs.getString("Band.Name"),
                     rs.getInt("Band.Level")
