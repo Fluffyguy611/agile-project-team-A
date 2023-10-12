@@ -32,6 +32,7 @@ describe('JobRole validator', () => {
         name: 'TestEngi',
         description: 'TestEngiStuff',
         sharePointLink: 'some link',
+        capabilityId: 1,
         bandId: 1,
         bandName: 'Band A',
         bandLevel: 1,

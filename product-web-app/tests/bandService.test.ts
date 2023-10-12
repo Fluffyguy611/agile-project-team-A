@@ -35,8 +35,6 @@ describe('Band service', () => {
 
       expect(responseBody).to.deep.equal(testBandEngi);
       sinon.assert.calledOnceWithExactly(bandValidatorStub.validateBand, testBandEngi);
-
-      mockAxios.restore();
     });
 
     it('When Band has invalid fields expect exception', async () => {
@@ -52,8 +50,6 @@ describe('Band service', () => {
       } finally {
         expect(exception.message).to.equal(validationError);
       }
-
-      mockAxios.restore();
     });
   });
 });

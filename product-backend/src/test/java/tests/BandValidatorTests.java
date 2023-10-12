@@ -49,7 +49,7 @@ public class BandValidatorTests {
     }
 
     @Test
-    public void WhenJobBandInBetweenZeroAndNineExpectErrorMessage() {
+    public void WhenJobBandInBetweenZeroAndNineExpectNoErrorMessage() {
         BandRequest bandRequest = new BandRequest("12345123451234512345123451234", 5);
 
         Optional<String> result = bandValidator.isValidBandLevel(bandRequest);

@@ -5,9 +5,9 @@ BEGIN
     START TRANSACTION;
     
     DROP TABLE IF EXISTS JobRole;
-    DROP TABLE IF EXISTS Band;
     DROP TABLE IF EXISTS `User`;
     DROP TABLE IF EXISTS `Role`;
+    DROP TABLE IF EXISTS Band;
     drop TABLE IF EXISTS Capability;
     
         COMMIT;

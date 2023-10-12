@@ -1,14 +1,13 @@
 package org.kainos.ea.db;
 
-
+import org.kainos.ea.exception.FailedToCreateCapabilityLeadException;
 import org.kainos.ea.model.Capability;
 import org.kainos.ea.model.CapabilityRequest;
-import org.kainos.ea.model.JobRole;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 public class CapabilityDao {
 
@@ -26,36 +25,29 @@ public class CapabilityDao {
                     rs.getString("Capability"),
                     rs.getString("Name"),
                     rs.getString("Photo"),
-                    rs.getString("Message")
-                    );
+                    rs.getString("Message"));
+
             capabilityList.add(capability);
         }
         return capabilityList;
     }
 
+    public void createCapabilityLead(CapabilityRequest capability, Connection c) throws SQLException, FailedToCreateCapabilityLeadException {
 
-
-    public int createCapabilityLead (CapabilityRequest capability, Connection c) throws SQLException {
-        // String insertStatement = to be filled
-                /*
+        String insertStatement = "INSERT INTO Capability (Capability, Name, Photo, Message) VALUES (?,?,?,?)";
 
         PreparedStatement st = c.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
 
-        st.setString(1, employee.getName());
-        st.setInt(2, employee.getSalary());
-        st.setString(3, employee.getBankAccount());
-        st.setString(4, employee.getInsuranceNumber());
+        st.setString(1, capability.getCapability());
+        st.setString(2, capability.getName());
+        st.setString(3, capability.getPhoto());
+        st.setString(4, capability.getMessage());
 
         st.executeUpdate();
 
         ResultSet rs = st.getGeneratedKeys();
-
-        if (rs.next()) {
-            return rs.getInt(1);
+        if (!rs.next()) {
+            throw new FailedToCreateCapabilityLeadException();
         }
-        */
-        return -1;
-
     }
-
 }
