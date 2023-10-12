@@ -9,6 +9,7 @@ import org.kainos.ea.controller.AuthController;
 import org.kainos.ea.controller.BandController;
 import org.kainos.ea.controller.CapabilityController;
 import org.kainos.ea.controller.JobRoleController;
+import org.kainos.ea.controller.RestrictedOperationsRequestFilter;
 
 public class AgileSprintWebServiceApplication extends Application<AgileSprintWebServiceConfiguration> {
 
@@ -37,5 +38,6 @@ public class AgileSprintWebServiceApplication extends Application<AgileSprintWeb
         environment.jersey().register(new JobRoleController());
         environment.jersey().register(new BandController());
         environment.jersey().register(new CapabilityController());
+        environment.jersey().register(new RestrictedOperationsRequestFilter());
     }
 }

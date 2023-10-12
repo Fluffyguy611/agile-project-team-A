@@ -3,6 +3,7 @@ import User from '../model/user.js';
 import AuthValidator from './authValidator.js';
 import logger from './logger.js';
 import { API } from '../common/constants.js';
+import UserCredentials from '../model/userCredentials.js';
 
 export default class AuthService {
   private authValidator: AuthValidator;
@@ -37,16 +38,16 @@ export default class AuthService {
     }
   }
 
-  async login(user: User): Promise<string> {
+  async login(user: User): Promise<UserCredentials> {
     try {
       const apiResponse = await axios.post(API.LOGIN, user);
-      const token = apiResponse.data;
+      const credentials: UserCredentials = apiResponse.data;
 
-      if (!token) {
+      if (!credentials.token) {
         throw new Error('No token found in the response.');
       }
 
-      return token;
+      return credentials;
     } catch (e: any) {
       logger.error(`Could not login user: ${e.message}`);
       throw new Error('Could not login user');
