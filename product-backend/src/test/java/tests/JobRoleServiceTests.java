@@ -88,6 +88,7 @@ class JobRoleServiceTests {
                 "This is a test case",
                 "https://example.com",
                 1,
+                "Capa Name",
                 1,
                 "Some band name",
                 4
@@ -118,6 +119,7 @@ class JobRoleServiceTests {
                 "description",
                 "sharePointLink",
                 1,
+                "Capa Name",
                 1,
                 "band A",
                 4

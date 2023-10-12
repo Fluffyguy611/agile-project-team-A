@@ -55,6 +55,7 @@ public class JobRoleServiceTest {
                 "This is a test case",
                 "https://example.com",
                 4,
+                "Capa Name",
                 1,
                 "band A",
                 4

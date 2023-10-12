@@ -12,6 +12,7 @@
                         <th scope="col">JOB ROLES</th>
                         <th scope="col" style="text-align: center;">SHOW DETAILS</th>
                         <th scope="col" style="text-align: center;">BAND</th>
+                        <th scope="col" style="text-align: center;">CAPABILITY NAME</th>
                       </tr>
               </thead>
               <tbody>
@@ -22,6 +23,7 @@
                   <button class="btn btn-success" onclick="window.location.href='/job-roles/{{ jobRole.id }}'">Details</button>
                   </td>
                   <td style="text-align: center;">{{ jobRole.bandName }}</td>
+                  <td style="text-align: center;">{{ jobRole.capabilityName }}</td>
                 </tr>
                 {% endfor %}
               </tbody>
