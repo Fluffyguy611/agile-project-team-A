@@ -23,7 +23,8 @@ public class JobRoleDao {
         ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, JobRole.BandId, Band.Name, Band.Level" +
                 " FROM JobRole " +
                 "INNER JOIN Band " +
-                "ON Band.Id = JobRole.BandId ");
+                "ON Band.Id = JobRole.BandId " +
+                "ORDER BY JobRole.Name ASC");
 
         List<JobRole> jobRoleList = new ArrayList<>();
         while (rs.next()) {
