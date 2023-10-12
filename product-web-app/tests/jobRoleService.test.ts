@@ -48,9 +48,7 @@ describe('JobRole service', () => {
       const responseBody = await jobRoleService.createNewJobRole(jobRoleTestEngi);
 
       expect(responseBody).to.deep.equal(jobRoleTestEngi);
-      sinon.assert.calledOnceWithExactly(jobRoleValidatorStub.validateJobRole, jobRoleTestEngi);
-
-      mockAxios.restore();
+      sinon.assert.calledOnceWithExactly(jobRoleValidatorStub.validateJobRole, jobRoleTestEngi);;
     });
 
     it('When Job Role has invalid fields expect exception', async () => {
@@ -71,8 +69,6 @@ describe('JobRole service', () => {
       } finally {
         expect(exception.message).to.equal(validationError);
       }
-
-      mockAxios.restore();
     });
 
     describe('getJobRoleById', () => {
@@ -91,8 +87,6 @@ describe('JobRole service', () => {
         } finally {
           expect(exception.message).to.equal('Job Role not found');
         }
-
-        mockAxios.restore();
       });
 
       it('when jobRole have invalid id expect exception to be thrown', async () => {
@@ -110,8 +104,6 @@ describe('JobRole service', () => {
         } finally {
           expect(exception.message).to.equal('Job Role not found');
         }
-
-        mockAxios.restore();
       });
 
       it('when API is online expect jobRole to be returned', async () => {
@@ -124,8 +116,6 @@ describe('JobRole service', () => {
         const responseBody = await jobRoleService.getJobRoleSpecification(jobRolePrincipal.id);
 
         expect(responseBody.id).to.be.equal(jobRolePrincipal.id);
-
-        mockAxios.restore();
       });
     });
 

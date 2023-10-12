@@ -56,6 +56,7 @@ describe('Capability service', () => {
 
     it('when API is down expect exception to be thrown', async () => {
       let exception: any;
+      mockAxios.onGet(API.CAPABILITY).reply(500);
       try {
         await capabilityService.getEveryCapability();
       } catch (e) {
