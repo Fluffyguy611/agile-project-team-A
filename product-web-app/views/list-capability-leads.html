@@ -1,40 +1,37 @@
 {% extends "./parent.html" %} {% block content %}
 <style>
-.leads-grid{
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-grid-template-rows: auto;
-gap: 30px;
-}
-
-  .lead-card{
-    box-sizing: border-box;
-    border-radius: 2%;
-    box-shadow: 1px 2px 5px 0px rgba(66, 68, 90, 1);
-  }
+   .leads-grid {
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr;
+   grid-template-rows: auto;
+   gap: 30px;
+   text-align: center;
+   }
+   .card-img-top {
+   max-width: 300px;
+   max-height: 300px;
+   }
+   .lead-card {
+   box-sizing: border-box;
+   border-radius: 2%;
+   box-shadow: 1px 2px 5px 0px rgba(66, 68, 90, 1);
+   }
 </style>
-
 <title>{% block title %} Capability Leads {% endblock %}</title>
 <main class="container mt-4">
-  <div class="leads-grid">
-    
-        {% if capability and capability.length > 0 %} {%for lead in capability %}
-      <div class="lead-card" >
-        <img
-          class="card-img-top"
-          src="data:image/jpeg;base64, {{ lead.photo }}"
-          alt="Card image cap"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ lead.capability }} - {{ lead.name }}</h5>
-          <p class="card-text">{{ lead.message }}</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <small class="text-muted"></small>
-          </div>
-        </div>
+   <div class="leads-grid">
+      {% if capability and capability.length > 0 %} {%for lead in capability %}
+      <div class="lead-card">
+         <img class="card-img-top" src="data:image/jpeg;base64, {{ lead.photo }}" alt="Card image cap" />
+         <div class="card-body">
+            <h5 class="card-title">{{ lead.capability }} - {{ lead.name }}</h5>
+            <p class="card-text">{{ lead.message }}</p>
+            <div class="d-flex justify-content-between align-items-center">
+               <small class="text-muted"></small>
+            </div>
+         </div>
       </div>
-      {% endfor %}  {% else %} Could not find Capability Leads. {% endif %}
-  </div>
+      {% endfor %} {% else %} Could not find Capability Leads. {% endif %}
+   </div>
 </main>
-
 {% endblock %}

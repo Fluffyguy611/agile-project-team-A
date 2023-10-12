@@ -26,7 +26,6 @@ public class JobRoleDao {
                 "ON Band.Id = JobRole.BandId " +
                 "INNER JOIN Capability " +
                 "ON Capability.Id = JobRole.CapabilityId ");
-
         List<JobRole> jobRoleList = new ArrayList<>();
         while (rs.next()) {
 
