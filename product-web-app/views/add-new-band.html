@@ -14,8 +14,9 @@
             <form action="/admin/band" method="post">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" name="name" class="form-control" value="{{ band.name }}" required>
+                    <input type="text" name="name" class="form-control mt-2" value="{{ band.name }}" required>
                 </div>
+                <div class="mt-2"></div>
                 <div class="form-group">
                     <label for="level">Level (0-9)</label>
                     <input type="number" name="level" quantity min="0" max="9" class="form-control" value="{{ band.level }}" maxlength="1" required>

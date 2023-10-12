@@ -1,5 +1,38 @@
 {% extends "./parent.html" %}
 {% block content %}
+
+<style>
+    .select-dropdown {
+        width: 500px;
+        padding: 10px;
+        border: 1px solid #124;
+        border-radius: 5px;
+        background-color: aliceblue;
+        color: chocolate;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .select-dropdown::after {
+        content: '\25BC';
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 16px;
+    }
+
+    .select-dropdown option {
+        background-color: aquamarine;
+        color: gold;
+    }
+
+    .select-dropdown option:checked {
+        background-color: blueviolet;
+        color:chartreuse;
+    }
+</style>
+
 <title>{% block title %}Add New Job Role{% endblock %}</title>
 
     <main class="container mt-4">
@@ -14,18 +47,20 @@
             <form action="./add-job-roles" method="post">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" name="name" class="form-control" value="{{ jobRole.name }}" required>
+                    <input type="text" name="name" class="form-control mt-2" value="{{ jobRole.name }}" required>
                 </div>
+                <div class="mt-2"></div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea name="description" rows="15" cols="1" wrap="hard" value="{{ jobRole.description }}" class="form-control"
+                    <textarea name="description" rows="15" cols="1" wrap="hard" value="{{ jobRole.description }}" class="form-control mt-2"
                         required>{{ jobRole.description }}</textarea>
                 </div>
+                <div class="mt-2"></div>
                 <div class="form-group">
                     <label for="sharePointLink">SharePoint Link</label>
-                    <input type="text" name="sharePointLink" value="{{ jobRole.sharePointLink }}" class="form-control" required>
+                    <input type="text" name="sharePointLink" value="{{ jobRole.sharePointLink }}" class="form-control mt-2" required>
                 </div>
-
+                <div class="mt-2"></div>
                 <div class="form-group">
                     <label for="capabilityId">Select desired Capability</label>
                     <select select id="/capability" name="capabilityId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
@@ -34,9 +69,10 @@
                     {% endfor%}
                     </select>
                 </div>
+                <div class="mt-2"></div>
                 <div class="form-group">
                     <label for="band">Select desired Job Band</label>
-                    <select select id="admin/bands" name="bandId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
+                    <select select id="admin/bands" name="bandId" class="form-select form-select-lg mb-3 mt-2 select-dropdown" aria-label=".form-select-lg" required>
                         {% for band in bands %}
                             <option value="{{ band.id }}">
                                 {{ band.name }}

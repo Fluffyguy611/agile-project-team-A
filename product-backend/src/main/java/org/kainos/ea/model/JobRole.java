@@ -8,6 +8,8 @@ public class JobRole {
     private String sharePointLink;
     private int capabilityId;
     private int bandId;
+    private String bandName;
+    private int bandLevel;
 
 
     public JobRole(int id, String name, String description, String sharePointLink, int capabilityId, int bandId) {
@@ -17,6 +19,33 @@ public class JobRole {
         this.sharePointLink = sharePointLink;
         this.capabilityId = capabilityId;
         this.bandId = bandId;
+    }
+
+    public JobRole(int id, String name, String description, String sharePointLink, int bandId, int capabilityId, String bandName, int bandLevel) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.sharePointLink = sharePointLink;
+        this.capabilityId = capabilityId;
+        this.bandId = bandId;
+        this.bandName = bandName;
+        this.bandLevel = bandLevel;
+    }
+
+    public String getBandName() {
+        return bandName;
+    }
+
+    public void setBandName(String bandName) {
+        this.bandName = bandName;
+    }
+
+    public int getBandLevel() {
+        return bandLevel;
+    }
+
+    public void setBandLevel(int bandLevel) {
+        this.bandLevel = bandLevel;
     }
 
     public int getId() {
@@ -51,13 +80,14 @@ public class JobRole {
         this.sharePointLink = sharePointLink;
     }
 
-    public int getCapabilitId() {
+    public int getCapabilityId() {
         return capabilityId;
     }
 
-    public void setCapabilitId(int capabilitId) {
-        this.capabilityId = capabilitId;
+    public void setCapabilityId(int capabilityId) {
+        this.capabilityId = capabilityId;
     }
+
     public int getBandId() {
         return bandId;
     }

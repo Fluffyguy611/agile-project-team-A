@@ -34,6 +34,8 @@ describe('JobRole validator', () => {
         sharePointLink: 'some link',
         capabilityId: 1,
         bandId: 1,
+        bandName: 'Band A',
+        bandLevel: 1,
       };
 
       expect(jobRoleValidator.validateJobRole(jobRole)).to.be.null;

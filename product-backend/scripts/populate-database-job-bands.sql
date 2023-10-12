@@ -10,3 +10,4 @@ VALUES
     ('Director', 7),
     ('Senior Director', 8),
     ('Senior', 9);
+
