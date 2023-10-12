@@ -35,7 +35,7 @@ public class BandValidatorTests {
         Optional<String> result = bandValidator.isValidBandLevel(bandRequest);
 
         assertThat(result).isNotEmpty();
-        assertThat(result).contains("Correct Level input");
+        assertThat(result).contains("Incorrect Level input");
     }
 
     @Test
@@ -45,7 +45,7 @@ public class BandValidatorTests {
         Optional<String> result = bandValidator.isValidBandLevel(bandRequest);
 
         assertThat(result).isNotEmpty();
-        assertThat(result).contains("Correct Level input");
+        assertThat(result).contains("Incorrect Level input");
     }
 
     @Test
@@ -54,7 +54,6 @@ public class BandValidatorTests {
 
         Optional<String> result = bandValidator.isValidBandLevel(bandRequest);
 
-        assertThat(result).isNotEmpty();
-        assertThat(result).contains("Correct Level input");
+        assertThat(result).isEmpty();
     }
 }
