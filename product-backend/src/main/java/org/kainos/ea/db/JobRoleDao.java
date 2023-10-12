@@ -1,6 +1,5 @@
 package org.kainos.ea.db;
 
-
 import org.kainos.ea.exception.DatabaseConnectionException;
 import org.kainos.ea.model.JobRole;
 import org.kainos.ea.model.JobRoleRequest;
@@ -21,7 +20,7 @@ public class JobRoleDao {
     public List<JobRole> getAllJobRoles() throws SQLException, DatabaseConnectionException {
         Connection c = databaseConnector.getConnection();
         Statement st = c.createStatement();
-        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.BandId\n" + "FROM JobRole");
+        ResultSet rs = st.executeQuery("SELECT JobRole.Id, JobRole.Name, JobRole.Description, JobRole.SharePointLink, JobRole.CapabilityId, JobRole.BandId \n" + "FROM JobRole");
 
         List<JobRole> jobRoleList = new ArrayList<>();
         while (rs.next()) {
@@ -31,7 +30,9 @@ public class JobRoleDao {
                     rs.getString("Name"),
                     rs.getString("Description"),
                     rs.getString("SharePointLink"),
+                    rs.getInt("CapabilityId"),
                     rs.getInt("BandId"));
+
             jobRoleList.add(jobRole);
 
         }
@@ -42,14 +43,15 @@ public class JobRoleDao {
     public Optional<JobRole> createNewJobRole(JobRoleRequest jobRole) throws SQLException {
         Connection c = databaseConnector.getConnection();
 
-        String insertStatement = "INSERT INTO JobRole (Name, Description, SharePointLink, BandId) VALUES (?,?,?,?);";
+        String insertStatement = "INSERT INTO JobRole (Name, Description, SharePointLink, CapabilityId, BandId) VALUES (?,?,?,?, ?)";
 
         PreparedStatement st = c.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS);
 
         st.setString(1, jobRole.getName());
         st.setString(2, jobRole.getDescription());
         st.setString(3, jobRole.getSharePointLink());
-        st.setInt(4, jobRole.getBandId());
+        st.setInt(4, jobRole.getCapabilityId());
+        st.setInt(5, jobRole.getBandId());
 
         st.executeUpdate();
 
@@ -62,6 +64,7 @@ public class JobRoleDao {
                             jobRole.getName(),
                             jobRole.getDescription(),
                             jobRole.getSharePointLink(),
+                            jobRole.getCapabilityId(),
                             jobRole.getBandId()));
         }
         return Optional.empty();
@@ -80,6 +83,7 @@ public class JobRoleDao {
                     rs.getString("Name"),
                     rs.getString("Description"),
                     rs.getString("SharePointLink"),
+                    rs.getInt("CapabilityId"),
                     rs.getInt("BandId")
             ));
         }
@@ -99,6 +103,7 @@ public class JobRoleDao {
                     rs.getString("Name"),
                     rs.getString("Description"),
                     rs.getString("SharePointLink"),
+                    rs.getInt("CapabilityId"),
                     rs.getInt("BandId")
             ));
         }

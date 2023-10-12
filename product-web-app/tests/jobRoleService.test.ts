@@ -13,6 +13,7 @@ const jobRolePrincipal: JobRole = {
   name: 'Principal',
   description: 'his is a test case',
   sharePointLink: 'https://example.com',
+  capabilityId: 1,
   bandId: 1,
 };
 
@@ -21,6 +22,7 @@ const jobRoleTestEngi: JobRole = {
   name: 'TestEngi',
   description: 'TestEngisStuff',
   sharePointLink: 'https://example.com',
+  capabilityId: 1,
   bandId: 1,
 };
 
@@ -46,9 +48,7 @@ describe('JobRole service', () => {
       const responseBody = await jobRoleService.createNewJobRole(jobRoleTestEngi);
 
       expect(responseBody).to.deep.equal(jobRoleTestEngi);
-      sinon.assert.calledOnceWithExactly(jobRoleValidatorStub.validateJobRole, jobRoleTestEngi);
-
-      mockAxios.restore();
+      sinon.assert.calledOnceWithExactly(jobRoleValidatorStub.validateJobRole, jobRoleTestEngi);;
     });
 
     it('When Job Role has invalid fields expect exception', async () => {
@@ -69,8 +69,6 @@ describe('JobRole service', () => {
       } finally {
         expect(exception.message).to.equal(validationError);
       }
-
-      mockAxios.restore();
     });
 
     describe('getJobRoleById', () => {
@@ -89,8 +87,6 @@ describe('JobRole service', () => {
         } finally {
           expect(exception.message).to.equal('Job Role not found');
         }
-
-        mockAxios.restore();
       });
 
       it('when jobRole have invalid id expect exception to be thrown', async () => {
@@ -108,8 +104,6 @@ describe('JobRole service', () => {
         } finally {
           expect(exception.message).to.equal('Job Role not found');
         }
-
-        mockAxios.restore();
       });
 
       it('when API is online expect jobRole to be returned', async () => {
@@ -122,8 +116,6 @@ describe('JobRole service', () => {
         const responseBody = await jobRoleService.getJobRoleSpecification(jobRolePrincipal.id);
 
         expect(responseBody.id).to.be.equal(jobRolePrincipal.id);
-
-        mockAxios.restore();
       });
     });
 
@@ -134,6 +126,7 @@ describe('JobRole service', () => {
           name: 'name',
           description: 'description',
           sharePointLink: 'exaple',
+          capabilityId: 1,
         },
       ];
 

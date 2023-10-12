@@ -7,7 +7,7 @@ export const API = {
   BANDS: '/api/admin/bands/',
   GET_JOB_ROLE: (id: number) => `api/job-roles/${id}`,
   CAPABILITY: '/api/capability',
-  CREATE_CAPABILITY: '/api/admin/capability',
+  CREATE_CAPABILITY: '/api/admin/add-capability',
   REGISTER: '/api/auth/register',
   LOGIN: '/api/auth/login',
   GET_BAND: (id: number) => `api/band/${id}`,

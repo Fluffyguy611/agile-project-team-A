@@ -4,11 +4,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.kainos.ea.exception.FailedToGetJobRoleException;
-import org.kainos.ea.exception.JobRoleDoesNotExistException;
+import org.kainos.ea.db.CapabilityDao;
+import org.kainos.ea.db.DatabaseConnector;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.JobRoleRequest;
+import org.kainos.ea.service.CapabilityService;
 import org.kainos.ea.service.JobRoleService;
 import org.kainos.ea.service.JobRoleValidator;
 import org.slf4j.Logger;
@@ -22,8 +23,9 @@ import java.sql.SQLException;
 public class JobRoleController {
     private final static Logger logger = LoggerFactory.getLogger(JobRoleService.class);
 
-
     private final JobRoleService jobRoleService = new JobRoleService(new JobRoleDao(), new JobRoleValidator());
+    private final CapabilityService capabilityService = new CapabilityService(new DatabaseConnector(), new CapabilityDao());
+
 
     @POST
     @Path("/admin/job-roles")
@@ -70,4 +72,6 @@ public class JobRoleController {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();
         }
     }
+
 }
+

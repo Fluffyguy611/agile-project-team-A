@@ -4,7 +4,7 @@ import { API } from '../common/constants.js';
 import Capability from '../model/capability.js';
 
 export default class CapabilityService {
-  async getEveryCapabilityLead(): Promise<Capability[]> {
+  async getEveryCapability(): Promise<Capability[]> {
     try {
       const response = await axios.get(API.CAPABILITY);
 
@@ -12,6 +12,16 @@ export default class CapabilityService {
     } catch (e) {
       logger.error('Capability Leads not found');
       throw new Error('Capability Leads not found');
+    }
+  }
+
+  async createCapability(capability: Capability): Promise<Capability> {
+    try {
+      const response = await axios.post(API.CREATE_CAPABILITY, capability);
+      return response.data;
+    } catch (e: any) {
+      logger.error(`Could not create Capability! Error: ${e.response.data.message}`);
+      throw new Error(e.response.data.message);
     }
   }
 }
