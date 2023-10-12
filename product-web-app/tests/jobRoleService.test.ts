@@ -14,6 +14,8 @@ const jobRolePrincipal: JobRole = {
   description: 'his is a test case',
   sharePointLink: 'https://example.com',
   bandId: 1,
+  bandName: 'Band A',
+  bandLevel: 1,
 };
 
 const jobRoleTestEngi: JobRole = {
@@ -22,6 +24,8 @@ const jobRoleTestEngi: JobRole = {
   description: 'TestEngisStuff',
   sharePointLink: 'https://example.com',
   bandId: 1,
+  bandName: 'Band A',
+  bandLevel: 1,
 };
 
 describe('JobRole service', () => {

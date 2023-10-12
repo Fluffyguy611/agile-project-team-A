@@ -33,6 +33,8 @@ describe('JobRole validator', () => {
         description: 'TestEngiStuff',
         sharePointLink: 'some link',
         bandId: 1,
+        bandName: 'Band A',
+        bandLevel: 1,
       };
 
       expect(jobRoleValidator.validateJobRole(jobRole)).to.be.null;

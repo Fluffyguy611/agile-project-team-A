@@ -1,4 +1,4 @@
-INSERT INTO JobRole (Name, Description, SharePointLink, BandId) VALUES
+INSERT INTO JobRole (`Name`, `Description`, `SharePointLink`, `BandId`) VALUES
 ("Techssnology Lesdfsdfader", "Responsible for leading technology initiatives and teams within the organization.", "https://example.com/techleader", 1),
 ('Principal', 'A high-level position with significant responsibilities in the organization.', 'https://example.com/principal', 2),
 ('Principal Architect', 'Responsible for designing and overseeing architectural solutions.', 'https://example.com/principalarchitect', 3),

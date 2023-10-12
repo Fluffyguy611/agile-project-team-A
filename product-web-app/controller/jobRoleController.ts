@@ -10,14 +10,15 @@ import BandValidator from '../service/bandValidator.js';
 
 export default class JobRoleController {
   private jobRoleService = new JobRoleService(new JobRoleValidator());
-
   private bandService = new BandService(new BandValidator());
 
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
+        const bands = await this.bandService.getAllJobBands()
       res.render('add-new-job-role', {
         role: mock.role,
         isLoggedIn: mock.isLoggedIn,
+        bands,
       });
     });
     app.post('/admin/add-job-roles', async (req: Request, res: Response) => {
@@ -66,7 +67,7 @@ export default class JobRoleController {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
       res.render('job-roles', {
-        roles: data,
+        jobRole : data,
         role: mock.role,
         isLoggedIn: mock.isLoggedIn,
       });

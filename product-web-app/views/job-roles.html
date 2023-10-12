@@ -4,21 +4,24 @@
     <main class="container mt-4">
       <section id="roles" class="mt-4">
 
-      {% if roles and roles.length > 0 %}
+      {% if jobRole and jobRole.length > 0 %}
             <table class="table">
               <thead>
                       <tr class="bg-dark text-light">
                         <th scope="col">JOB ROLES</th>
                         <th scope="col" style="text-align: center;">SHOW DETAILS</th>
+                        <th scope="col" style="text-align: center;">BAND</th>
                       </tr>
               </thead>
               <tbody>
-                {% for role in roles %}
+                {% for jobRole in jobRole %}
                 <tr>
-                  <td ><strong>{{ role.name }}</strong></td>
-                  <td style="text-align: center;"><a href= "/job-roles/{{ role.id }}">Details</a></td>
+                  <td ><strong>{{ jobRole.name }}</strong></td>
+                  <td style="text-align: center;"><a href= "/job-roles/{{ jobRole.id }}">Details</a></td>
+                  <td style="text-align: center;">{{ jobRole.bandName }}</td>
                 </tr>
                 {% endfor %}
+                </tr>
               </tbody>
             </table>    
 {% else %}

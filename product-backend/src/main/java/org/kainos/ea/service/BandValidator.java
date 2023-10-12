@@ -18,9 +18,9 @@ public class BandValidator {
 
     public Optional<String> isValidBandLevel(BandRequest band) {
         if (band.getLevel() >= 0 || band.getLevel() <= 9) {
-            return Optional.of("Correct Level input");
-        } else {
             return Optional.empty();
+        } else {
+            return Optional.of("Correct Level input");
         }
     }
 }

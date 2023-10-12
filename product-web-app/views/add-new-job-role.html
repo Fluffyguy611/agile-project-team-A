@@ -1,5 +1,38 @@
 {% extends "./parent.html" %}
 {% block content %}
+
+<style>
+    .select-dropdown {
+        width: 500px;
+        padding: 10px;
+        border: 1px solid #124;
+        border-radius: 5px;
+        background-color: aliceblue;
+        color: chocolate;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .select-dropdown::after {
+        content: '\25BC';
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 16px;
+    }
+
+    .select-dropdown option {
+        background-color: aquamarine;
+        color: gold;
+    }
+
+    .select-dropdown option:checked {
+        background-color: blueviolet;
+        color:chartreuse;
+    }
+</style>
+
 <title>{% block title %}Add New Job Role{% endblock %}</title>
 
     <main class="container mt-4">
@@ -27,11 +60,11 @@
                 </div>
                 <div class="form-group">
                     <label for="band">Select desired Job Band</label>
-                    <select select id="admin/bands" name="bandId" class="form-select form-select-lg mb-3 mt-2" aria-label=".form-select-lg" required>
-                        {% for Band in Band %}
-                            <option value="{{ Band.id }}">
-                                {{ Band.name }}
-                                 <span class="level">{{ Band.level }}</span>
+                    <select select id="admin/bands" name="bandId" class="form-select form-select-lg mb-3 mt-2 select-dropdown" aria-label=".form-select-lg" required>
+                        {% for band in bands %}
+                            <option value="{{ band.id }}">
+                                {{ band.name }}
+                                 <span class="level">{{ band.level }}</span>
                             </option>
                         {% endfor %}
                     </select>

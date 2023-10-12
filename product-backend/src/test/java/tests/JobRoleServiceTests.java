@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kainos.ea.db.JobRoleDao;
 import org.kainos.ea.exception.*;
 import org.kainos.ea.model.JobRole;
+import org.kainos.ea.model.JobRolePlusBandResponse;
 import org.kainos.ea.model.JobRoleRequest;
 import org.kainos.ea.service.JobRoleService;
 import org.kainos.ea.service.JobRoleValidator;
@@ -82,19 +83,21 @@ class JobRoleServiceTests {
     @Test
     void getJobRole_shouldReturnJobRole_whenDaoReturnsAJobRole() throws DatabaseConnectionException, SQLException,
             JobRoleDoesNotExistException, FailedToGetJobRoleException {
-        JobRole jobRole = new JobRole(
+        JobRolePlusBandResponse jobRolePlusBandResponse = new JobRolePlusBandResponse(
                 1,
                 "Principal",
                 "This is a test case",
                 "https://example.com",
-                1
+                1,
+                "Some band name",
+                4
         );
         int jobRoleId = 1;
-        Mockito.when(jobRoleDaoMock.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRole));
+        Mockito.when(jobRoleDaoMock.getJobRoleById(jobRoleId)).thenReturn(Optional.of(jobRolePlusBandResponse));
 
-        JobRole resultRole = jobRoleService.getJobRoleById(jobRoleId);
+        JobRolePlusBandResponse resultRole = jobRoleService.getJobRoleById(jobRoleId);
 
-        assertEquals(resultRole, jobRole);
+        assertEquals(resultRole, jobRolePlusBandResponse);
     }
 
     @Test
@@ -108,20 +111,22 @@ class JobRoleServiceTests {
 
     @Test
     void getJobRoles_shouldReturnJobRoles_whenDaoReturnsJobRoles() throws SQLException, FailedToGetAllJobRolesException, DatabaseConnectionException {
-        List<JobRole> mockedJobRole = new ArrayList<>();
+        List<JobRolePlusBandResponse> mockedJobRole = new ArrayList<>();
 
-        mockedJobRole.add(new JobRole(
+        mockedJobRole.add(new JobRolePlusBandResponse(
                 1,
                 "name",
                 "description",
                 "sharePointLink",
+                1,
+                "Band A",
                 1
 
         ));
 
         Mockito.when(jobRoleDaoMock.getAllJobRoles()).thenReturn(mockedJobRole);
 
-        List<JobRole> result = jobRoleService.getAllJobRoles();
+        List<JobRolePlusBandResponse> result = jobRoleService.getAllJobRoles();
         assertEquals(result, mockedJobRole);
         verify(jobRoleDaoMock).getAllJobRoles();
     }
