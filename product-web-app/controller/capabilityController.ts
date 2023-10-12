@@ -12,10 +12,7 @@ export default class CapabilityController {
 
   appRoutes(app: Application) {
     app.get('/admin/add-capability', async (req: Request, res: Response) => {
-      res.render('add-new-capability', {
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
-      });
+      res.render('add-new-capability');
     });
 
     app.get('/capability', async (req: Request, res: Response) => {
@@ -53,9 +50,7 @@ export default class CapabilityController {
         } catch (e: any) {
           logger.warn(e.message);
           res.render('add-new-capability', {
-            capability: data,
-            role: mock.role,
-            isLoggedIn: mock.isLoggedIn,
+            capability: data
           });
         }
       },

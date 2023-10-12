@@ -12,6 +12,7 @@ export default class JobRoleController {
   private jobRoleService = new JobRoleService(new JobRoleValidator());
 
   private capabilityService = new CapabilityService();
+
   private bandService = new BandService(new BandValidator());
 
   appRoutes(app: Application) {
@@ -20,7 +21,7 @@ export default class JobRoleController {
       const bands = await this.bandService.getAllJobBands();
       res.render('add-new-job-role', {
         capabilities,
-        bands
+        bands,
       });
     });
     app.post('/admin/add-job-roles', async (req: Request, res: Response) => {

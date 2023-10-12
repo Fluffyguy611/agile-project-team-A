@@ -17,7 +17,7 @@ public class JobRoleRequest {
             @JsonProperty("description") String description,
             @JsonProperty("sharePointLink") String sharePointLink,
             @JsonProperty("capabilityId") int capabilityId,
-            @JsonProperty("bandId")) {
+            @JsonProperty("bandId") int bandId) {
         setName(name);
         setDescription(description);
         setSharePointLink(sharePointLink);
@@ -56,6 +56,7 @@ public class JobRoleRequest {
     public void setCapabilityId(int capabilityId) {
         this.capabilityId = capabilityId;
     }
+
     public int getBandId() {
         return bandId;
     }
