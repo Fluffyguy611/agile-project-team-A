@@ -17,16 +17,17 @@
                 {% for jobRole in jobRole %}
                 <tr>
                   <td ><strong>{{ jobRole.name }}</strong></td>
-                  <td style="text-align: center;"><a href= "/job-roles/{{ jobRole.id }}">Details</a></td>
+                  <td style="text-align: center;">
+                  <button class="btn btn-success" onclick="window.location.href='/job-roles/{{ jobRole.id }}'">Details</button>
+                  </td>
                   <td style="text-align: center;">{{ jobRole.bandName }}</td>
                 </tr>
                 {% endfor %}
-                </tr>
               </tbody>
             </table>    
-{% else %}
-There are no job roles
-{% endif %}
+        {% else %}
+        There are no job roles
+        {% endif %}
       </section>
     </main>
 {% endblock %}

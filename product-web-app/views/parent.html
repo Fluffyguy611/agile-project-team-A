@@ -1,42 +1,98 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.kainos.com">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </head>
-
 <style>
-    .login-button {
-      background: rgb(4, 119, 63);
-      border: 0;
-      color: white;
-      padding: 10px;
-      margin-left: 50px;
-      border-radius: 15px;
-      transition: 0.4s ease;
+    html {
+        height: 100%;
+    }
+
+    body {
+        min-height: 100%;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        text-align: left;
+        font-family: sans-serif;
+    }
+
+    .footer {
+        font-weight: 300;
+        color: #fff;
+        grid-row-start: 2;
+        grid-row-end: 3;
+        padding-top: 50px;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, #252d4f 0%, rgba(37, 45, 79, 0) 100%), linear-gradient(90deg, #004631 0.02%, #61a83f 27.47%, #61a83f 40.06%, #41679f 69.71%, #283583 100%);
+    }
+
+    .footer__bottom {
+        padding: 25px 0 40px;
+        background: url('https://www.kainos.com/globalassets/images/6_flux/flux_white_footer.png?width=1200&mode=crop&quality=80');
+        background-repeat: no-repeat;
+    }
+
+    .footer__slogan {
+        font-weight: 600;
+        font-size: 3em;
+    }
+
+    .footer__slogan > span {
+        color: #cfd600;
+    }
+
+    .footer__copyrights {
+        text-align: end;
+        font-size: 1.1rem;
+    }
+
+    .footer__copyrights > b {
+        font-size: 1.2rem;
+    }
+
+    .login-button, .register-button{
+        background: rgb(4, 119, 63);
+        border: 0;
+        color: white;
+        padding: 10px;
+        margin-left: 50px;
+        border-radius: 15px;
+        transition: 0.4s ease;
     }
   
-    .login-button:hover {
-      background: black;
-      cursor: pointer;
+    .login-button:hover, .register-button:hover {
+        background: black;
+        cursor: pointer;
     }
+
+    .custom-logout-button {
+        color: white;
+        background: #1b2db5;
+        border: none;
+    }
+
+    .custom-logout-button:hover {
+        color: white;
+        background: black;
+        cursor: pointer;
+    }
+
 </style>
-
-
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-light bg-white border-bottom">
             <div class="container-fluid">
-                <a class="navbar-brand" href="https://www.kainos.com/"><img src="https://cdn.phenompeople.com/CareerConnectResources/KAINGB/social/Kainos_logo_1024X512-1643380451515.png" alt="" width="205" height="102" href="/"></a>
+                <a class="navbar-brand" href="https://www.kainos.com/"><img src="https://cdn.phenompeople.com/CareerConnectResources/KAINGB/social/Kainos_logo_1024X512-1643380451515.png"  alt="Kainos Home Page" width="205" height="102" href="/"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                {% if isLoggedIn %} 
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         <li class="nav-item active">
@@ -57,36 +113,44 @@
                                 Available actions:
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                {% if role == 'admin' %}
-                                <li><a class="dropdown-item" href="/admin/add-job-roles">Add New Job Role</a></li>
-                                <li><a class="dropdown-item" href="">Delete</a></li>
-                                <li><a class="dropdown-item" href="">Update</a></li>
+                                {% if isAdmin == "1" %}
+                                <li><a class="dropdown-item" href="/admin/add-job-roles">Add new Job Role</a></li>
+                                <li><a class="dropdown-item" href="/admin/band">Add new Band</a></li>
+                                <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
+                                <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                {% elif isAdmin == "2" %}
                                 <li><a class="dropdown-item" href="/job-roles">View Job Roles</a></li>
                                 <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
                                 {% else %}
-                                <li><a class="dropdown-item" href="/job-roles">View Capability Leads</a></li>
-                                <li><a class="dropdown-item" href="/capability">View Capability Leads</a></li>
+                                <li><a class="dropdown-item" href="/auth/register">Register</a></li>
+                                <li><a class="dropdown-item" href="/auth/login">Login</a></li>
                                 {% endif %}
-                            </li>
                             </ul>
                         </li>
                     </ul>
+                    {% if isAdmin == "1" or isAdmin == "2" %}
+                    <button class="btn custom-logout-button ms-auto" onclick="window.location.href='/auth/logout'">Logout</button>
+                    {% endif %}
                 </div>
             </div>
         </nav>
-    </header>
     <div id="content">{% block content %} {% endblock %}</div>
-    {% else %} 
-    <header>YOU NEED TO BE SIGNED TO VIEW THIS PAGE</header>
-        <div class="login">
-            <a href="/login">
-                <button class="login-button">Login</button>
-                </a>
+    </header>
+    <footer class="footer">     
+        <div class="footer__bottom">
+            <div class="footer__bg-image footer__bg-image--desktop"></div>
+            <div class="footer__container footer__container--image container">
+                <div class="footer__slogan">
+                    <b>Thinking</b><br>
+                    <span>beyond</span><br>
+                    <b>limitations</b>
+                </div>
+                    <div class="footer__copyrights">
+                        <b>Contact Us: dzikiadriana@kainos.com</b><br>
+                        Copyright © 2023 Dziki Adriana
+                    </div>
+            </div>
         </div>
-        <div>
-            <img src="https://media.tenor.com/lx2WSGRk8bcAAAAC/pulp-fiction-john-travolta.gif" alt="">
-        </div>
-    </div>
-    {% endif %}
+    </footer>
 </body>
 </html>

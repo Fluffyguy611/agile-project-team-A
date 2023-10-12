@@ -2,7 +2,6 @@ import { Application, Request, Response } from 'express';
 import sanitizeHtml from 'sanitize-html';
 import JobRole from '../model/jobRole.js';
 import JobRoleService from '../service/jobRoleService.js';
-import mock from '../common/req.express.session.mock.js';
 import JobRoleValidator from '../service/jobRoleValidator.js';
 import logger from '../service/logger.js';
 import BandService from '../service/bandService.js';
@@ -14,10 +13,9 @@ export default class JobRoleController {
 
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
-        const bands = await this.bandService.getAllJobBands()
+      const bands = await this.bandService.getAllJobBands();
       res.render('add-new-job-role', {
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
+        role: req.session.isAdmin,
         bands,
       });
     });
@@ -34,8 +32,7 @@ export default class JobRoleController {
         res.locals.errorMessage = e.message;
         res.render('add-new-job-role', {
           jobRole: data,
-          role: mock.role,
-          isLoggedIn: mock.isLoggedIn,
+          role: req.session.isAdmin,
         });
       }
     });
@@ -53,8 +50,6 @@ export default class JobRoleController {
 
       res.render('view-single-jobRole', {
         jobRole: data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
       });
     });
 
@@ -67,9 +62,7 @@ export default class JobRoleController {
         logger.error(`Couldnt get job Role! Error: ${e}`);
       }
       res.render('job-roles', {
-        jobRole : data,
-        role: mock.role,
-        isLoggedIn: mock.isLoggedIn,
+        jobRole: data,
       });
     });
   }

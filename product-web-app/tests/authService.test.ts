@@ -11,6 +11,11 @@ const mockedUser = {
   roleId: 1,
 };
 
+const userCredentials = {
+  token: 'MockToken',
+  roleId: 1,
+};
+
 const authService = new AuthService(new AuthValidator());
 
 describe('Auth service', () => {
@@ -92,10 +97,10 @@ describe('login', () => {
   });
 
   it('should return token when credentials are correct', async () => {
-    mockAxios.onPost(API.LOGIN, mockedUser).reply(200, 'mockedToken');
+    mockAxios.onPost(API.LOGIN, mockedUser).reply(200, userCredentials);
 
-    const token = await authService.login(mockedUser);
+    const credentials = await authService.login(mockedUser);
 
-    expect(token).to.equal('mockedToken');
+    expect(credentials.token).to.equal('MockToken');
   });
 });
