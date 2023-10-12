@@ -1,5 +1,6 @@
 package org.kainos.ea.db;
 
+import org.kainos.ea.exception.FailedToCreateCapabilityLeadException;
 import org.kainos.ea.model.Capability;
 import org.kainos.ea.model.CapabilityRequest;
 
@@ -31,8 +32,7 @@ public class CapabilityDao {
         return capabilityList;
     }
 
-
-    public int createCapabilityLead(CapabilityRequest capability, Connection c) throws SQLException {
+    public void createCapabilityLead(CapabilityRequest capability, Connection c) throws SQLException, FailedToCreateCapabilityLeadException {
 
         String insertStatement = "INSERT INTO Capability (Capability, Name, Photo, Message) VALUES (?,?,?,?)";
 
@@ -46,21 +46,8 @@ public class CapabilityDao {
         st.executeUpdate();
 
         ResultSet rs = st.getGeneratedKeys();
-        if (rs.next()) {
-            return rs.getInt(1);
+        if (!rs.next()) {
+            throw new FailedToCreateCapabilityLeadException();
         }
-
-        return -1;
-
     }
-
 }
-
-
-
-
-
-
-
-
-

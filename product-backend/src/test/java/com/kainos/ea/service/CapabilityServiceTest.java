@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class CapabilityServiceTest {
@@ -29,7 +29,6 @@ public class CapabilityServiceTest {
     DatabaseConnector databaseConnector = Mockito.mock(DatabaseConnector.class);
 
     CapabilityService capabilityService = new CapabilityService(databaseConnector, capabilityDao);
-
 
     Capability capability = new Capability(
             1,
@@ -84,25 +83,20 @@ public class CapabilityServiceTest {
     void createCapability_When_CapabilityInputIsValid_Expect_NewCapabilityToBeReturned() throws FailedToCreateCapabilityLeadException, SQLException, InvalidCapabilityLeadException {
         Connection conn = databaseConnector.getConnection();
         CapabilityRequest mockedCapabilityRequest = new CapabilityRequest("MockedCapability", "MockedName", "MockedPhoto", "MockedMessage");
-        when(capabilityDao.createCapabilityLead(mockedCapabilityRequest, conn)).thenReturn(1);
 
-        int newCapability = capabilityService.createCapabilityLead(mockedCapabilityRequest);
+        capabilityService.createCapabilityLead(mockedCapabilityRequest);
 
-        assertThat(newCapability).isEqualTo(1);
+        verify(capabilityDao).createCapabilityLead(mockedCapabilityRequest, conn);
     }
-
 
     @Test
     void createCapability_When_ThereIsDatabaseError_Expect_FailedToCreateCapabilityLeadException() throws SQLException, FailedToCreateCapabilityLeadException { //kiedy wystapi blad z v=baza dancyh rzuc wyjatkiem failedToCreate
         Connection conn = databaseConnector.getConnection();
         CapabilityRequest mockedCapabilityRequest = new CapabilityRequest("MockedCapability", "MockedName", "MockedPhoto", "MockedMessage");
-        when(capabilityDao.createCapabilityLead(mockedCapabilityRequest, conn)).thenThrow(new SQLException(""));
+        doThrow(new FailedToCreateCapabilityLeadException()).when(capabilityDao).createCapabilityLead(mockedCapabilityRequest, conn);
 
-        assertThatExceptionOfType(FailedToCreateCapabilityLeadException.class) //oczekuje ze zaostanie rzucony wyjatek FailedTo.....
-                .isThrownBy(() -> capabilityService.createCapabilityLead(mockedCapabilityRequest)) // sprawdza czy metoda createCapabilityLead rzuca wyjatkiem FailedTo.....
-                .withMessageMatching("Failed to create capability"); //oczekuje wyjatku z wiadomoscia "Failed to create"
-
+        assertThatExceptionOfType(FailedToCreateCapabilityLeadException.class)
+                .isThrownBy(() -> capabilityService.createCapabilityLead(mockedCapabilityRequest))
+                .withMessageMatching("Failed to create capability");
     }
-
-
 }

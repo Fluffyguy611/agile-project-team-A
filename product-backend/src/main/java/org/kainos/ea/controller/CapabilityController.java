@@ -49,8 +49,8 @@ public class CapabilityController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createCapability(CapabilityRequest capabilityRequest) {
         try {
-            int result = capabilityService.createCapabilityLead(capabilityRequest);
-            return Response.ok(result).build();
+            capabilityService.createCapabilityLead(capabilityRequest);
+            return Response.ok().build();
         } catch (FailedToCreateCapabilityLeadException | SQLException e) {
             logger.error("Failed to create Capability! Error: {}", e.getMessage());
             return Response.serverError().build(); //500
@@ -58,7 +58,5 @@ public class CapabilityController {
             logger.error("Capability does not exist! Error: {}", (e.getMessage()));
             return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorResponse(e.getMessage())).build();//400 np bledne zapytanie
         }
-
     }
-
 }

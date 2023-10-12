@@ -47,7 +47,7 @@ public class CapabilityService {
     }
 
 
-    public int createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException, SQLException {
+    public void createCapabilityLead(CapabilityRequest capabilityRequest) throws InvalidCapabilityLeadException, FailedToCreateCapabilityLeadException, SQLException {
         try {
             Optional<String> validation = capabilityValidator.isValidCapabilityLead(capabilityRequest);
 
@@ -56,13 +56,7 @@ public class CapabilityService {
                 throw new InvalidCapabilityLeadException(validation.get());
             }
 
-            int id = capabilityDao.createCapabilityLead(capabilityRequest, databaseConnector.getConnection());
-
-            if (id == -1) {
-                throw new FailedToCreateCapabilityLeadException();
-            }
-            
-            return id;
+            capabilityDao.createCapabilityLead(capabilityRequest, databaseConnector.getConnection());
         } catch (SQLException e) {
             logger.error("SQL Exception! Error: {}", e.getMessage());
             throw new FailedToCreateCapabilityLeadException();
