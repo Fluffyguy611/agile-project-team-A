@@ -50,7 +50,8 @@ export default class CapabilityController {
         } catch (e: any) {
           logger.warn(e.message);
           res.render('add-new-capability', {
-            capability: data
+            capability: data,
+            errorMessage: e.message
           });
         }
       },
