@@ -15,7 +15,7 @@ export default class JobRoleController {
 
   appRoutes(app: Application) {
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
-        const bands = await this.bandService.getAllJobBands()
+      const bands = await this.bandService.getAllJobBands();
       res.render('add-new-job-role', {
         role: mock.role,
         isLoggedIn: mock.isLoggedIn,

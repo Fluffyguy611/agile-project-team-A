@@ -22,8 +22,8 @@ export default class BandController {
       data.name = sanitizeHtml(data.name).trim();
 
       try {
-        const newBand = await this.bandService.createNewBand(data);
-        res.redirect(`/admin/bands`);
+        await this.bandService.createNewBand(data);
+        res.redirect('/admin/bands');
       } catch (e: any) {
         logger.warn(e.message);
         res.locals.errorMessage = e.message;
@@ -44,11 +44,11 @@ export default class BandController {
         logger.error(`Couldnt get Band! Error: ${e}`);
       }
 
-      res.render('view-single-band', { 
+      res.render('view-single-band', {
         Band: data,
         role: mock.role,
         isLoggedIn: mock.isLoggedIn,
-       });
+      });
     });
 
     app.get('/admin/bands', async (req: Request, res: Response) => {
@@ -59,11 +59,11 @@ export default class BandController {
       } catch (e) {
         logger.error(`Couldnt get Job Band! Error: ${e}`);
       }
-      res.render('view-all-job-bands', { 
+      res.render('view-all-job-bands', {
         Band: data,
         role: mock.role,
         isLoggedIn: mock.isLoggedIn,
-       });
+      });
     });
 
     app.get('/admin/add-job-roles', async (req: Request, res: Response) => {
@@ -74,11 +74,11 @@ export default class BandController {
       } catch (e) {
         logger.error(`Couldnt get Job Band! Error: ${e}`);
       }
-      res.render('add-new-job-role', { 
+      res.render('add-new-job-role', {
         Band: data,
         role: mock.role,
         isLoggedIn: mock.isLoggedIn,
-       });
+      });
     });
   }
 }
